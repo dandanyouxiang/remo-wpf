@@ -1,0 +1,18 @@
+﻿<Window x:Class="PresentationLayer.Window1"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Window1" Height="632.664" Width="856.278">
+    <Grid ShowGridLines="true">
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="70.902*"></ColumnDefinition>
+            <ColumnDefinition Width="40.765*" />
+            <ColumnDefinition Width="111.807*"></ColumnDefinition>
+            <ColumnDefinition Width="111.807*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+    </Grid>
+</Window>
