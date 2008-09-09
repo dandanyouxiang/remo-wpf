@@ -1,41 +1,41 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="EntityLayer.DcColdMeasurenments" Collapsed="true">
+  <Class Name="EntityLayer.DcColdMeasurenments">
     <Position X="7.5" Y="2.5" Width="3.25" />
-    <AssociationLine Name="RessistanceTransformerChannels" Type="EntityLayer.RessistanceTransformerChannel" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="7.805" Y="3.009" />
-        <Point X="7.805" Y="3.643" />
-        <Point X="6.312" Y="3.643" />
-        <Point X="6.312" Y="4.75" />
-      </Path>
-      <MemberNameLabel ManuallyPlaced="true">
-        <Position X="-1.622" Y="0.937" />
-      </MemberNameLabel>
-    </AssociationLine>
     <AssociationLine Name="TempChannelsCurrentState" Type="EntityLayer.TempChannel">
-      <MemberNameLabel ManuallyPlaced="true">
-        <Position X="-1.478" Y="0.817" />
-      </MemberNameLabel>
-    </AssociationLine>
-    <AssociationLine Name="TempMeasurenments" Type="EntityLayer.TempMeasurenment" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="10.562" Y="3.009" />
-        <Point X="10.562" Y="3.384" />
-        <Point X="11.104" Y="3.384" Type="JumpStart" />
-        <Point X="11.271" Y="3.384" Type="JumpEnd" />
-        <Point X="13.542" Y="3.384" Type="JumpStart" />
-        <Point X="13.708" Y="3.384" Type="JumpEnd" />
-        <Point X="13.809" Y="3.384" />
-        <Point X="13.809" Y="4.75" />
-      </Path>
-      <MemberNameLabel ManuallyPlaced="true">
-        <Position X="0.74" Y="1.376" />
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="-1.124" Y="0.713" Height="0.16" Width="1.785" />
       </MemberNameLabel>
     </AssociationLine>
     <AssociationLine Name="TempChannelsMeasurenmentConfiguration" Type="EntityLayer.TempChannel">
       <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
-        <Position X="-1.923" Y="0.321" Height="0.16" Width="2.324" />
+        <Position X="-1.642" Y="0.342" Height="0.16" Width="2.324" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="TempMeasurenments" Type="EntityLayer.TempMeasurenment" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="10.562" Y="4.026" />
+        <Point X="10.562" Y="4.704" />
+        <Point X="11.105" Y="4.704" Type="JumpStart" />
+        <Point X="11.271" Y="4.704" Type="JumpEnd" />
+        <Point X="11.542" Y="4.704" Type="JumpStart" />
+        <Point X="11.708" Y="4.704" Type="JumpEnd" />
+        <Point X="13.809" Y="4.704" />
+        <Point X="13.809" Y="5.5" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.121" Y="0.881" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="RessistanceTransformerChannels" Type="EntityLayer.RessistanceTransformerChannel" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="7.938" Y="4.027" />
+        <Point X="7.938" Y="4.402" />
+        <Point X="6.506" Y="4.402" />
+        <Point X="6.506" Y="5.5" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="-1.421" Y="1.156" Height="0.16" Width="2.149" />
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
@@ -43,38 +43,38 @@
       <FileName>EntityLayer\Entities.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
-      <Property Name="RessistanceTransformerChannels" />
       <Property Name="TempChannelsCurrentState" />
-      <Property Name="TempMeasurenments" />
       <Property Name="TempChannelsMeasurenmentConfiguration" />
+      <Property Name="TempMeasurenments" />
+      <Property Name="RessistanceTransformerChannels" />
     </ShowAsCollectionAssociation>
   </Class>
-  <Class Name="EntityLayer.AcHotMeasurenments" Collapsed="true">
+  <Class Name="EntityLayer.AcHotMeasurenments">
     <Position X="13.25" Y="2.5" Width="1.75" />
     <AssociationLine Name="TempChannelsCurrentState" Type="EntityLayer.TempChannel" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="13.625" Y="3.009" />
-        <Point X="13.625" Y="3.914" />
-        <Point X="11.625" Y="3.914" />
-        <Point X="11.625" Y="4.75" />
+        <Point X="13.625" Y="4.026" />
+        <Point X="13.625" Y="4.258" />
+        <Point X="11.625" Y="4.258" />
+        <Point X="11.625" Y="5.5" />
       </Path>
-      <MemberNameLabel ManuallyPlaced="true">
-        <Position X="-1.611" Y="0.232" />
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="-1.734" Y="1.339" Height="0.16" Width="1.743" />
       </MemberNameLabel>
     </AssociationLine>
     <AssociationLine Name="TempChannelsMeasurenmentConfiguration" Type="EntityLayer.TempChannel" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="13.25" Y="2.913" />
-        <Point X="11.188" Y="2.913" />
-        <Point X="11.188" Y="4.75" />
+        <Point X="13.25" Y="3.738" />
+        <Point X="11.188" Y="3.738" />
+        <Point X="11.188" Y="5.5" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
-        <Position X="-1.814" Y="1.912" Height="0.16" Width="1.858" />
+        <Position X="-1.853" Y="1.803" Height="0.16" Width="1.858" />
       </MemberNameLabel>
     </AssociationLine>
     <AssociationLine Name="TempMeasurenments" Type="EntityLayer.TempMeasurenment">
       <MemberNameLabel ManuallyPlaced="true">
-        <Position X="-1.261" Y="0.509" />
+        <Position X="-1.544" Y="0.617" />
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
@@ -87,12 +87,14 @@
       <Property Name="TempMeasurenments" />
     </ShowAsCollectionAssociation>
   </Class>
-  <Class Name="EntityLayer.DcCoolingMeasurenments" Collapsed="true">
+  <Class Name="EntityLayer.DcCoolingMeasurenments">
     <Position X="4.5" Y="2.5" Width="2" />
     <AssociationLine Name="RessistanceTransformerChannels" Type="EntityLayer.RessistanceTransformerChannel" FixedToPoint="true">
       <Path>
-        <Point X="4.688" Y="3.009" />
-        <Point X="4.688" Y="4.75" />
+        <Point X="5.5" Y="3.481" />
+        <Point X="5.5" Y="3.856" />
+        <Point X="4.394" Y="3.856" />
+        <Point X="4.394" Y="5.5" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true">
         <Position X="-1.213" Y="0.531" />
@@ -106,26 +108,34 @@
       <Property Name="RessistanceTransformerChannels" />
     </ShowAsAssociation>
   </Class>
-  <Class Name="EntityLayer.RessistanceTransformerChannel" Collapsed="true">
-    <Position X="4" Y="4.75" Width="2.5" />
+  <Class Name="EntityLayer.RessistanceTransformerChannel">
+    <Position X="3.5" Y="5.5" Width="3.25" />
     <AssociationLine Name="RessistanceChannelsCurrentState" Type="EntityLayer.RessistanceChannel" FixedFromPoint="true">
       <Path>
-        <Point X="4.139" Y="5.259" />
-        <Point X="4.139" Y="6.25" />
+        <Point X="3.681" Y="7.355" />
+        <Point X="3.681" Y="8.25" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
-        <Position X="-1.601" Y="0.129" Height="0.16" Width="2.121" />
+        <Position X="-0.602" Y="0.129" Height="0.16" Width="2.121" />
       </MemberNameLabel>
     </AssociationLine>
-    <AssociationLine Name="RessistanceChannelsMeasurenmentConfiguration" Type="EntityLayer.RessistanceChannel">
-      <MemberNameLabel ManuallyPlaced="true">
-        <Position X="0.546" Y="-2.488" />
-      </MemberNameLabel>
-    </AssociationLine>
-    <AssociationLine Name="RessistanceMeasurenments" Type="EntityLayer.RessistanceMeasurenment" FixedToPoint="true">
+    <AssociationLine Name="RessistanceChannelsMeasurenmentConfiguration" Type="EntityLayer.RessistanceChannel" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="6.188" Y="5.259" />
-        <Point X="6.188" Y="6.25" />
+        <Point X="4.688" Y="7.356" />
+        <Point X="4.688" Y="7.955" />
+        <Point X="4.688" Y="7.955" />
+        <Point X="4.688" Y="8.25" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="-1.249" Y="0.513" Height="0.16" Width="3.011" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="RessistanceMeasurenments" Type="EntityLayer.RessistanceMeasurenment" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="6.438" Y="7.356" />
+        <Point X="6.438" Y="7.875" />
+        <Point X="6.438" Y="7.875" />
+        <Point X="6.438" Y="8.25" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
         <Position X="-2.318" Y="0.101" Height="0.16" Width="2.169" />
@@ -141,47 +151,32 @@
       <Property Name="RessistanceMeasurenments" />
     </ShowAsCollectionAssociation>
   </Class>
-  <Class Name="EntityLayer.RessistanceChannel" Collapsed="true">
-    <Position X="3.25" Y="6.25" Width="2.5" />
+  <Class Name="EntityLayer.RessistanceChannel">
+    <Position X="2.5" Y="8.25" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAQgAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>EntityLayer\Entities.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="EntityLayer.RessistanceMeasurenment" Collapsed="true">
-    <Position X="6" Y="6.25" Width="2" />
-    <AssociationLine Name="RessistanceChannelMeasurenment" Type="EntityLayer.RessistanceChannelMeasurenment">
-      <MemberNameLabel ManuallyPlaced="true">
-        <Position X="-1.281" Y="0.239" />
-      </MemberNameLabel>
-    </AssociationLine>
+  <Class Name="EntityLayer.RessistanceMeasurenment">
+    <Position X="6.25" Y="8.25" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAQA=</HashCode>
-      <FileName>EntityLayer\Entities.cs</FileName>
-    </TypeIdentifier>
-    <ShowAsCollectionAssociation>
-      <Property Name="RessistanceChannelMeasurenment" />
-    </ShowAsCollectionAssociation>
-  </Class>
-  <Class Name="EntityLayer.RessistanceChannelMeasurenment" Collapsed="true">
-    <Position X="6" Y="7.75" Width="2.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAgACAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAgACAAAAAAAgAAAAAAAAAAAAAAQA=</HashCode>
       <FileName>EntityLayer\Entities.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="EntityLayer.TempChannel" Collapsed="true">
-    <Position X="8" Y="4.75" Width="3.75" />
+  <Class Name="EntityLayer.TempChannel">
+    <Position X="8" Y="5.5" Width="3.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAQiAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>EntityLayer\Entities.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="EntityLayer.TempMeasurenment" Collapsed="true">
-    <Position X="13.25" Y="4.75" Width="1.75" />
+  <Class Name="EntityLayer.TempMeasurenment">
+    <Position X="13.25" Y="5.5" Width="1.75" />
     <AssociationLine Name="TempChannelMeasurenments" Type="EntityLayer.TempChannelMeasurenment">
       <MemberNameLabel ManuallyPlaced="true">
-        <Position X="0.127" Y="-0.484" />
+        <Position X="-1.925" Y="0.245" />
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
@@ -192,8 +187,8 @@
       <Property Name="TempChannelMeasurenments" />
     </ShowAsCollectionAssociation>
   </Class>
-  <Class Name="EntityLayer.TempChannelMeasurenment" Collapsed="true">
-    <Position X="13" Y="6" Width="2.25" />
+  <Class Name="EntityLayer.TempChannelMeasurenment">
+    <Position X="13.25" Y="8.25" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAgAAAAAAA=</HashCode>
       <FileName>EntityLayer\Entities.cs</FileName>
@@ -206,51 +201,60 @@
       <FileName>EntityLayer\Entities.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="EntityLayer.Root" Collapsed="true">
+  <Class Name="EntityLayer.Root">
     <Position X="5.75" Y="0.75" Width="5" />
+    <AssociationLine Name="TransformerProperties" Type="EntityLayer.TransformerProperties" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="6.25" Y="1.537" />
+        <Point X="6.25" Y="1.805" />
+        <Point X="1.375" Y="1.805" />
+        <Point X="1.375" Y="2.5" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-1.494" Y="0.8" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <AssociationLine Name="DcColdMeasurenments" Type="EntityLayer.DcColdMeasurenments" FixedFromPoint="true">
+      <Path>
+        <Point X="9.125" Y="1.537" />
+        <Point X="9.125" Y="2.5" />
+      </Path>
+    </AssociationLine>
     <AssociationLine Name="AcHotMeasurenments" Type="EntityLayer.AcHotMeasurenments" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="10.125" Y="1.259" />
-        <Point X="10.125" Y="1.634" />
-        <Point X="14.125" Y="1.634" />
+        <Point X="10.125" Y="1.537" />
+        <Point X="10.125" Y="1.913" />
+        <Point X="14.125" Y="1.913" />
         <Point X="14.125" Y="2.5" />
       </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.833" Y="0.678" />
+      </MemberNameLabel>
     </AssociationLine>
     <AssociationLine Name="DcCoolingMeasurenments" Type="EntityLayer.DcCoolingMeasurenments" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="7.5" Y="1.259" />
+        <Point X="7.5" Y="1.537" />
         <Point X="7.5" Y="1.986" />
         <Point X="5.875" Y="1.986" />
         <Point X="5.875" Y="2.5" />
       </Path>
-    </AssociationLine>
-    <AssociationLine Name="DcColdMeasurenments" Type="EntityLayer.DcColdMeasurenments" FixedFromPoint="true">
-      <Path>
-        <Point X="9.125" Y="1.259" />
-        <Point X="9.125" Y="2.5" />
-      </Path>
-    </AssociationLine>
-    <AssociationLine Name="TransformerProperties" Type="EntityLayer.TransformerProperties" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="6.25" Y="1.259" />
-        <Point X="6.25" Y="1.805" />
-        <Point X="2.375" Y="1.805" />
-        <Point X="2.375" Y="2.5" />
-      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="0.11" Y="0.133" />
+      </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAIAIAAAAAAAAAAAAAAAgAAAIAAAAAAA=</HashCode>
       <FileName>EntityLayer\Entities.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
+      <Property Name="TransformerProperties" />
+      <Property Name="DcColdMeasurenments" />
       <Property Name="AcHotMeasurenments" />
       <Property Name="DcCoolingMeasurenments" />
-      <Property Name="DcColdMeasurenments" />
-      <Property Name="TransformerProperties" />
     </ShowAsAssociation>
   </Class>
   <Class Name="EntityLayer.TransformerProperties">
-    <Position X="1.5" Y="2.5" Width="1.75" />
+    <Position X="0.5" Y="2.5" Width="1.75" />
     <NestedTypes>
       <Enum Name="EntityLayer.TransformerProperties.ConnectionType" Collapsed="true">
         <TypeIdentifier>

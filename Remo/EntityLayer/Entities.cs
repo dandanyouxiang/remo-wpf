@@ -24,8 +24,6 @@ namespace EntityLayer
                         typeof(TransformerProperties),
                         typeof(List<RessistanceChannel>),
                         typeof(RessistanceChannel),
-                        typeof(List<RessistanceChannelMeasurenment>),
-                        typeof(RessistanceChannelMeasurenment), 
                         typeof(List<RessistanceMeasurenment>),
                         typeof(RessistanceMeasurenment), 
                         typeof(List<RessistanceTransformerChannel>),
@@ -62,8 +60,6 @@ namespace EntityLayer
                         typeof(TransformerProperties),
                         typeof(List<RessistanceChannel>),
                         typeof(RessistanceChannel),
-                        typeof(List<RessistanceChannelMeasurenment>),
-                        typeof(RessistanceChannelMeasurenment), 
                         typeof(List<RessistanceMeasurenment>),
                         typeof(RessistanceMeasurenment), 
                         typeof(List<RessistanceTransformerChannel>),
@@ -107,10 +103,7 @@ namespace EntityLayer
                         new List<RessistanceChannel>(){new RessistanceChannel(1, true), new RessistanceChannel(2, true)},
                         new List<RessistanceMeasurenment>(){
                             new RessistanceMeasurenment(
-                                new DateTime(2008, 1, 1, 10, 0, 0), 
-                                new List<RessistanceChannelMeasurenment>() {
-                                    new RessistanceChannelMeasurenment(1, 1, 1),
-                                    new RessistanceChannelMeasurenment(2, 10,1)} )
+                                new DateTime(2008, 1, 1, 10, 0, 0), 1, 1, 1)
                             }
                             )
                         }
@@ -369,24 +362,6 @@ namespace EntityLayer
         /// </summary>
         public DateTime Time { get; set; }
         /// <summary>
-        /// Мерењата за секој канал
-        /// </summary>
-        public List<RessistanceChannelMeasurenment> RessistanceChannelMeasurenment { get; set; }
-        public RessistanceMeasurenment(DateTime time, List<RessistanceChannelMeasurenment> ressistanceChannelMeasurenment)
-        {
-            Time = time;
-            RessistanceChannelMeasurenment = ressistanceChannelMeasurenment;
-        }
-        public RessistanceMeasurenment(DateTime time) : this(time, new List<RessistanceChannelMeasurenment>()) { }
-        public RessistanceMeasurenment() : this(DateTime.Now) { }
-    }
-    /// <summary>
-    /// Мерење на напон и струја
-    /// </summary>
-    [Serializable]
-    public class RessistanceChannelMeasurenment
-    {
-        /// <summary>
         /// Број на канал
         /// </summary>
         public int ChannelNo { get; set; }
@@ -398,13 +373,17 @@ namespace EntityLayer
         /// Струјата добиена од мерењето
         /// </summary>
         public double Current { get; set; }
-        public RessistanceChannelMeasurenment(int channelNo, double voltage, double current)
+
+       
+        public RessistanceMeasurenment(DateTime time, int channelNo, double voltage, double current)
         {
+            Time = time;
             ChannelNo = channelNo;
             Voltage = voltage;
             Current = current;
         }
-        public RessistanceChannelMeasurenment() : this(1, 0, 1){ }
+        public RessistanceMeasurenment(DateTime time) : this(time, 1, 0, 1) { }
+        public RessistanceMeasurenment() : this(DateTime.Now) { }
     }
 
     /// <summary>
