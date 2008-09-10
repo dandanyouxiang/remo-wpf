@@ -4,11 +4,28 @@ using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 using System.IO;
+using System.ComponentModel;
 
 namespace EntityLayer
 {
+    #region XmlServices
     public static class XmlServices
     {
+        private static  Type[] types = new Type[] { 
+                        typeof(DcColdMeasurenments),
+                        typeof(AcHotMeasurenments),
+                        typeof(DcCoolingMeasurenments),
+                        typeof(TransformerProperties),
+                        typeof(List<RessistanceMeasurenment>),
+                        typeof(RessistanceMeasurenment), 
+                        typeof(List<RessistanceTransformerChannel>),
+                        typeof(RessistanceTransformerChannel),
+                        typeof(DateTime),
+                        typeof(List<TempMeasurenment>),
+                        typeof(TempMeasurenementConfiguration),
+                        typeof(TempMeasurenment)
+                     };
+
         public static void writeToXml(string path, Root root)
         {
             try
@@ -16,26 +33,7 @@ namespace EntityLayer
                 using (Stream fStream = new FileStream(path,
                                 FileMode.Create, FileAccess.Write, FileShare.None))
                 {
-                    XmlSerializer xmlFormat = new XmlSerializer(typeof(Root),
-                    new Type[] { 
-                        typeof(DcColdMeasurenments),
-                        typeof(AcHotMeasurenments),
-                        typeof(DcCoolingMeasurenments),
-                        typeof(TransformerProperties),
-                        typeof(List<RessistanceChannel>),
-                        typeof(RessistanceChannel),
-                        typeof(List<RessistanceMeasurenment>),
-                        typeof(RessistanceMeasurenment), 
-                        typeof(List<RessistanceTransformerChannel>),
-                        typeof(RessistanceTransformerChannel),
-                        typeof(DateTime),
-                        typeof(List<TempChannel>), 
-                        typeof(TempChannel), 
-                        typeof(List<TempChannelMeasurenment>),
-                        typeof(TempChannelMeasurenment),
-                        typeof(List<TempMeasurenment>),
-                        typeof(TempMeasurenment)
-                     });
+                    XmlSerializer xmlFormat = new XmlSerializer(typeof(Root), types);
                     xmlFormat.Serialize(fStream, root);
                 }
             }
@@ -52,26 +50,7 @@ namespace EntityLayer
                 using (Stream fStream = new FileStream(path,
                                 FileMode.Create, FileAccess.Write, FileShare.None))
                 {
-                    XmlSerializer xmlFormat = new XmlSerializer(typeof(DcColdMeasurenments),
-                    new Type[] { 
-                        typeof(DcColdMeasurenments),
-                        typeof(AcHotMeasurenments),
-                        typeof(DcCoolingMeasurenments),
-                        typeof(TransformerProperties),
-                        typeof(List<RessistanceChannel>),
-                        typeof(RessistanceChannel),
-                        typeof(List<RessistanceMeasurenment>),
-                        typeof(RessistanceMeasurenment), 
-                        typeof(List<RessistanceTransformerChannel>),
-                        typeof(RessistanceTransformerChannel),
-                        typeof(DateTime),
-                        typeof(List<TempChannel>), 
-                        typeof(TempChannel), 
-                        typeof(List<TempChannelMeasurenment>),
-                        typeof(TempChannelMeasurenment),
-                        typeof(List<TempMeasurenment>),
-                        typeof(TempMeasurenment)
-                     });
+                    XmlSerializer xmlFormat = new XmlSerializer(typeof(DcColdMeasurenments), types);
                     root = (Root)xmlFormat.Deserialize(fStream);
                 }
                 return root;
@@ -85,29 +64,30 @@ namespace EntityLayer
         public static void writeToXmlTest(string path)
         {
             DcColdMeasurenments dcColdMeasurenments = new DcColdMeasurenments(
-                1, 5,
-                new List<TempChannel>() { new TempChannel(1, true, false), new TempChannel(2, true, false) },
-                new List<TempChannel>() { new TempChannel(1, true, false), new TempChannel(2, true, false) },
-                new List<TempMeasurenment>() { 
-                    new TempMeasurenment(
-                        new DateTime(2008, 1, 1, 10, 0, 0), 
-                        new List<TempChannelMeasurenment>(){
-                            new TempChannelMeasurenment(1, 25), 
-                            new TempChannelMeasurenment(2, 25) } )
-                },
+                new TempMeasurenementConfiguration(true, true,true,true,false, false, false, true, 
+                    new List<TempMeasurenment>(){
+                        new TempMeasurenment(new DateTime(2008,1,1,1,1,1),20.1, 20.2, 20.3, 20.1),
+                        new TempMeasurenment(new DateTime(2008,1,1,1,1,2),20.1, 20.2, 20.3, 20.1),
+                        new TempMeasurenment(new DateTime(2008,1,1,1,1,3),20.1, 20.2, 20.3, 20.1),
+                        new TempMeasurenment(new DateTime(2008,1,1,1,1,4),20.1, 20.2, 20.3, 20.1),
+                        new TempMeasurenment(new DateTime(2008,1,1,1,1,1),20.1, 20.2, 20.3, 20.1),
+                        new TempMeasurenment(new DateTime(2008,1,1,1,1,1),20.1, 20.2, 20.3, 20.1)
+                    }),
+                
                 new List<RessistanceTransformerChannel>()
                 {
                     new RessistanceTransformerChannel(
-                        1, 1, 1, 1, 
-                        new List<RessistanceChannel>(){new RessistanceChannel(1, true), new RessistanceChannel(2, true)},
-                        new List<RessistanceChannel>(){new RessistanceChannel(1, true), new RessistanceChannel(2, true)},
+                        1, 1, 1, 1, true, true,
+                        
                         new List<RessistanceMeasurenment>(){
-                            new RessistanceMeasurenment(
-                                new DateTime(2008, 1, 1, 10, 0, 0), 1, 1, 1)
+                            new RessistanceMeasurenment( new DateTime(2008, 1, 1, 10, 0, 0), 1, 1, 1),
+                            new RessistanceMeasurenment( new DateTime(2008, 1, 1, 10, 0, 1), 2, 2, 1),
+                            new RessistanceMeasurenment( new DateTime(2008, 1, 1, 10, 0, 2), 1, 3, 1),
+                            new RessistanceMeasurenment( new DateTime(2008, 1, 1, 10, 0, 3), 2, 4, 1)
                             }
-                            )
-                        }
-                );
+                    )
+                 }
+            );
 
             Root root = new Root();
             root.DcColdMeasurenments = dcColdMeasurenments;
@@ -118,6 +98,7 @@ namespace EntityLayer
             writeToXml(path, root);
         }
     }
+    #endregion
 
     /// <summary>
     /// Коренот на XML документот
@@ -137,27 +118,11 @@ namespace EntityLayer
     [Serializable]
     public class DcColdMeasurenments
     {
-        //Температури   
+        //Температури
         /// <summary>
-        /// Тековна состојба на SampleRate за температурни мерења
+        /// Конфигурација на Температурни Канали и вредности на Температурните мерења
         /// </summary>
-        public int TempSampleRateCurrentState { get; set; }
-        /// <summary>
-        /// Тековна состојба на NoOfSamples за температурни мерења
-        /// </summary>
-        public int TempNoOfSamplesCurrentState { get; set; }
-        /// <summary>
-        /// Тековна состојба на каналите за температурни мерења
-        /// </summary>
-        public List<TempChannel> TempChannelsCurrentState { get; set; }
-        /// <summary>
-        /// Состојба на каналите за самите температурни мерења
-        /// </summary>
-        public List<TempChannel> TempChannelsMeasurenmentConfiguration { get; set; }
-        /// <summary>
-        /// Температурните мерења
-        /// </summary>
-        public List<TempMeasurenment> TempMeasurenments { get; set; }
+        public TempMeasurenementConfiguration TempMeasurenementConfiguration { get; set; }
 
         //Отпори
         /// <summary>
@@ -165,22 +130,14 @@ namespace EntityLayer
         /// </summary>
         public List<RessistanceTransformerChannel> RessistanceTransformerChannels { get; set; }
 
-        public DcColdMeasurenments(int tempSampleRateCurrentState, int tempNoOfSamplesCurrentState,
-            List<TempChannel> tempChannelsCurrentState, List<TempChannel> tempChannelsMeasurenmentConfiguration,
-            List<TempMeasurenment> tempMeasurenments, List<RessistanceTransformerChannel> ressistanceTransformerChannels)
+        public DcColdMeasurenments(TempMeasurenementConfiguration tempMeasurenementConfiguration
+            , List<RessistanceTransformerChannel> ressistanceTransformerChannels)
         {
-            TempSampleRateCurrentState = tempSampleRateCurrentState;
-            TempNoOfSamplesCurrentState = tempNoOfSamplesCurrentState;
-
-            TempChannelsCurrentState = tempChannelsCurrentState;
-            TempChannelsMeasurenmentConfiguration = tempChannelsMeasurenmentConfiguration;
-
-            TempMeasurenments = tempMeasurenments;
-            RessistanceTransformerChannels = ressistanceTransformerChannels;
+            this.TempMeasurenementConfiguration = tempMeasurenementConfiguration;
+            this.RessistanceTransformerChannels = ressistanceTransformerChannels;
         }
         public DcColdMeasurenments()
-            : this(1, 1, new List<TempChannel>(), new List<TempChannel>(),
-                    new List<TempMeasurenment>(), new List<RessistanceTransformerChannel>())
+            : this(new TempMeasurenementConfiguration(), new List<RessistanceTransformerChannel>())
         {
         }
        
@@ -192,35 +149,15 @@ namespace EntityLayer
     public class AcHotMeasurenments
     {
         /// <summary>
-        /// Тековна состојба на SampleRate за температурни мерења
+        /// Конфигурација на Температурни Канали и вредности на Температурните мерења
         /// </summary>
-        public int TempSampleRateCurrentState { get; set; }
-        /// <summary>
-        /// Тековна состојба на каналите за температурни мерења
-        /// </summary>
-        public List<TempChannel> TempChannelsCurrentState { get; set; }
-        /// <summary>
-        /// Состојба на каналите за самите температурни мерења
-        /// </summary>
-        public List<TempChannel> TempChannelsMeasurenmentConfiguration { get; set; }
-        /// <summary>
-        /// Време на извршена редукција
-        /// </summary>
-        public DateTime TimeOfReduction { get; set; }
-        /// <summary>
-        /// Температурните мерења
-        /// </summary>
-        public List<TempMeasurenment> TempMeasurenments { get; set; }
+        TempMeasurenementConfiguration TempMeasurenementConfiguration { get; set; }
 
-        public AcHotMeasurenments(int tempSampleRateCurrentState, List<TempChannel> tempChannelsCurrentState, List<TempChannel> tempChannelsMeasurenmentConfiguration, DateTime timeOfReduction, List<TempMeasurenment> tempMeasurenments)
+        public AcHotMeasurenments(TempMeasurenementConfiguration tempMeasurenementConfiguration)
         {
-            TempSampleRateCurrentState = tempSampleRateCurrentState;
-            TempChannelsCurrentState = tempChannelsCurrentState;
-            TempChannelsMeasurenmentConfiguration = tempChannelsMeasurenmentConfiguration;
-            TimeOfReduction = timeOfReduction;
-            TempMeasurenments = tempMeasurenments;
+            this.TempMeasurenementConfiguration = tempMeasurenementConfiguration;
         }
-        public AcHotMeasurenments() : this(1, new List<TempChannel>(), new List<TempChannel>(), DateTime.Now, new List<TempMeasurenment>()) { }
+        public AcHotMeasurenments() : this(new TempMeasurenementConfiguration()) { }
     }
     /// <summary>
     /// Мерење при ладење
@@ -240,21 +177,158 @@ namespace EntityLayer
         }
         public DcCoolingMeasurenments() : this(new RessistanceTransformerChannel()) { }
     }
-    public class TransformerProperties
+
+    public class TransformerProperties : INotifyPropertyChanged
     {
         public enum ConnectionType { D, Y, Z };
         public enum Material { Copper, Aluminium, Other };
 
-        public String TransformatorSeries { get; set; }
-        public String TransformatorSerialNo { get; set; }
-        public String PresentAtTest { get; set; }
-        public String Comment { get; set; }
-        public ConnectionType HV { get; set; }
-        public ConnectionType LV { get; set; }
-        public Material HvMaterial { get; set; }
-        public Material LvMaterial { get; set; }
-        public double HvTempCoefficient { get; set; }
-        public double LvTempCoefficient { get; set; }
+        private String _transformatorSeries;
+        public String TransformatorSeries
+        {
+            get { return _transformatorSeries; }
+            set
+            {
+                if (_transformatorSeries != value)
+                {
+                    _transformatorSeries = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("TransformatorSeries"));
+                }
+            }
+        }
+
+        public String _transformatorSerialNo;
+        public String TransformatorSerialNo
+        {
+            get { return _transformatorSerialNo; }
+            set
+            {
+                if (_transformatorSerialNo != value)
+                {
+                    _transformatorSerialNo = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("TransformatorSerialNo"));
+                }
+            }
+        }
+
+        public String _presentAtTest;
+        public String PresentAtTest
+        {
+            get { return _presentAtTest; }
+            set
+            {
+                if (_presentAtTest != value)
+                {
+                    _presentAtTest = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("PresentAtTest"));
+                }
+            }
+        }
+
+        private String _comment;
+        public String Comment
+        {
+            get { return _comment; }
+            set
+            {
+                if(_comment != value)
+                {
+                    _comment = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("Comment"));
+                }
+            }
+        }
+
+        public ConnectionType _hv;
+        public ConnectionType HV
+        {
+            get { return _hv; }
+            set
+            {
+                if (_hv != value)
+                {
+                    _hv = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("HV"));
+                }
+            }
+        }
+
+        public ConnectionType _lv;
+        public ConnectionType LV
+        {
+            get { return _lv; }
+            set
+            {
+                if (_lv != value)
+                {
+                    _lv = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("LV"));
+                }
+            }
+        }
+
+        private Material _hvMaterial;
+        public Material HvMaterial
+        {
+            get { return _hvMaterial; }
+            set
+            {
+                if (_hvMaterial != value)
+                {
+                    _hvMaterial = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("HvMaterial"));
+                }
+            }
+        }
+
+        private Material _lvMaterial;
+        public Material LvMaterial
+        {
+            get { return _lvMaterial; }
+            set
+            {
+                if (_lvMaterial != value)
+                {
+                    _lvMaterial = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("LvMaterial"));
+                }
+            }
+        }
+
+        private double _hvTempCoefficient;
+        public double HvTempCoefficient
+        {
+            get { return _hvTempCoefficient; }
+            set
+            {
+                if (_hvTempCoefficient != value)
+                {
+                    _hvTempCoefficient = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("HvTempCoefficient"));
+                }
+            }
+        }
+
+        private double _lvTempCoefficient;
+        public double LvTempCoefficient
+        {
+            get { return _lvTempCoefficient; }
+            set
+            {
+                if (_lvTempCoefficient != value)
+                {
+                    _lvTempCoefficient = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("LvTempCoefficient"));
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(PropertyChangedEventArgs e)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, e);
+        }
 
         public TransformerProperties(String transformatorSeries, String transformatorSerialNo,
             String presentAtTest, String comment,
@@ -282,99 +356,219 @@ namespace EntityLayer
     /// Состојба на еден канал на трансформаторот
     /// </summary>
     [Serializable]
-    public class RessistanceTransformerChannel
+    public class RessistanceTransformerChannel : INotifyPropertyChanged
     {
+        private int _channelNo;
         /// <summary>
         /// Број на каналот на трансформаторот
         /// </summary>
-        public int ChannelNo { get; set; }
+        public int ChannelNo
+        {
+            get { return _channelNo; }
+            set
+            {
+                if (_channelNo != value)
+                {
+                    _channelNo = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("ChannelNo"));
+                }
+            }
+        }
+
+        private double _testCurrent;
         /// <summary>
         /// Струјата со која се вршени мерењата
         /// </summary>
-        public float TestCurrent { get; set; }
+        public double TestCurrent
+        {
+            get { return _testCurrent; }
+            set
+            {
+                if (_testCurrent != value)
+                {
+                    _testCurrent = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("TestCurrent"));
+                }
+            }
+        }
+        private int _ressistanceSampleRateCurrentState;
         /// <summary>
         /// Тековна состојба на SampleRate за мерење на отпор
         /// </summary>
-        public int RessistanceSampleRateCurrentState { get; set; }
+        public int RessistanceSampleRateCurrentState
+        {
+            get { return _ressistanceSampleRateCurrentState; }
+            set
+            {
+                if (_ressistanceSampleRateCurrentState != value)
+                {
+                    _ressistanceSampleRateCurrentState = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("RessistanceSampleRateCurrentState"));
+                }
+            }
+        }
+
+        private int _ressistanceNoOfSamplesCurrentState;
         /// <summary>
         /// Тековна состојба на NoOfSamples за мерење на отпор
         /// </summary>
-        public int RessistanceNoOfSamplesCurrentState { get; set; }
+        public int RessistanceNoOfSamplesCurrentState
+        {
+            get { return _ressistanceNoOfSamplesCurrentState; }
+            set
+            {
+                if (_ressistanceNoOfSamplesCurrentState != value)
+                {
+                    _ressistanceNoOfSamplesCurrentState = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("RessistanceNoOfSamplesCurrentState"));
+                }
+            }
+        }
+
+        private bool _isChannel1On;
         /// <summary>
-        /// Тековна состојба на каналите за мерење на отпор
+        /// Дали Канал 1 е On Или Off
         /// </summary>
-        public List<RessistanceChannel> RessistanceChannelsCurrentState { get; set; }
+        public bool IsChannel1On
+        {
+            get { return _isChannel1On; }
+            set
+            {
+                if (_isChannel1On != value)
+                {
+                    _isChannel1On = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("IsChannel1On"));
+                }
+            }
+        }
+        private bool _isChannel2On;
         /// <summary>
-        /// Состојба на каналите за самите мерење на отпор
+        /// Дали Канал 2 е On Или Off
         /// </summary>
-        public List<RessistanceChannel> RessistanceChannelsMeasurenmentConfiguration { get; set; }
+        public bool IsChannel2On
+        {
+            get { return _isChannel2On; }
+            set
+            {
+                if (_isChannel2On != value)
+                {
+                    _isChannel2On = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("IsChannel2On"));
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(PropertyChangedEventArgs e)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, e);
+        }
+
         /// <summary>
         /// Мерења на отпор
         /// </summary>
         public List<RessistanceMeasurenment> RessistanceMeasurenments { get; set; }
 
-        public RessistanceTransformerChannel(int channelNo, int testCurrent,
-            int ressistanceSampleRateCurrentState, int ressistanceNoOfSamplesCurrentState,
-            List<RessistanceChannel> ressistanceChannelsCurrentState,
-            List<RessistanceChannel> ressistanceChannelsMeasurenmentConfiguration,
+        public RessistanceTransformerChannel(
+            int channelNo, 
+            int testCurrent,
+            int ressistanceSampleRateCurrentState, 
+            int ressistanceNoOfSamplesCurrentState,
+            bool isChannel1On,
+            bool isChannel2On,
             List<RessistanceMeasurenment> ressistanceMeasurenments)
         {
             ChannelNo = channelNo;
             TestCurrent = testCurrent;
             RessistanceSampleRateCurrentState = ressistanceSampleRateCurrentState;
             RessistanceNoOfSamplesCurrentState = ressistanceNoOfSamplesCurrentState;
-            RessistanceChannelsCurrentState = ressistanceChannelsCurrentState;
-            RessistanceChannelsMeasurenmentConfiguration = ressistanceChannelsMeasurenmentConfiguration;
+            this.IsChannel1On = isChannel1On;
+            this.IsChannel2On = isChannel2On;
+
             RessistanceMeasurenments = ressistanceMeasurenments;
 
         }
-        public RessistanceTransformerChannel() : this(1, 1, 1, 1, new List<RessistanceChannel>(), 
-            new List<RessistanceChannel>(), new List<RessistanceMeasurenment>()) { }
+        public RessistanceTransformerChannel() : this(1, 1, 1, 1, true, true, new List<RessistanceMeasurenment>()) { }
     }
 
-    /// <summary>
-    /// Состојба на еден канал за мерење на отпор
-    /// </summary>
     [Serializable]
-    public class RessistanceChannel
+    public class RessistanceMeasurenment : INotifyPropertyChanged
     {
-        /// <summary>
-        /// Број на каналот
-        /// </summary>
-        public int ChannelNo { get; set; }
-        /// <summary>
-        /// Дали каналот е ON Или OFF
-        /// </summary>
-        public bool IsOn { get; set; }
-        public RessistanceChannel(int channelNo, bool isOn)
-        {
-            ChannelNo = channelNo;
-            
-            IsOn = isOn;
-        }
-        public RessistanceChannel() : this(1, false) { }
-    }
-    [Serializable]
-    public class RessistanceMeasurenment
-    {
+        private DateTime _time;
         /// <summary>
         /// Време на мерењето
         /// </summary>
-        public DateTime Time { get; set; }
+        public DateTime Time
+        {
+            get { return _time; }
+            set
+            {
+                if (_time != value)
+                {
+                    _time = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("Time"));
+                }
+            }
+        }
+        private int _channelNo;
         /// <summary>
         /// Број на канал
         /// </summary>
-        public int ChannelNo { get; set; }
+        public int ChannelNo
+        {
+            get { return _channelNo; }
+            set
+            {
+                if (_channelNo != value)
+                {
+                    _channelNo = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("ChannelNo"));
+                }
+            }
+        }
+
+        private double _voltage;
         /// <summary>
         /// Напонот добиен од мерењето
         /// </summary>
-        public double Voltage { get; set; }
+        public double Voltage
+        {
+            get { return _voltage; }
+            set
+            {
+                if (_voltage != value)
+                {
+                    _voltage = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("Voltage"));
+                }
+            }
+        }
+
+        private double _current;
         /// <summary>
         /// Струјата добиена од мерењето
         /// </summary>
-        public double Current { get; set; }
+        public double Current
+        {
+            get { return _current; }
+            set
+            {
+                if (_current != value)
+                {
+                    _current = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("Current"));
+                }
+            }
+        }
 
-       
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(PropertyChangedEventArgs e)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, e);
+        }
+
         public RessistanceMeasurenment(DateTime time, int channelNo, double voltage, double current)
         {
             Time = time;
@@ -385,76 +579,333 @@ namespace EntityLayer
         public RessistanceMeasurenment(DateTime time) : this(time, 1, 0, 1) { }
         public RessistanceMeasurenment() : this(DateTime.Now) { }
     }
-
-    /// <summary>
-    /// Сотојба на еден температурен канал
-    /// </summary>
     [Serializable]
-    public class TempChannel
+    public class TempMeasurenementConfiguration : INotifyPropertyChanged
     {
+
+        private DateTime _timeOfReduction;
         /// <summary>
-        /// Број на каналот
+        /// Време на извршена редукција
         /// </summary>
-        public int ChannelNo { get; set; }
-        /// <summary>
-        /// Дали каналот е ON Или OFF
-        /// </summary>
-        public bool IsOn { get; set; }
-        /// <summary>
-        /// Дали се работи за Oil канал или Amb канал
-        /// </summary>
-        public bool IsOil { get; set; }
-        public TempChannel(int channelNo, bool isOn, bool isOil)
+        public DateTime TimeOfReduction
         {
-            ChannelNo = channelNo;
-            IsOn = isOn;
-            IsOil = isOil;
+            get { return _timeOfReduction; }
+            set
+            {
+                if (_timeOfReduction != value)
+                {
+                    _timeOfReduction = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("TimeOfReduction"));
+                }
+            }
         }
-        public TempChannel() : this(1, false, false) { }
+
+        private int _tempSampleRateCurrentState;
+        /// <summary>
+        /// Тековна состојба на SampleRate за температурни мерења
+        /// </summary>
+        public int TempSampleRateCurrentState
+        {
+            get { return _tempSampleRateCurrentState; }
+            set
+            {
+                if (_tempSampleRateCurrentState != value)
+                {
+                    _tempSampleRateCurrentState = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("TempSampleRateCurrentState"));
+                }
+            }
+        }
+        private int _tempNoOfSamplesCurrentState;
+        /// <summary>
+        /// Тековна состојба на NoOfSamples за температурни мерења
+        /// </summary>
+        public int TempNoOfSamplesCurrentState
+        {
+            get { return _tempNoOfSamplesCurrentState; }
+            set
+            {
+                if (_tempNoOfSamplesCurrentState != value)
+                {
+                    _tempNoOfSamplesCurrentState = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("TempNoOfSamplesCurrentState"));
+                }
+            }
+        }
+        private bool _isChannel1On;
+        /// <summary>
+        /// Дали Канал 1 е On Или Off
+        /// </summary>
+        public bool IsChannel1On
+        {
+            get { return _isChannel1On; }
+            set
+            {
+                if (_isChannel1On != value)
+                {
+                    _isChannel1On = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("IsChannel1On"));
+                }
+            }
+        }
+        private bool _isChannel2On;
+        /// <summary>
+        /// Дали Канал 2 е On Или Off
+        /// </summary>
+        public bool IsChannel2On
+        {
+            get { return _isChannel2On; }
+            set
+            {
+                if (_isChannel2On != value)
+                {
+                    _isChannel2On = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("IsChannel2On"));
+                }
+            }
+        }
+        private bool _isChannel3On;
+        /// <summary>
+        /// Дали Канал 3 е On Или Off
+        /// </summary>
+        public bool IsChannel3On
+        {
+            get { return _isChannel3On; }
+            set
+            {
+                if (_isChannel3On != value)
+                {
+                    _isChannel3On = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("IsChannel3On"));
+                }
+            }
+        }
+        private bool _isChannel4On;
+        /// <summary>
+        /// Дали Канал 4 е On Или Off
+        /// </summary>
+        public bool IsChannel4On
+        {
+            get { return _isChannel4On; }
+            set
+            {
+                if (_isChannel4On != value)
+                {
+                    _isChannel4On = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("IsChannel4On"));
+                }
+            }
+        }
+        private bool _isChannel1Oil;
+        /// <summary>
+        /// Дали Канал 1 е Oil или Amb
+        /// </summary>
+        public bool IsChannel1Oil
+        {
+            get { return _isChannel1Oil; }
+            set
+            {
+                if (_isChannel1Oil != value)
+                {
+                    _isChannel1Oil = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("IsChannel1Oil"));
+                }
+            }
+        }
+        private bool _isChannel2Oil;
+        /// <summary>
+        /// Дали Канал 2 е Oil или Amb
+        /// </summary>
+        public bool IsChannel2Oil
+        {
+            get { return _isChannel2Oil; }
+            set
+            {
+                if (_isChannel2Oil != value)
+                {
+                    _isChannel2Oil = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("IsChannel2Oil"));
+                }
+            }
+        }
+
+        private bool _isChannel3Oil;
+        /// <summary>
+        /// Дали Канал 3 е Oil или Amb
+        /// </summary>
+        public bool IsChannel3Oil
+        {
+            get { return _isChannel3Oil; }
+            set
+            {
+                if (_isChannel3Oil != value)
+                {
+                    _isChannel3Oil = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("IsChannel3Oil"));
+                }
+            }
+        }
+
+        private bool _isChannel4Oil;
+        /// <summary>
+        /// Дали Канал 4 е Oil или Amb
+        /// </summary>
+        public bool IsChannel4Oil
+        {
+            get { return _isChannel4Oil; }
+            set
+            {
+                if (_isChannel4Oil != value)
+                {
+                    _isChannel4Oil = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("IsChannel4Oil"));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Температурните мерења
+        /// </summary>
+        public List<TempMeasurenment> TempMeasurenments { get; set; }
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(PropertyChangedEventArgs e)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, e);
+        }
+
+
+        public TempMeasurenementConfiguration(bool isChannel1On, bool isChannel2On, bool isChannel3On, bool isChannel4On, bool isChannel1Oil, bool isChannel2Oil, bool isChannel3Oil, bool isChannel4Oil, List<TempMeasurenment> tempMeasurenments)
+        {
+            IsChannel1On = isChannel1On;
+            IsChannel2On = isChannel2On;
+            IsChannel3On = isChannel3On;
+            IsChannel4On = isChannel4On;
+
+            IsChannel1Oil = isChannel1Oil;
+            IsChannel2Oil = isChannel2Oil;
+            IsChannel3Oil = isChannel3Oil;
+            IsChannel4Oil = isChannel4Oil;
+
+            TempMeasurenments = tempMeasurenments;
+        }
+        public TempMeasurenementConfiguration()
+        {
+            TempMeasurenments = new List<TempMeasurenment>();
+        }
+        
     }
     /// <summary>
     /// Едно температурно мерење со мерените вредности на сите канали.
     /// </summary>
     [Serializable]
-    public class TempMeasurenment
+    public class TempMeasurenment : INotifyPropertyChanged
     {
+        private DateTime _time;
         /// <summary>
         /// Време на мерењето
         /// </summary>
-        public DateTime Time { get; set; }
+        public DateTime Time
+        {
+            get { return _time; }
+            set
+            {
+                if (_time != value)
+                {
+                    _time = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("Time"));
+                }
+            }
+        }
+        private double _t1;
         /// <summary>
-        /// Мерењата за секој канал
+        /// Температура од канал бр. 1
         /// </summary>
-        public List<TempChannelMeasurenment> TempChannelMeasurenments { get; set; }
+        public double T1
+        {
+            get { return _t1; }
+            set
+            {
+                if (_t1 != value)
+                {
+                    _t1 = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("T1"));
+                }
+            }
+        }
+        private double _t2;
+        /// <summary>
+        /// Температура од канал бр. 2
+        /// </summary>
+        public double T2
+        {
+            get { return _t2; }
+            set
+            {
+                if (_t2 != value)
+                {
+                    _t2 = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("T2"));
+                }
+            }
+        }
 
-        public TempMeasurenment(DateTime time, List<TempChannelMeasurenment> tempChannelMeasurenments)
+        private double _t3;
+        /// /// <summary>
+        /// Температура од канал бр. 3
+        /// </summary>
+        public double T3
+        {
+            get { return _t3; }
+            set
+            {
+                if (_t3 != value)
+                {
+                    _t3 = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("T3"));
+                }
+            }
+        }
+
+
+        private double _t4;
+        /// /// <summary>
+        /// Температура од канал бр. 4
+        /// </summary>
+        public double T4
+        {
+            get { return _t4; }
+            set
+            {
+                if (_t4 != value)
+                {
+                    _t4 = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("T4"));
+                }
+            }
+        }
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(PropertyChangedEventArgs e)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, e);
+        }
+
+        public TempMeasurenment(DateTime time, double t1, double t2, double t3, double t4)
         {
             Time = time;
-            TempChannelMeasurenments = tempChannelMeasurenments;
-        }
-        public TempMeasurenment(DateTime time) : this(time, new List<TempChannelMeasurenment>()) { }
-        public TempMeasurenment() : this(DateTime.Now) { }
-    }
-    /// <summary>
-    /// Температурно мерење со мерените вредности на еден канал.
-    /// </summary>
-    [Serializable]
-    public class TempChannelMeasurenment
-    {
-        /// <summary>
-        /// Број на канал
-        /// </summary>
-        public int ChannelNo { get; set; }
-        /// <summary>
-        /// Вредноста добиена од мерењето
-        /// </summary>
-        public float Value { get; set; }
 
-        public TempChannelMeasurenment(int channelNo, float value)
-        {
-            ChannelNo = channelNo;
-            Value = value;
+            this.T1 = t1;
+            this.T2 = t2;
+            this.T3 = t3;
+            this.T4 = t4;
         }
-        public TempChannelMeasurenment() : this(1, 0) { }
+
+        public TempMeasurenment(DateTime time) : this(time, 20, 21, 220, 23) { }
+        public TempMeasurenment() : this(DateTime.Now) { }
     }
 }
