@@ -2,6 +2,11 @@
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="EntityLayer.DcColdMeasurenments">
     <Position X="10.5" Y="3.75" Width="3.25" />
+    <AssociationLine Name="RessistanceTransformerChannels" Type="EntityLayer.RessistanceTransformerChannel">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.555" Y="0.318" />
+      </MemberNameLabel>
+    </AssociationLine>
     <AssociationLine Name="TempMeasurenementConfiguration" Type="EntityLayer.TempMeasurenementConfiguration" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="13.188" Y="4.731" />
@@ -11,15 +16,6 @@
       </Path>
       <MemberNameLabel ManuallyPlaced="true">
         <Position X="-0.097" Y="0.818" />
-      </MemberNameLabel>
-    </AssociationLine>
-    <AssociationLine Name="RessistanceTransformerChannels" Type="EntityLayer.RessistanceTransformerChannel" FixedToPoint="true">
-      <Path>
-        <Point X="11.938" Y="4.731" />
-        <Point X="11.938" Y="6.25" />
-      </Path>
-      <MemberNameLabel ManuallyPlaced="true">
-        <Position X="-0.555" Y="0.318" />
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>

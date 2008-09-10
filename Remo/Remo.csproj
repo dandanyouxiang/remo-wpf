@@ -68,6 +68,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataSourceLayer\DataConversion.cs" />
+    <Compile Include="DataSourceLayer\DataSource.cs" />
+    <Compile Include="DataSourceLayer\Validation.cs" />
     <Compile Include="EntityLayer\Entities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -95,8 +98,7 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DataAccessLayer\" />
-    <Folder Include="DataSourceLayer\" />
+    <Folder Include="DataAccessLayer1\" />
     <Folder Include="ReportsLayer\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

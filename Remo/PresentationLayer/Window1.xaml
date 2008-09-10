@@ -33,6 +33,20 @@
                                     <ColumnDefinition Width="40*"></ColumnDefinition>
                                     <ColumnDefinition Width="530.195*" />
                                 </Grid.ColumnDefinitions>
+
+                                <GroupBox Header="Ressistance Measurenment" Margin="30,10,10,10" Name="groupBox3" Grid.Row="0" Grid.Column="2" VerticalAlignment="Top" HorizontalAlignment="Left">
+                                    <Grid Height="229" Width="337">
+                                        <TextBox Height="23" HorizontalAlignment="Right" Margin="0,62.944,16,0" Name="textBox6" VerticalAlignment="Top" Width="120" />
+                                        <TextBox Height="23" HorizontalAlignment="Right" Margin="0,0,16,81" Name="textBox11" VerticalAlignment="Bottom" Width="120" />
+                                        <TextBox Height="24" HorizontalAlignment="Left" Margin="24,0,0,81" Name="textBox12" VerticalAlignment="Bottom" Width="120" />
+                                        <TextBox Height="24" HorizontalAlignment="Left" Margin="24,62.944,0,0" Name="textBox13" VerticalAlignment="Top" Width="120" />
+                                        <Label Height="28" HorizontalAlignment="Left" Margin="24,39,0,0" Name="label9" VerticalAlignment="Top" Width="120">Sample Rate</Label>
+                                        <Label HorizontalAlignment="Right" Margin="0,97,16,104" Name="label10" Width="120">R c a</Label>
+                                        <Label HorizontalAlignment="Left" Margin="24,97,0,104" Name="label11" Width="120">R C A</Label>
+                                        <Label Height="28" HorizontalAlignment="Right" Margin="0,39,16,0" Name="label12" VerticalAlignment="Top" Width="120">No. of Samples</Label>
+                                        <Button Height="23" Margin="148,0,114,16" Name="button4" VerticalAlignment="Bottom">Start</Button>
+                                    </Grid>
+                                </GroupBox>
                                 <ListBox  Margin="40,80,0,0" VerticalAlignment="Top" Name="ChannelsListBox" MinHeight="70" Width="60"  Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left">
                                     <ListBoxItem Margin="10,3">A - B</ListBoxItem>
                                     <ListBoxItem Margin="10,3">B - C</ListBoxItem>
@@ -72,19 +86,6 @@
                             </Grid>
                         </TabItem>
                     </TabControl>
-                    <GroupBox Header="Ressistance Measurenment" Margin="329.967,79.553,165.438,238.786" Name="groupBox3" Grid.ColumnSpan="2">
-                        <Grid Height="229" Width="337">
-                            <TextBox Height="23" HorizontalAlignment="Right" Margin="0,62.944,16,0" Name="textBox6" VerticalAlignment="Top" Width="120" />
-                            <TextBox Height="23" HorizontalAlignment="Right" Margin="0,0,16,81" Name="textBox11" VerticalAlignment="Bottom" Width="120" />
-                            <TextBox Height="24" HorizontalAlignment="Left" Margin="24,0,0,81" Name="textBox12" VerticalAlignment="Bottom" Width="120" />
-                            <TextBox Height="24" HorizontalAlignment="Left" Margin="24,62.944,0,0" Name="textBox13" VerticalAlignment="Top" Width="120" />
-                            <Label Height="28" HorizontalAlignment="Left" Margin="24,39,0,0" Name="label9" VerticalAlignment="Top" Width="120">Sample Rate</Label>
-                            <Label HorizontalAlignment="Right" Margin="0,97,16,104" Name="label10" Width="120">R c a</Label>
-                            <Label HorizontalAlignment="Left" Margin="24,97,0,104" Name="label11" Width="120">R C A</Label>
-                            <Label Height="28" HorizontalAlignment="Right" Margin="0,39,16,0" Name="label12" VerticalAlignment="Top" Width="120">No. of Samples</Label>
-                            <Button Height="23" Margin="148,0,114,16" Name="button4" VerticalAlignment="Bottom">Start</Button>
-                        </Grid>
-                    </GroupBox>
                 </Grid>
                 
             </TabItem>
