@@ -5,7 +5,7 @@ using System.Text;
 using System.Windows.Data;
 using System.Globalization;
 
-namespace EntityLayer.DataSourceLayer
+namespace DataAccessLayer
 {
     /// <summary>
     /// Приказ во милиметри

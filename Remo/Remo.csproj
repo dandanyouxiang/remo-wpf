@@ -8,7 +8,7 @@
     <ProjectGuid>{484FA257-4FD6-4AC3-9D4E-0F52F2322E4C}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EntityLayer</RootNamespace>
+    <RootNamespace>DataAccessLayer</RootNamespace>
     <AssemblyName>Remo</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -68,10 +68,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataSourceLayer\DataConversion.cs" />
-    <Compile Include="DataSourceLayer\DataSource.cs" />
-    <Compile Include="DataSourceLayer\Validation.cs" />
+    <Compile Include="DataAccessLayer\DataConversion.cs" />
+    <Compile Include="DataAccessLayer\DataSource.cs" />
+    <Compile Include="DataAccessLayer\Validation.cs" />
     <Compile Include="EntityLayer\Entities.cs" />
+    <Compile Include="EntityLayer\ListWithChangeEvents.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -90,6 +91,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="DataAccessLayer\ClassDiagram1.cd" />
     <None Include="EntityLayer\ClassDiagram.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -98,7 +100,7 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DataAccessLayer1\" />
+    <Folder Include="DataSourceLayer\" />
     <Folder Include="ReportsLayer\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

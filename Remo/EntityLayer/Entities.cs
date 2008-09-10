@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml.Serialization;
 using System.IO;
 using System.ComponentModel;
+using EntityLayer;
 
 namespace EntityLayer
 {
@@ -16,12 +17,12 @@ namespace EntityLayer
                         typeof(AcHotMeasurenments),
                         typeof(DcCoolingMeasurenments),
                         typeof(TransformerProperties),
-                        typeof(List<RessistanceMeasurenment>),
+                        typeof(ListWithChangeEvents<RessistanceMeasurenment>),
                         typeof(RessistanceMeasurenment), 
-                        typeof(List<RessistanceTransformerChannel>),
+                        typeof(ListWithChangeEvents<RessistanceTransformerChannel>),
                         typeof(RessistanceTransformerChannel),
                         typeof(DateTime),
-                        typeof(List<TempMeasurenment>),
+                        typeof(ListWithChangeEvents<TempMeasurenment>),
                         typeof(TempMeasurenementConfiguration),
                         typeof(TempMeasurenment)
                      };
@@ -65,7 +66,7 @@ namespace EntityLayer
         {
             DcColdMeasurenments dcColdMeasurenments = new DcColdMeasurenments(
                 new TempMeasurenementConfiguration(true, true,true,true,false, false, false, true, 
-                    new List<TempMeasurenment>(){
+                    new ListWithChangeEvents<TempMeasurenment>(){
                         new TempMeasurenment(new DateTime(2008,1,1,1,1,1),20.1, 20.2, 20.3, 20.1),
                         new TempMeasurenment(new DateTime(2008,1,1,1,1,2),20.1, 20.2, 20.3, 20.1),
                         new TempMeasurenment(new DateTime(2008,1,1,1,1,3),20.1, 20.2, 20.3, 20.1),
@@ -74,12 +75,12 @@ namespace EntityLayer
                         new TempMeasurenment(new DateTime(2008,1,1,1,1,1),20.1, 20.2, 20.3, 20.1)
                     }),
                 
-                new List<RessistanceTransformerChannel>()
+                new ListWithChangeEvents<RessistanceTransformerChannel>()
                 {
                     new RessistanceTransformerChannel(
                         1, 1, 1, 1, true, true,
                         
-                        new List<RessistanceMeasurenment>(){
+                        new ListWithChangeEvents<RessistanceMeasurenment>(){
                             new RessistanceMeasurenment( new DateTime(2008, 1, 1, 10, 0, 0), 1, 1, 1),
                             new RessistanceMeasurenment( new DateTime(2008, 1, 1, 10, 0, 1), 2, 2, 1),
                             new RessistanceMeasurenment( new DateTime(2008, 1, 1, 10, 0, 2), 1, 3, 1),
@@ -128,16 +129,16 @@ namespace EntityLayer
         /// <summary>
         /// Каналите на трансформаторот и нивните конфигурации и мерења
         /// </summary>
-        public List<RessistanceTransformerChannel> RessistanceTransformerChannels { get; set; }
+        public ListWithChangeEvents<RessistanceTransformerChannel> RessistanceTransformerChannels { get; set; }
 
         public DcColdMeasurenments(TempMeasurenementConfiguration tempMeasurenementConfiguration
-            , List<RessistanceTransformerChannel> ressistanceTransformerChannels)
+            , ListWithChangeEvents<RessistanceTransformerChannel> ressistanceTransformerChannels)
         {
             this.TempMeasurenementConfiguration = tempMeasurenementConfiguration;
             this.RessistanceTransformerChannels = ressistanceTransformerChannels;
         }
         public DcColdMeasurenments()
-            : this(new TempMeasurenementConfiguration(), new List<RessistanceTransformerChannel>())
+            : this(new TempMeasurenementConfiguration(), new ListWithChangeEvents<RessistanceTransformerChannel>())
         {
         }
        
@@ -468,8 +469,8 @@ namespace EntityLayer
         /// <summary>
         /// Мерења на отпор
         /// </summary>
-        public List<RessistanceMeasurenment> RessistanceMeasurenments { get; set; }
-
+        public ListWithChangeEvents<RessistanceMeasurenment> RessistanceMeasurenments { get; set; }
+        
         public RessistanceTransformerChannel(
             int channelNo, 
             int testCurrent,
@@ -477,7 +478,7 @@ namespace EntityLayer
             int ressistanceNoOfSamplesCurrentState,
             bool isChannel1On,
             bool isChannel2On,
-            List<RessistanceMeasurenment> ressistanceMeasurenments)
+            ListWithChangeEvents<RessistanceMeasurenment> ressistanceMeasurenments)
         {
             ChannelNo = channelNo;
             TestCurrent = testCurrent;
@@ -489,7 +490,7 @@ namespace EntityLayer
             RessistanceMeasurenments = ressistanceMeasurenments;
 
         }
-        public RessistanceTransformerChannel() : this(1, 1, 1, 1, true, true, new List<RessistanceMeasurenment>()) { }
+        public RessistanceTransformerChannel() : this(1, 1, 1, 1, true, true, new ListWithChangeEvents<RessistanceMeasurenment>()) { }
     }
 
     [Serializable]
@@ -766,7 +767,7 @@ namespace EntityLayer
         /// <summary>
         /// Температурните мерења
         /// </summary>
-        public List<TempMeasurenment> TempMeasurenments { get; set; }
+        public ListWithChangeEvents<TempMeasurenment> TempMeasurenments { get; set; }
 
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -777,7 +778,7 @@ namespace EntityLayer
         }
 
 
-        public TempMeasurenementConfiguration(bool isChannel1On, bool isChannel2On, bool isChannel3On, bool isChannel4On, bool isChannel1Oil, bool isChannel2Oil, bool isChannel3Oil, bool isChannel4Oil, List<TempMeasurenment> tempMeasurenments)
+        public TempMeasurenementConfiguration(bool isChannel1On, bool isChannel2On, bool isChannel3On, bool isChannel4On, bool isChannel1Oil, bool isChannel2Oil, bool isChannel3Oil, bool isChannel4Oil, ListWithChangeEvents<TempMeasurenment> tempMeasurenments)
         {
             IsChannel1On = isChannel1On;
             IsChannel2On = isChannel2On;
@@ -793,7 +794,7 @@ namespace EntityLayer
         }
         public TempMeasurenementConfiguration()
         {
-            TempMeasurenments = new List<TempMeasurenment>();
+            TempMeasurenments = new ListWithChangeEvents<TempMeasurenment>();
         }
         
     }

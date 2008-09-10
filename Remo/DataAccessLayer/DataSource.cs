@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 
-namespace EntityLayer.DataSourceLayer
+namespace DataAccessLayer
 {
     //////////////
     //Prv tab////
     ////////////
-    public class RessistanceMeasurenment:INotifyPropertyChanged
+    public class RessistanceMeasurenment : INotifyPropertyChanged
     {
         
-        ////////
+        //////// 
         
         private int RCA;
         private int RCa;
@@ -29,7 +29,7 @@ namespace EntityLayer.DataSourceLayer
         /// <summary>
         /// Ентитен преку кој се поврзуваат податоци.
         /// </summary>
-        private EntityLayer.DcColdMeasurenments dcColdMeasurenments;
+        //private EntityLayer.DcColdMeasurenments dcColdMeasurenments;
 
         //private 
 
@@ -42,7 +42,8 @@ namespace EntityLayer.DataSourceLayer
 
         public RessistanceMeasurenment(EntityLayer.DcColdMeasurenments dcColdMeasurenments) 
         {
-            this.dcColdMeasurenments = dcColdMeasurenments;
+            //Todo
+            //this.dcColdMeasurenments = dcColdMeasurenments;
         }
         /// <summary>
         /// За промена на пропертијата.
@@ -148,10 +149,9 @@ namespace EntityLayer.DataSourceLayer
     }
     public class DCColdMeasurenment 
     {
-
-
         TemperatureMeasurenment temperatureMeasurenment = new TemperatureMeasurenment();
-        RessistanceMeasurenment ressistanceMeasurenment = new RessistanceMeasurenment();
+        //Todo
+        //RessistanceMeasurenment ressistanceMeasurenment = new RessistanceMeasurenment();
     }
     ///////////////
 

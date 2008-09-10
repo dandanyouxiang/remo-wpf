@@ -5,7 +5,7 @@ using System.Text;
 using System.Windows.Controls;
 using System.Globalization;
 
-namespace EntityLayer.DataSourceLayer
+namespace DataAccessLayer
 {
     class ConvertInput 
     {
