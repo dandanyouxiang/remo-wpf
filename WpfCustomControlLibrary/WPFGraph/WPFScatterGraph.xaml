@@ -1,0 +1,65 @@
+﻿<UserControl x:Class="DNBSoft.WPF.WPFGraph.WPFScatterGraph"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    MinHeight="300" MinWidth="300" Loaded="UserControl_Loaded">
+    <Grid Name="masterGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>    
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="60"/>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="30" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Axis definitions -->
+        
+        <Border Name="topBorder" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
+        <Border Name="sideBorder" Grid.Row="0" Grid.Column="2" Grid.RowSpan="3"/>    
+        <Border Name="verticalAxisBorder" Grid.Row="1" Grid.Column="0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Canvas Name="verticalAxis" Grid.Column="1">
+
+                </Canvas>
+                <Canvas Grid.Column="0" VerticalAlignment="Center">
+                    <Label Name="verticalTitle" Grid.Column="0" VerticalAlignment="Center">
+                        <Label.RenderTransform>
+                            <RotateTransform CenterX="10" CenterY="15" Angle="90" />
+                        </Label.RenderTransform>
+                        NOT SET
+                    </Label>
+                </Canvas>
+            </Grid>
+        </Border>
+        <Border Name="cornerAxisBorder" Grid.Row="2" Grid.Column="0"
+                BorderThickness="0,1,1,0" BorderBrush="Black">
+            
+        </Border>
+        <Border Name="horizontalAxisBorder" Grid.Row="2" Grid.Column="1"
+                BorderThickness="0,1,0,0" BorderBrush="Black">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Canvas Name="horizontalAxis" Grid.Row="0">
+
+                </Canvas>
+                <Label Name="horizontalTitle" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top">
+                    NOT SET
+                </Label>
+            </Grid>
+        </Border>
+        
+        <!-- Graph Space -->
+        <Canvas Name="graphCanvas" Grid.Row="1" Grid.Column="1">
+            
+        </Canvas>
+    </Grid>
+</UserControl>

@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfCustomControlLibrary", "WpfCustomControlLibrary\WpfCustomControlLibrary.csproj", "{3008262C-DD62-44C8-9DEB-7DDAB103BB9C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfCustomControlsClient", "WpfCustomControlsClient\WpfCustomControlsClient.csproj", "{8D83A4D9-2053-4A10-A76F-6BA7448A7157}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFGraph", "WPFGraph\WPFGraph.csproj", "{0A6BF4D8-1AB8-42FC-935A-AFCB576188A5}"
+EndProject
+Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3008262C-DD62-44C8-9DEB-7DDAB103BB9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3008262C-DD62-44C8-9DEB-7DDAB103BB9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3008262C-DD62-44C8-9DEB-7DDAB103BB9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3008262C-DD62-44C8-9DEB-7DDAB103BB9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D83A4D9-2053-4A10-A76F-6BA7448A7157}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D83A4D9-2053-4A10-A76F-6BA7448A7157}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D83A4D9-2053-4A10-A76F-6BA7448A7157}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D83A4D9-2053-4A10-A76F-6BA7448A7157}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A6BF4D8-1AB8-42FC-935A-AFCB576188A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A6BF4D8-1AB8-42FC-935A-AFCB576188A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A6BF4D8-1AB8-42FC-935A-AFCB576188A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A6BF4D8-1AB8-42FC-935A-AFCB576188A5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

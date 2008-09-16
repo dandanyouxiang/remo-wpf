@@ -1,0 +1,158 @@
+﻿<UserControl x:Class="WpfCustomControlLibrary.Thermometer"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Height="300" Width="100" IsEnabledChanged="UserControl_IsEnabledChanged" Background="White">
+    <UserControl.Resources>
+        <!-- Rectangle Style -->
+        <Style x:Key="RectangleStyle"  TargetType="{x:Type Rectangle}">
+            <Setter Property="Fill">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5" SpreadMethod="Pad">
+                        <GradientStop Offset="-0.8">
+                            <GradientStop.Color>
+                                <Color A="255" R="72" G="78" B="93"/>
+                            </GradientStop.Color>
+                        </GradientStop>
+                        <GradientStop Offset="0.2">
+                            <GradientStop.Color>
+                                <Color A="255" R="185" G="185" B="205"/>
+                            </GradientStop.Color>
+                        </GradientStop>
+                        <GradientStop Offset="0.5">
+                            <GradientStop.Color>
+                                <Color A="255" R="225" G="225" B="245"/>
+                            </GradientStop.Color>
+                        </GradientStop>
+                        <GradientStop Offset="0.8">
+                            <GradientStop.Color>
+                                <Color A="255" R="185" G="185" B="205"/>
+                            </GradientStop.Color>
+                        </GradientStop>
+                        <GradientStop Offset="1.8">
+                            <GradientStop.Color>
+                                <Color A="255" R="72" G="78" B="93"/>
+                            </GradientStop.Color>
+                        </GradientStop>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- Rectangle Fill Style -->
+        <Style x:Key="RectangleFillStyle"  TargetType="{x:Type Rectangle}">
+            <Setter Property="Fill">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5" SpreadMethod="Pad">
+                        <GradientStop Offset="-0.8">
+                            <GradientStop.Color>
+                                <Color A="255" R="140" G="4" B="4"/>
+                            </GradientStop.Color>
+                        </GradientStop>
+                        <GradientStop Offset="0.2">
+                            <GradientStop.Color>
+                                <Color A="255" R="255" G="20" B="20"/>
+                            </GradientStop.Color>
+                        </GradientStop>
+                        <GradientStop Offset="0.5">
+                            <GradientStop.Color>
+                                <Color A="255" R="255" G="90" B="90"/>
+                            </GradientStop.Color>
+                        </GradientStop>
+                        <GradientStop Offset="0.8">
+                            <GradientStop.Color>
+                               <Color A="255" R="255" G="20" B="20"/>
+                            </GradientStop.Color>
+                        </GradientStop>
+                        <GradientStop Offset="1.8">
+                            <GradientStop.Color>
+                                <Color A="255" R="140" G="30" B="30"/>
+                            </GradientStop.Color>
+                        </GradientStop>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- Top Eclipse Style -->
+        <Style x:Key="TopEllipseStyle"  TargetType="{x:Type Ellipse}">
+            <Setter Property="Fill">
+                <Setter.Value>
+                    <RadialGradientBrush RadiusX="0.5" RadiusY="0.7" GradientOrigin="0.5, 0.4">
+                        <GradientStop Offset="0">
+                            <GradientStop.Color>
+                                <Color A="255" R="238" G="238" B="255"/>
+                            </GradientStop.Color>
+                        </GradientStop>
+                        <GradientStop Offset="0.7">
+                            <GradientStop.Color>
+                                <Color A="255" R="185" G="185" B="205"/>
+                            </GradientStop.Color>
+                        </GradientStop>
+                        <GradientStop Offset="1.7">
+                            <GradientStop.Color>
+                                <Color A="255" R="72" G="78" B="93"/>
+                            </GradientStop.Color>
+                        </GradientStop>
+                    </RadialGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- Bottom Eclipse Style -->
+        <Style x:Key="BottomEllipseStyle"  TargetType="{x:Type Ellipse}">
+            <Setter Property="Fill">
+                <Setter.Value>
+                    <RadialGradientBrush RadiusX="0.5" RadiusY="0.7" GradientOrigin="0.5, 0.4">
+                        <GradientStop Offset="0">
+                            <GradientStop.Color>
+                                <Color A="255" R="255" G="90" B="90"/>
+                            </GradientStop.Color>
+                        </GradientStop>
+                        <GradientStop Offset="0.7">
+                            <GradientStop.Color>
+                                <Color A="255" R="255" G="20" B="20"/>
+                            </GradientStop.Color>
+                        </GradientStop>
+                        <GradientStop Offset="1.7">
+                            <GradientStop.Color>
+                                <Color A="255" R="140" G="30" B="30"/>
+                            </GradientStop.Color>
+                        </GradientStop>
+                    </RadialGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition  Width="22"></ColumnDefinition>
+            <ColumnDefinition  Width="{Binding Path=EclipseWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="{Binding Path=EclipseHeight, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}} }"></RowDefinition>
+            <RowDefinition Height="{Binding Path=EclipseHeight, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}} }"></RowDefinition>
+            <RowDefinition Height="60*"></RowDefinition>
+            <RowDefinition Height="{Binding Path=EclipseHeight, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}} }"></RowDefinition>
+            <RowDefinition Height="{Binding Path=EclipseHeight, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}} }"></RowDefinition>
+
+        </Grid.RowDefinitions>
+        
+        
+        <!--StackPanel for the TickBar's with Numbers -->
+        <StackPanel Name="TickBarsStackPanel" Grid.RowSpan="5"  Margin="0 0 2 0">
+        </StackPanel>
+        <Ellipse  Grid.Column="1" Grid.RowSpan="2" Style="{StaticResource TopEllipseStyle}">
+        </Ellipse>
+        
+        <Ellipse  Grid.Column="1" Grid.Row="3" Grid.RowSpan="2" Style="{StaticResource BottomEllipseStyle}">
+        </Ellipse>
+
+
+        <Rectangle Name="backgroungRectangle" Grid.Column="1" Grid.Row="1" Style="{StaticResource RectangleStyle}" Grid.RowSpan="3">
+        </Rectangle>
+        
+        <Rectangle Name="fillRectangle" Grid.Column="1" Grid.Row="1" Style="{StaticResource RectangleFillStyle}" Grid.RowSpan="3" Height="0" VerticalAlignment="Bottom">
+        </Rectangle>  
+        
+        <Border Name="EnabledBorder" Grid.RowSpan="5"  Grid.ColumnSpan="2" Background="{Binding Path=Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}} }" Opacity="0"/>
+
+    </Grid>
+</UserControl>
