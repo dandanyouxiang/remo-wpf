@@ -5,14 +5,13 @@ using System.Text;
 using System.Xml.Serialization;
 using System.IO;
 using System.ComponentModel;
-using EntityLayer;
 
 namespace EntityLayer
 {
     #region XmlServices
-    public static class XmlServices
+    public class XmlServices
     {
-        private static  Type[] types = new Type[] { 
+        private  Type[] types = new Type[] { 
                         typeof(DcColdMeasurenments),
                         typeof(AcHotMeasurenments),
                         typeof(DcCoolingMeasurenments),
@@ -27,7 +26,7 @@ namespace EntityLayer
                         typeof(TempMeasurenment)
                      };
 
-        public static void writeToXml(string path, Root root)
+        public void writeToXml(string path, Root root)
         {
             try
             {
@@ -43,7 +42,7 @@ namespace EntityLayer
                 Console.WriteLine(ex.Message);
             }
         }
-        public static Root readXml(string path)
+        public Root readXml(string path)
         {
             Root root;
             try
@@ -62,7 +61,7 @@ namespace EntityLayer
             }
             return null;
         }
-        public static void writeToXmlTest(string path)
+        public void writeToXmlTest(string path)
         {
             DcColdMeasurenments dcColdMeasurenments = new DcColdMeasurenments(
                 new TempMeasurenementConfiguration(true, true,true,true,false, false, false, true, 
