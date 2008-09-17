@@ -14,9 +14,10 @@ namespace EntityLayer
 
             public new void Add(T value)
             {
-                OnPropertyChanged(new PropertyChangedEventArgs(null));
                 base.Add(value);
                 value.PropertyChanged += new PropertyChangedEventHandler(value_PropertyChanged);
+            
+                OnPropertyChanged(new PropertyChangedEventArgs(null));
             }
             private void value_PropertyChanged(object sender, PropertyChangedEventArgs e)
             {
@@ -37,6 +38,12 @@ namespace EntityLayer
                     value.PropertyChanged -= new PropertyChangedEventHandler(value_PropertyChanged);
                 }
                 return flag;
+            }
+            public new void RemoveAt(int index)
+            {
+                base[index].PropertyChanged-=new PropertyChangedEventHandler(value_PropertyChanged);
+                base.RemoveAt(index);
+                OnPropertyChanged(new PropertyChangedEventArgs(null));
             }
 
             public new T this[int index]
