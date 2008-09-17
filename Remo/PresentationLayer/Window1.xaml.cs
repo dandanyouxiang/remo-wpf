@@ -33,6 +33,8 @@ namespace PresentationLayer
                 datasource.PropertyChanged += new PropertyChangedEventHandler(DCColdRessistanceTable_PropertyChanged);
 
                 DCColdRessistanceTable.ItemsSource = datasource.DCColdRessistanceTable(datasource.SelectedChannel);
+                DCColdRessistanceTable.DataContext = datasource;
+
                 NoOfSamplesRessTextBox.DataContext = datasource.root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel];
                 SampleRateRessTextBox.DataContext = datasource.root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel];
 
@@ -79,10 +81,13 @@ namespace PresentationLayer
 
         private void ChannelsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            datasource.setValuesForSelectedChannel();
+
             GridViewColumn colum = new GridViewColumn();
             if (datasource.SelectedChannel < datasource.root.DcColdMeasurenments.RessistanceTransformerChannels.Count)
             {
                 DCColdRessistanceTable.ItemsSource = datasource.DCColdRessistanceTable(datasource.SelectedChannel);
+                
                // NoOfSamplesRessTextBox.DataContext = datasource.root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel];
                // SampleRateRessTextBox.DataContext = datasource.root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel];
 
