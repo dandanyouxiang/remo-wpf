@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,6 +8,24 @@ using System.Globalization;
 
 namespace DataAccessLayer
 {
+    public class RegexValidator : ValidationRule
+    {
+        public string RegularExpression { get; set; }
+
+        public override ValidationResult Validate(object value, CultureInfo cultureInfo)
+        {
+            Regex regex = new Regex(RegularExpression);
+            if (regex.IsMatch(value.ToString()))
+            {
+                return new ValidationResult(true, null);
+            }
+            else
+            {
+                return new ValidationResult(false, "Validation failed");
+            }
+        }
+    }
+
     class ConvertInput 
     {
         static public void TryConvertInteger(object value,string metric) 

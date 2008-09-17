@@ -517,10 +517,10 @@ namespace DataAccessLayer
             {
                 //Citanje na podatocite
 
-                EntityLayer.XmlServices.writeToXmlTest(path);
+                new EntityLayer.XmlServices().writeToXmlTest(path);
 
 
-                root = EntityLayer.XmlServices.readXml(path);
+                root = new EntityLayer.XmlServices().readXml(path);
 
                 //DCCold
                 root.DcColdMeasurenments.RessistanceTransformerChannels.PropertyChanged += new PropertyChangedEventHandler(DcColdMeasurenments_RessistanceTransformerChannels_PropertyChanged);

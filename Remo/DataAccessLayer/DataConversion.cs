@@ -7,6 +7,86 @@ using System.Globalization;
 
 namespace DataAccessLayer
 {
+    /// <summary>
+    /// PrePostFixConvertor
+    /// </summary>
+    [ValueConversion(typeof(double), typeof(string))]
+    [ValueConversion(typeof(int), typeof(string))]
+    [ValueConversion(typeof(decimal), typeof(string))]
+    public class PrePostFixConvertor : IValueConverter
+    {
+        public enum ConversionTypesEnum { _double, _int, _decimal };
+        private ConversionTypesEnum _conversionType = ConversionTypesEnum._double;
+        public ConversionTypesEnum ConversionType { get { return _conversionType; } set { _conversionType = value; } }
+
+        private int _decimals = 1;
+        /// <summary>
+        /// Број на децимални места
+        /// </summary>
+        public int Decimals { get { return _decimals; } set { _decimals = value; } }
+
+        private string _prefix = "";
+        /// <summary>
+        /// Префикс
+        /// </summary>
+        public string Prefix { get { return _prefix; } set { _prefix = value; } }
+
+        private string _postfix = "";
+        /// <summary>
+        /// Постфикс
+        /// </summary>
+        public string Postfix { get { return _postfix; } set { _postfix = value; } }
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return Prefix + " " + ConvertToString(value) + " " + Postfix;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            string text = System.Convert.ToString(value);
+            //Во случај да неможе да го конвертира во број внесениот стринг да врати -1
+            try
+            {
+                if (text.Contains(Prefix))
+                {
+                    text = text.Replace(Prefix, "");
+                }
+                if (text.Contains(Postfix))
+                {
+                    text = text.Replace(Postfix, "");
+                }
+                object retValue = ConvertToType(text, culture);
+                return retValue;
+            }
+            catch
+            {
+                return "";
+            }
+        }
+        public object ConvertToType(string s, CultureInfo culture)
+        {
+            switch (ConversionType)
+            {
+                case ConversionTypesEnum._double: return Math.Round(Double.Parse(s, NumberStyles.Any, culture), Decimals);
+                case ConversionTypesEnum._int: return Int32.Parse(s);
+                case ConversionTypesEnum._decimal: return Math.Round(Decimal.Parse(s, NumberStyles.Any, culture), Decimals);
+            }
+            return null;
+        }
+        public string ConvertToString(object o)
+        {
+            switch (ConversionType)
+            {
+                case ConversionTypesEnum._double: return Math.Round((double)o, Decimals).ToString();
+                case ConversionTypesEnum._int: return o.ToString();
+                case ConversionTypesEnum._decimal: return Math.Round((decimal)o, Decimals).ToString();
+            }
+            return "";
+
+        }
+    }
+
     public enum ConversionType 
     {
         Milimetar,
@@ -21,40 +101,65 @@ namespace DataAccessLayer
     /// Приказ во милиметри
     /// </summary>
     [ValueConversion(typeof(int), typeof(string))]
-    public class PrePostFixConvertor : IValueConverter
+    public class everythingConvertor : IValueConverter
     {
-        private string _prefix = "";
-        public string Prefix { get { return _prefix; } set { _prefix = value; } }
-
-        private string _postfix = "";
-        public string Postfix { get { return _postfix; } set { _postfix = value; } }
+        public ConversionType ConvType { get; set; }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return Prefix + value.ToString() + Postfix;
+            string retValue=System.Convert.ToString(value);
+
+            switch (ConvType) 
+            {
+                case ConversionType.Amper: retValue += " A"; break;
+                case ConversionType.Ohm: retValue += " Ohm"; break;
+                case ConversionType.Celsius: retValue += " C"; break;
+                case ConversionType.Second: retValue += " sec"; break;
+                case ConversionType.Minute: retValue += " min"; break;
+                case ConversionType.Milimetar: retValue += " mm"; break;
+            
+            }
+
+            return value.ToString() + " mm";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string text = System.Convert.ToString(value);
-            string returnValue = null;
+            object retValue = 0;
+            string metric = " S";
+            string textMM = System.Convert.ToString(value);
+
+            switch (ConvType)
+            {
+                case ConversionType.Amper: metric= " A"; break;
+                case ConversionType.Ohm: metric = " Ohm"; break;
+                case ConversionType.Celsius: metric = " C"; break;
+                case ConversionType.Second: metric = " sec"; break;
+                case ConversionType.Minute: metric = " min"; break;
+                case ConversionType.Milimetar: metric = " mm"; break;
+
+            }
+
             //Во случај да неможе да го конвертира во број внесениот стринг да врати -1
             try
             {
-                if (text.Contains(Prefix))
+                if (textMM.Contains(metric))
                 {
-                    text = text.Replace(Prefix, "");
+                    retValue = System.Convert.ToInt32(System.Convert.ToString(value).Substring(0, textMM.Length - metric.Length));
                 }
-                if (text.Contains(Postfix))
+                else
                 {
-                    text = text.Replace(Postfix, "");
+                    retValue = System.Convert.ToInt32(textMM);
                 }
-                returnValue = System.Convert.ToInt32(text);
+
             }
             catch
             {
-                return null;
+                retValue = null ;
             }
+
+            return retValue;
+
         }
     }
 
