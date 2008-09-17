@@ -29,7 +29,23 @@ namespace DataAccessLayer
             this.TAmb = tAmb;
             this.TOil = tOil;
         }
-    } 
+    }
+
+    public class TableRessHeader
+    {
+        public string Date { get; set; }
+        public string Time { get; set; }
+        public string R1 { get; set; }
+        public string R2 { get; set; }
+
+        public TableRessHeader(string date, string time, string r1, string r2)
+        {
+            this.Date = date;
+            this.Time = time;
+            this.R1 = r1;
+            this.R2 = r2;
+        }
+    }
 
     public partial class DataSource : INotifyPropertyChanged
     {
@@ -68,8 +84,11 @@ namespace DataAccessLayer
                             if (SelectedChnnl != value) 
                             {
                                 SelectedChnnl = value;
+
                                 OnPropertyChanged(new PropertyChangedEventArgs(null));
 
+                                //labelite nad polinjata za otporite
+                                
                             }
                         }
                     }
@@ -253,22 +272,29 @@ namespace DataAccessLayer
         /// <returns></returns>
         public IEnumerable DCColdTemperatureTable()
         {
+            IEnumerable exp;
             var tempch = root.DcColdMeasurenments.TempMeasurenementConfiguration;
+            try
+            {
+                            exp = from temp in root.DcColdMeasurenments.TempMeasurenementConfiguration.TempMeasurenments
+                                  select new
+                                  {
+                                      Time = temp.Time.Date,
+                                      Date = temp.Time.ToLongTimeString(),
+                                      T1 = temp.T1,
+                                      T2 = temp.T2,
+                                      T3 = temp.T3,
+                                      T4 = temp.T4,
+                                      TAmb = (((!tempch.IsChannel1Oil && tempch.IsChannel1On) ? temp.T1 : 0) + ((!tempch.IsChannel2Oil && tempch.IsChannel2On) ? temp.T2 : 0) + ((!tempch.IsChannel3Oil && tempch.IsChannel3On) ? temp.T3 : 0) + ((!tempch.IsChannel4Oil && tempch.IsChannel4On) ? temp.T4 : 0)) / (((!tempch.IsChannel1Oil && tempch.IsChannel1On) ? 1 : 0) + ((!tempch.IsChannel2Oil && tempch.IsChannel2On) ? 1 : 0) + ((!tempch.IsChannel3Oil && tempch.IsChannel3On) ? 1 : 0) + ((!tempch.IsChannel4Oil && tempch.IsChannel4On) ? 1 : 0)),
+                                      TOil = (((tempch.IsChannel1Oil && tempch.IsChannel1On) ? temp.T1 : 0) + ((tempch.IsChannel2Oil && tempch.IsChannel2On) ? temp.T2 : 0) + ((tempch.IsChannel3Oil && tempch.IsChannel3On) ? temp.T3 : 0) + ((tempch.IsChannel4Oil && tempch.IsChannel4On) ? temp.T4 : 0)) / (((tempch.IsChannel1Oil && tempch.IsChannel1On) ? 1 : 0) + ((tempch.IsChannel2Oil && tempch.IsChannel2On) ? 1 : 0) + ((tempch.IsChannel3Oil && tempch.IsChannel3On) ? 1 : 0) + ((tempch.IsChannel4Oil && tempch.IsChannel4On) ? 1 : 0)),
 
-            IEnumerable exp = from temp in root.DcColdMeasurenments.TempMeasurenementConfiguration.TempMeasurenments
-                              select new
-                              {
-                                  Time = temp.Time.Date,
-                                  Date = temp.Time.ToLongTimeString(),
-                                  T1 = temp.T1,
-                                  T2 = temp.T2,
-                                  T3 = temp.T3,
-                                  T4 = temp.T4,
-                                  TAmb = (((!tempch.IsChannel1Oil && tempch.IsChannel1On) ? temp.T1 : 0) + ((!tempch.IsChannel2Oil && tempch.IsChannel2On) ? temp.T2 : 0) + ((!tempch.IsChannel3Oil && tempch.IsChannel3On) ? temp.T3 : 0) + ((!tempch.IsChannel4Oil && tempch.IsChannel4On) ? temp.T4 : 0)) / (((!tempch.IsChannel1Oil && tempch.IsChannel1On) ? 1 : 0) + ((!tempch.IsChannel2Oil && tempch.IsChannel2On) ? 1 : 0) + ((!tempch.IsChannel3Oil && tempch.IsChannel3On) ? 1 : 0) + ((!tempch.IsChannel4Oil && tempch.IsChannel4On) ? 1 : 0)),
-                                  TOil = (((tempch.IsChannel1Oil && tempch.IsChannel1On) ? temp.T1 : 0) + ((tempch.IsChannel2Oil && tempch.IsChannel2On) ? temp.T2 : 0) + ((tempch.IsChannel3Oil && tempch.IsChannel3On) ? temp.T3 : 0) + ((tempch.IsChannel4Oil && tempch.IsChannel4On) ? temp.T4 : 0)) / (((tempch.IsChannel1Oil && tempch.IsChannel1On) ? 1 : 0) + ((tempch.IsChannel2Oil && tempch.IsChannel2On) ? 1 : 0) + ((tempch.IsChannel3Oil && tempch.IsChannel3On) ? 1 : 0) + ((tempch.IsChannel4Oil && tempch.IsChannel4On) ? 1 : 0)),
-                                  
 
-                              };
+                                  };
+            }
+            catch 
+            {
+                return null;
+            }
             return exp;
         }
 
@@ -436,6 +462,10 @@ namespace DataAccessLayer
             private double R2AtStdT;
             private double R1Ph;
             private double R2Ph;
+            private string R1AtStdTHdr;
+            private string R2AtStdTHdr;
+            private string R1PhHdr;
+            private string R2PhHdr;
             private int StdT;
             /// <summary>
             /// Средни вредности за првиот отпонички канал.
@@ -448,6 +478,10 @@ namespace DataAccessLayer
 
             private double StdDevTR1;
             private double StdDevTR2;
+            private string StdDevTR1Hdr;
+            private string StdDevTR2Hdr;
+
+            private TableRessHeader DCColdRessistanceTableHdr;    
 
             private double TCld;
 
@@ -520,6 +554,59 @@ namespace DataAccessLayer
                     }
                 }
             }
+
+            public string R1AtStdTempHeader
+            {
+                get { return R1AtStdTHdr; }
+                set
+                {
+                    if (R1AtStdTHdr != value)
+                    {
+                        R1AtStdTHdr = value;
+                        OnPropertyChanged(new PropertyChangedEventArgs("R1AtStdTempHeader"));
+                    }
+                }
+            }
+
+            public string R2AtStdTempHeader
+            {
+                get { return R2AtStdTHdr; }
+                set
+                {
+                    if (R2AtStdTHdr != value)
+                    {
+                        R2AtStdTHdr = value;
+                        OnPropertyChanged(new PropertyChangedEventArgs("R2AtStdTempHeader"));
+                    }
+                }
+            }
+
+            public string R1PhaseHeader
+            {
+                get { return R1PhHdr; }
+                set
+                {
+                    if (R1PhHdr != value)
+                    {
+                        R1PhHdr = value;
+                        OnPropertyChanged(new PropertyChangedEventArgs("R1PhaseHeader"));
+                    }
+                }
+            }
+
+            public string R2PhaseHeader
+            {
+                get { return R2PhHdr; }
+                set
+                {
+                    if (R2PhHdr != value)
+                    {
+                        R2PhHdr = value;
+                        OnPropertyChanged(new PropertyChangedEventArgs("R2PhaseHeader"));
+                    }
+                }
+            }
+            
             /// <summary>
             /// Средна вредност од измерените отпори за првиот отпорнички канал.
             /// </summary>
@@ -598,7 +685,45 @@ namespace DataAccessLayer
                     }
                 }
             }
-            
+            public string StdDevTempR1Header
+            {
+                get { return StdDevTR1Hdr; }
+                set
+                {
+                    if (StdDevTR1Hdr != value)
+                    {
+                        StdDevTR1Hdr = value;
+                        OnPropertyChanged(new PropertyChangedEventArgs("StdDevTempR1Header"));
+                    }
+                }
+            }
+            public string StdDevTempR2Header
+            {
+                get { return StdDevTR2Hdr; }
+                set
+                {
+                    if (StdDevTR2Hdr != value)
+                    {
+                        StdDevTR2Hdr = value;
+                        OnPropertyChanged(new PropertyChangedEventArgs("StdDevTempR2Header"));
+                    }
+                }
+            }
+
+            public TableRessHeader DCColdRessistanceTableHeader 
+            {
+                get { return DCColdRessistanceTableHdr; }
+                set 
+                {
+                    if (DCColdRessistanceTableHdr != value) 
+                    {
+                        DCColdRessistanceTableHdr = value;
+                        OnPropertyChanged(new PropertyChangedEventArgs("DCColdRessistanceTableHeader"));
+                    }
+                }
+            }
+
+
         #endregion
 
 
@@ -610,14 +735,22 @@ namespace DataAccessLayer
         /// <returns></returns>
         public IEnumerable DCColdRessistanceTable(int channelIndex)
         {
-            IEnumerable exp = from ress in root.DcColdMeasurenments.RessistanceTransformerChannels[channelIndex].RessistanceMeasurenments
-                              select new
-                              {
-                                  Time = ress.Time.Date,
-                                  Date = ress.Time.ToLongTimeString(),
-                                  RCA = (ress.ChannelNo == 1) ? (ress.Voltage / ress.Voltage).ToString() : "-",
-                                  Rca = (ress.ChannelNo == 2) ? (ress.Voltage / ress.Voltage).ToString() : "-"
-                              };
+            IEnumerable exp;
+            try
+            {
+                            exp = from ress in root.DcColdMeasurenments.RessistanceTransformerChannels[channelIndex].RessistanceMeasurenments
+                                  select new
+                                  {
+                                      Time = ress.Time.Date,
+                                      Date = ress.Time.ToLongTimeString(),
+                                      RCA = (ress.ChannelNo == 1) ? (ress.Voltage / ress.Voltage).ToString() : "-",
+                                      Rca = (ress.ChannelNo == 2) ? (ress.Voltage / ress.Voltage).ToString() : "-"
+                                  };
+            }
+            catch 
+            {
+                return null;
+            }
             return exp;
         }
 
@@ -751,6 +884,99 @@ namespace DataAccessLayer
             r2StdDev = Math.Sqrt(r2StdDev / r2.Count());
 
             return r2StdDev;
+        }
+
+        private string evalR1AtStdTempHeader() 
+        {
+            switch (SelectedChannel) 
+            {
+                case 0:return "R A - B"; 
+                case 1:return "R B - C"; 
+                case 2:return "R C - A"; 
+                default: return "R A - B"; 
+            }
+        }
+
+        private string evalR2AtStdTempHeader()
+        {
+            switch (SelectedChannel)
+            {
+                case 0: return "R a - b"; 
+                case 1: return "R b - c"; 
+                case 2: return "R c - a"; 
+                default: return "R a - b";
+            }
+        }
+
+        private string evalR1PhaseHeader() 
+        {
+            switch (SelectedChannel)
+            {
+                case 0: return "R A"; 
+                case 1: return "R B"; 
+                case 2: return "R C"; 
+                default: return "R A";
+            }
+        }
+
+        private string evalR2PhaseHeader()
+        {
+            switch (SelectedChannel)
+            {
+                case 0: return "R a";
+                case 1: return "R b"; 
+                case 2: return "R c"; 
+                default: return "R a"; 
+            }
+        }
+        private string evalStdDevTempR1Header() 
+        {
+            switch (SelectedChannel)
+            {
+                case 0: return "A - B Std Dev";
+                case 1: return "B - C Std Dev";
+                case 2: return "C - A Std Dev";
+                default: return "A - B Std Dev"; 
+            }
+        }
+
+        private string evalStdDevTempR2Header()
+        {
+            switch (SelectedChannel)
+            {
+                case 0: return "a - b Std Dev";
+                case 1: return "b - c Std Dev";
+                case 2: return "c - a Std Dev";
+                default: return "a - b Std Dev";
+            }
+        }
+        private TableRessHeader evalDCColdRessistanceTableHeader() 
+        {
+            string r1="";
+            string r2="";
+
+            switch (SelectedChannel)
+            {
+                case 0: r1 = "A - B Std Dev"; r2 = "a - b Std Dev"; break;
+                case 1: r1 = "B - C Std Dev"; r2 = "b - c Std Dev"; break;
+                case 2: r1 = "C - A Std Dev"; r2 = "c - a Std Dev"; break;
+                default: r1 = "A - B Std Dev"; r2 = "a - b Std Dev"; break;
+            }
+            return new TableRessHeader("Date", "Time", r1, r2);
+        }
+
+        public void setValuesForSelectedChannel() 
+        {
+            R1AtStdTempHeader = evalR1AtStdTempHeader();
+            R1PhaseHeader = evalR1PhaseHeader();
+
+            R2AtStdTempHeader = evalR2AtStdTempHeader();
+            R2PhaseHeader = evalR2PhaseHeader();
+
+            StdDevTempR1Header = evalStdDevTempR1Header();
+            StdDevTempR2Header = evalStdDevTempR2Header();
+
+            DCColdRessistanceTableHeader=evalDCColdRessistanceTableHeader();
         }
 
         #endregion
