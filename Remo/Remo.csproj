@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccessLayer\ACHeatingMeasurenments.cs" />
+    <Compile Include="DataAccessLayer\CalibrationServices.cs" />
     <Compile Include="DataAccessLayer\DataConversion.cs" />
     <Compile Include="DataAccessLayer\DataSource.cs" />
     <Compile Include="DataAccessLayer\DCColdMeasurenments.cs" />
@@ -76,8 +77,11 @@
     <Compile Include="DataAccessLayer\TransformatorProperties.cs" />
     <Compile Include="DataAccessLayer\Utils.cs" />
     <Compile Include="DataAccessLayer\Validation.cs" />
+    <Compile Include="DataSourceLayer\DataSourceServices.cs" />
     <Compile Include="EntityLayer\Entities.cs" />
     <Compile Include="EntityLayer\ListWithChangeEvents.cs" />
+    <Compile Include="EntityLayer\RessistanceCalibrationEntities.cs" />
+    <Compile Include="EntityLayer\TempCalibrationEntities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -105,7 +109,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DataSourceLayer\" />
     <Folder Include="ReportsLayer\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
