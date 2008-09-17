@@ -49,7 +49,7 @@ namespace DataAccessLayer
     /// Приказ во секунди
     /// </summary>
     [ValueConversion(typeof(int), typeof(string))]
-    public class SecundConvertor : IValueConverter
+    public class SecondConvertor : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

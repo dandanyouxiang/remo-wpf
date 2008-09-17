@@ -32,7 +32,7 @@ namespace EntityLayer
             try
             {
                 using (Stream fStream = new FileStream(path,
-                                FileMode.Create, FileAccess.Write, FileShare.None))
+                                FileMode.Create, FileAccess.ReadWrite, FileShare.None))
                 {
                     XmlSerializer xmlFormat = new XmlSerializer(typeof(Root), types);
                     xmlFormat.Serialize(fStream, root);
@@ -49,9 +49,9 @@ namespace EntityLayer
             try
             {
                 using (Stream fStream = new FileStream(path,
-                                FileMode.Create, FileAccess.Write, FileShare.None))
+                                FileMode.Open, FileAccess.Read, FileShare.None))
                 {
-                    XmlSerializer xmlFormat = new XmlSerializer(typeof(DcColdMeasurenments), types);
+                    XmlSerializer xmlFormat = new XmlSerializer(typeof(Root), types);
                     root = (Root)xmlFormat.Deserialize(fStream);
                 }
                 return root;
@@ -67,18 +67,18 @@ namespace EntityLayer
             DcColdMeasurenments dcColdMeasurenments = new DcColdMeasurenments(
                 new TempMeasurenementConfiguration(true, true,true,true,false, false, false, true, 
                     new ListWithChangeEvents<TempMeasurenment>(){
-                        new TempMeasurenment(new DateTime(2008,1,1,1,1,1),20.1, 20.2, 20.3, 20.1),
-                        new TempMeasurenment(new DateTime(2008,1,1,1,1,2),20.1, 20.2, 20.3, 20.1),
-                        new TempMeasurenment(new DateTime(2008,1,1,1,1,3),20.1, 20.2, 20.3, 20.1),
-                        new TempMeasurenment(new DateTime(2008,1,1,1,1,4),20.1, 20.2, 20.3, 20.1),
-                        new TempMeasurenment(new DateTime(2008,1,1,1,1,1),20.1, 20.2, 20.3, 20.1),
-                        new TempMeasurenment(new DateTime(2008,1,1,1,1,1),20.1, 20.2, 20.3, 20.1)
+                        new TempMeasurenment(new DateTime(2008,1,1,1,1,1),20.1, 20.2, 20.3, 21.1),
+                        new TempMeasurenment(new DateTime(2008,1,1,1,1,2),20.1, 20.2, 20.3, 22.1),
+                        new TempMeasurenment(new DateTime(2008,1,1,1,1,3),20.1, 20.2, 20.3, 23.1),
+                        new TempMeasurenment(new DateTime(2008,1,1,1,1,4),20.1, 20.2, 20.3, 24.1),
+                        new TempMeasurenment(new DateTime(2008,1,1,1,1,1),20.1, 20.2, 20.3, 25.1),
+                        new TempMeasurenment(new DateTime(2008,1,1,1,1,1),20.1, 20.2, 20.3, 26.1)
                     }),
                 
                 new ListWithChangeEvents<RessistanceTransformerChannel>()
                 {
                     new RessistanceTransformerChannel(
-                        1, 1, 1, 1, true, true,
+                        11, 12, 13, 14, true, true,
                         
                         new ListWithChangeEvents<RessistanceMeasurenment>(){
                             new RessistanceMeasurenment( new DateTime(2008, 1, 1, 10, 0, 0), 1, 1, 1),
@@ -93,7 +93,14 @@ namespace EntityLayer
             Root root = new Root();
             root.DcColdMeasurenments = dcColdMeasurenments;
             root.AcHotMeasurenments = new AcHotMeasurenments();
-            root.DcCoolingMeasurenments = new DcCoolingMeasurenments();
+            root.DcCoolingMeasurenments = new DcCoolingMeasurenments(new RessistanceTransformerChannel(1,12,1,1,true,false,new ListWithChangeEvents<RessistanceMeasurenment>()
+            {
+                new RessistanceMeasurenment(DateTime.Now),
+                new RessistanceMeasurenment(DateTime.Now),
+                new RessistanceMeasurenment(DateTime.Now),
+                new RessistanceMeasurenment(DateTime.Now),
+            })
+                );
             root.TransformerProperties = new TransformerProperties();
                 
             writeToXml(path, root);
@@ -111,6 +118,13 @@ namespace EntityLayer
         public DcColdMeasurenments DcColdMeasurenments { get; set; }
         public AcHotMeasurenments AcHotMeasurenments { get; set; }
         public DcCoolingMeasurenments DcCoolingMeasurenments { get; set; }
+        public Root()
+        {
+            TransformerProperties = new TransformerProperties();
+            DcColdMeasurenments = new DcColdMeasurenments();
+            AcHotMeasurenments = new AcHotMeasurenments();
+            DcCoolingMeasurenments = new DcCoolingMeasurenments();
+        }
     }
 
     /// <summary>
@@ -152,7 +166,7 @@ namespace EntityLayer
         /// <summary>
         /// Конфигурација на Температурни Канали и вредности на Температурните мерења
         /// </summary>
-        TempMeasurenementConfiguration TempMeasurenementConfiguration { get; set; }
+        public TempMeasurenementConfiguration TempMeasurenementConfiguration { get; set; }
 
         public AcHotMeasurenments(TempMeasurenementConfiguration tempMeasurenementConfiguration)
         {
@@ -777,6 +791,10 @@ namespace EntityLayer
                 PropertyChanged(this, e);
         }
 
+        private void TempMeasurenments_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            OnPropertyChanged(e);
+        }
 
         public TempMeasurenementConfiguration(bool isChannel1On, bool isChannel2On, bool isChannel3On, bool isChannel4On, bool isChannel1Oil, bool isChannel2Oil, bool isChannel3Oil, bool isChannel4Oil, ListWithChangeEvents<TempMeasurenment> tempMeasurenments)
         {
@@ -791,10 +809,10 @@ namespace EntityLayer
             IsChannel4Oil = isChannel4Oil;
 
             TempMeasurenments = tempMeasurenments;
+            TempMeasurenments.PropertyChanged+=new PropertyChangedEventHandler(TempMeasurenments_PropertyChanged);
         }
-        public TempMeasurenementConfiguration()
+        public TempMeasurenementConfiguration() : this(false, false, false, false, false, false, false, false, new ListWithChangeEvents<TempMeasurenment>())
         {
-            TempMeasurenments = new ListWithChangeEvents<TempMeasurenment>();
         }
         
     }

@@ -68,8 +68,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAccessLayer\ACHeatingMeasurenments.cs" />
     <Compile Include="DataAccessLayer\DataConversion.cs" />
     <Compile Include="DataAccessLayer\DataSource.cs" />
+    <Compile Include="DataAccessLayer\DCColdMeasurenments.cs" />
+    <Compile Include="DataAccessLayer\DCCoolingMeasurenments.cs" />
+    <Compile Include="DataAccessLayer\TransformatorProperties.cs" />
+    <Compile Include="DataAccessLayer\Utils.cs" />
     <Compile Include="DataAccessLayer\Validation.cs" />
     <Compile Include="EntityLayer\Entities.cs" />
     <Compile Include="EntityLayer\ListWithChangeEvents.cs" />
