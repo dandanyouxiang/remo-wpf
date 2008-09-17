@@ -1,0 +1,56 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:graph="clr-namespace:DNBSoft.WPF.WPFGraph;assembly=WPFGraph"
+        
+    x:Class="PresentationLayer.TempCalibration"
+        
+    Title="Калибрирање на температури" Height="600" Width="800" ResizeMode="NoResize" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" WindowStartupLocation="CenterScreen">
+    <Grid Margin="0 0 0 20">
+        <Grid.Resources>
+            <Style TargetType="{x:Type Button}">
+                <Setter Property="Width" Value="80"/>
+                <Setter Property="Height" Value="30"/>
+                <Setter Property="Margin" Value="10 5 10 5"/>
+                <Setter Property="FontFamily" Value="Tahoma" />
+                <Setter Property="FontSize" Value="14" />
+            </Style>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="100*"/>
+            <RowDefinition Height="50*"/>
+            <RowDefinition Height="180*"/>
+        </Grid.RowDefinitions>
+        <ListView x:Name="MeasurenmentListView" Grid.Row="1" Margin="30 10 30 10">
+            <ListView.View>
+                <GridView AllowsColumnReorder="False">
+                	<GridViewColumn Header="Дата/Време" DisplayMemberBinding="{Binding Path=Time}"/>
+                	<GridViewColumn Header="T1 Meas"    DisplayMemberBinding="{Binding Path=T1}"/>
+                	<GridViewColumn Header="T1 Ref"     DisplayMemberBinding="{Binding Path=T1Ref}"/>
+                	<GridViewColumn Header="T1 Err"     DisplayMemberBinding="{Binding Path=T1Err}"/>
+                	<GridViewColumn                     DisplayMemberBinding="{Binding Path=null}"/>
+                	<GridViewColumn Header="T2 Meas"    DisplayMemberBinding="{Binding Path=T2}"/>
+                	<GridViewColumn Header="T2 Ref"     DisplayMemberBinding="{Binding Path=T2Ref}"/>
+                	<GridViewColumn Header="T2 Err"     DisplayMemberBinding="{Binding Path=T2Err}"/>
+                	<GridViewColumn                     DisplayMemberBinding="{Binding Path=null}"/>
+                	<GridViewColumn Header="T3 Meas"    DisplayMemberBinding="{Binding Path=T3}"/>
+                	<GridViewColumn Header="T3 Ref"     DisplayMemberBinding="{Binding Path=T3Ref}"/>
+                	<GridViewColumn Header="T3 Err"     DisplayMemberBinding="{Binding Path=T3Err}"/>
+                	<GridViewColumn                     DisplayMemberBinding="{Binding Path=null}"/>
+                	<GridViewColumn Header="T4 Meas"    DisplayMemberBinding="{Binding Path=T4}"/>
+                	<GridViewColumn Header="T4 Ref"     DisplayMemberBinding="{Binding Path=T4Ref}"/>
+                	<GridViewColumn Header="T4 Err"     DisplayMemberBinding="{Binding Path=T4Err}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        
+        <StackPanel Grid.Row="2" Width="305" Margin="0,0,30,22" x:Name="stackPanel1" Orientation="Horizontal" HorizontalAlignment="Right">       
+            <Button x:Name="dodadiButton"   Click="dodadiButton_Click" Content="Додади"/>
+            <Button x:Name="izbrisiButton"  Click="izbrisiButton_Click" Content="Избриши"/>
+            <Button x:Name="izlezButton"    Click="izlezButton_Click" IsCancel="True" Content="Излез"/>
+        </StackPanel>
+        <graph:WPFScatterGraph x:Name="graph" Grid.Row="3" MinWidth="200" MinHeight="200" Margin="20 0" YAxisTitle="T Err" XAxisTitle="T Meas" MinYRange="-2" MaxYRange="2" IntervalYRange="0.2" GraphBackground="LightGray"/>
+        <TextBlock Name="heading" Text="Калибрирање на Температури" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" />
+    </Grid>
+</Window>

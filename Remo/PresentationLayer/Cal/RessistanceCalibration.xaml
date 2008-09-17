@@ -1,0 +1,47 @@
+﻿<Window x:Class="PresentationLayer.ResssistanceCalibration"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:graph="clr-namespace:DNBSoft.WPF.WPFGraph;assembly=WPFGraph"
+    Title="Калибрирање на отпори" Height="600" Width="787" WindowStartupLocation="CenterScreen">
+    
+    <Grid Margin="0 0 0 20">
+        <Grid.Resources>
+            <Style TargetType="Button">
+                <Setter Property="Width" Value="80"/>
+                <Setter Property="Height" Value="30"/>
+                <Setter Property="Margin" Value="10 5 10 5"/>
+                <Setter Property="FontFamily" Value="Tahoma" />
+                <Setter Property="FontSize" Value="14" />
+            </Style>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="80*"/>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="120*"/>
+        </Grid.RowDefinitions>
+        <ListView Name="MeasurenmentListView" Grid.Row="1" Margin="30 10 30 10" FontSize="14" FontFamily="Dialog" HorizontalContentAlignment="Right">
+            <ListView.View>
+                <GridView AllowsColumnReorder="False">
+                    <GridView.Columns>
+                        <GridViewColumn Header="Дата/Време" DisplayMemberBinding="{Binding Path=Time}"  Width="170"/>
+                        <GridViewColumn Header="Current" DisplayMemberBinding="{Binding Path=Current}"  Width="80"/>
+                        <GridViewColumn Header="R Meas" DisplayMemberBinding="{Binding Path=RMeas}"     Width="120"/>
+                        <GridViewColumn Header="R Ref" DisplayMemberBinding="{Binding Path=RRef}"       Width="120"/>
+                        <GridViewColumn Header="R Err" DisplayMemberBinding="{Binding Path=RErr}"       Width="120"/>
+                        <GridViewColumn Header="R Err %" DisplayMemberBinding="{Binding Path=RErrPerc}" Width="100"/>
+                    </GridView.Columns>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <StackPanel Grid.Row="2" Width="305"  Name="stackPanel1" Orientation="Horizontal" HorizontalAlignment="Right" >
+            <Button Name="dodadiButton"   Click="dodadiButton_Click">Додади</Button>
+            <Button Name="izbrisiButton"  Click="izbrisiButton_Click" BorderThickness="1">Избриши</Button>
+            <Button Name="izlezButton"    Click="izlezButton_Click">Излез</Button>
+        </StackPanel>
+        <graph:WPFScatterGraph x:Name="graph" Grid.Row="3" MinWidth="200" MinHeight="200" Margin="20 0" YAxisTitle="R Err" XAxisTitle="R Meas" MinYRange="-0.001" MaxYRange="0.001" IntervalYRange="0.0002" GraphBackground="LightGray"/>
+        <TextBlock Name="heading" Text="Калибрирање на Отпори" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        <Line HorizontalAlignment="Center" Y1="40" Y2="40" X1="0" X2="300"  StrokeThickness="1" Stroke="Gray"  />
+    </Grid>
+</Window>

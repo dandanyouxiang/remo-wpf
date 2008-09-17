@@ -1,0 +1,78 @@
+﻿<Window x:Class="PresentationLayer.TempCalibrationDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Вредности за калибрирање" Height="298" Width="414" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Grid>
+        <Grid.Resources>
+            <Style x:Key="StackPanelTextBoxLabel" TargetType="StackPanel">
+                <Setter Property="Margin" Value="10 0 10 0"/>
+            </Style>
+        <Style TargetType="TextBox">
+                <Setter Property="Width" Value="70"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="FontFamily" Value="Tahoma" />
+                <Setter Property="FontSize" Value="18" />
+            </Style>
+            <Style TargetType="Button">
+                <Setter Property="Width" Value="70"/>
+                <Setter Property="Height" Value="30"/>
+                <Setter Property="FontFamily" Value="Tahoma" />
+                <Setter Property="FontSize" Value="14" />
+            </Style>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20*"></RowDefinition>
+            <RowDefinition Height="30*"></RowDefinition>
+            <RowDefinition Height="30*"></RowDefinition>
+            <RowDefinition Height="20*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <TextBlock TextWrapping="WrapWithOverflow" TextAlignment="Center" FontSize="13" Margin="61,0,47,0">
+            Внесете ги измерените температури од надворешниот инструмент со точност од барем една децимала
+        </TextBlock>
+            <GroupBox Grid.Row="1" Header="Мерени температури од надворешниот инструмент" FontSize="12" Margin="10 0 10 0">
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel Style="{StaticResource StackPanelTextBoxLabel}">
+                        <Label>T1</Label>
+                        <TextBox Name="T1Ref"/>
+                    </StackPanel>
+                    <StackPanel Style="{StaticResource StackPanelTextBoxLabel}">
+                        <Label>T2</Label>
+                        <TextBox Name="T2Ref"/>
+                    </StackPanel>
+                    <StackPanel Style="{StaticResource StackPanelTextBoxLabel}">
+                        <Label>T3</Label>
+                        <TextBox Name="T3Ref"/>
+                    </StackPanel>
+                    <StackPanel Style="{StaticResource StackPanelTextBoxLabel}">
+                        <Label>T4</Label>
+                        <TextBox Name="T4Ref"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox  Grid.Row="2" Header="Мерени температури од REMO" FontSize="12" Margin="10 0 10 0">
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel Style="{StaticResource StackPanelTextBoxLabel}">
+                        <Label>T1</Label>
+                        <TextBox Name="T1" IsEnabled="True" IsReadOnly="True" Text="{Binding Path=T1}" />
+                    </StackPanel>
+                    <StackPanel Style="{StaticResource StackPanelTextBoxLabel}">
+                        <Label>T2</Label>
+                        <TextBox Name="T2" IsEnabled="True" IsReadOnly="True" Text="{Binding Path=T2}"/>
+                    </StackPanel>
+                    <StackPanel Style="{StaticResource StackPanelTextBoxLabel}">
+                        <Label>T3</Label>
+                        <TextBox Name="T3" IsEnabled="True" IsReadOnly="True" Text="{Binding Path=T3}"/>
+                    </StackPanel>
+                    <StackPanel Style="{StaticResource StackPanelTextBoxLabel}">
+                        <Label>T4</Label>
+                        <TextBox Name="T4" IsEnabled="True" IsReadOnly="True" Text="{Binding Path=T4}"/>
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+       
+        <Button Grid.Row="3" Name="okButton" HorizontalAlignment="Left" Width="70" Margin="116,11,0,11" IsDefault="True" Click="okButton_Click">OK</Button>
+        <Button Grid.Row="3" Name="cancelButton" HorizontalAlignment="Right" Width="70" Margin="0,11,116,11" IsCancel="True">Cancel</Button>
+    </Grid>
+</Window>
