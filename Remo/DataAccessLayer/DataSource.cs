@@ -435,6 +435,8 @@ namespace DataAccessLayer
 
                 StdDevTempR1 = evalStdDevTempR1(selectedChannelIndex);
                 StdDevTempR2 = evalStdDevTempR2(selectedChannelIndex);
+
+                
             }
             /// <summary>
             /// Во DcColdMeasurenments,во подтабот TemperatureMeasurenments Ако се смени некој прочитан податок, одново да се пресметаат вредностите на полињата што се добиваат преку некако функција.
@@ -461,6 +463,7 @@ namespace DataAccessLayer
                 TCold = evalTCold();
 
                 DCColdTemperatureTableHeader = evalDCColdTemperatureTableHeader();
+
             }
             /// <summary>
             /// Во AcHotMeasurenments Ако се смени некој прочитан податок, одново да се пресметаат вредностите на полињата што се добиваат преку некако функција.
@@ -475,6 +478,8 @@ namespace DataAccessLayer
                 SecondesSampleRate=evalSecondesSampleRate();
                 //Todo: Najverojatno ova treba da se trgne.
                 SamplesDone=evalSamplesDone();
+
+
             }
             /// <summary>
             /// Во DcCoolingMeasurenments Ако се смени некој прочитан податок, одново да се пресметаат вредностите на полињата што се добиваат преку некако функција.
@@ -516,11 +521,20 @@ namespace DataAccessLayer
             public DataSource(string path) 
             {
                 //Citanje na podatocite
+                EntityLayer.XmlServices serv = new EntityLayer.XmlServices();
+
+
+                serv.writeToXmlTest(path);
 
                 new EntityLayer.XmlServices().writeToXmlTest(path);
 
 
+
+
+                root = serv.readXml(path);
+
                 root = new EntityLayer.XmlServices().readXml(path);
+
 
                 //DCCold
                 root.DcColdMeasurenments.RessistanceTransformerChannels.PropertyChanged += new PropertyChangedEventHandler(DcColdMeasurenments_RessistanceTransformerChannels_PropertyChanged);
