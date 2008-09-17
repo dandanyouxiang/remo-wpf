@@ -21,65 +21,40 @@ namespace DataAccessLayer
     /// Приказ во милиметри
     /// </summary>
     [ValueConversion(typeof(int), typeof(string))]
-    public class everythingConvertor : IValueConverter
+    public class PrePostFixConvertor : IValueConverter
     {
-        public ConversionType ConvType { get; set; }
+        private string _prefix = "";
+        public string Prefix { get { return _prefix; } set { _prefix = value; } }
+
+        private string _postfix = "";
+        public string Postfix { get { return _postfix; } set { _postfix = value; } }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string retValue=System.Convert.ToString(value);
-
-            switch (ConvType) 
-            {
-                case ConversionType.Amper: retValue += " A"; break;
-                case ConversionType.Ohm: retValue += " Ohm"; break;
-                case ConversionType.Celsius: retValue += " C"; break;
-                case ConversionType.Second: retValue += " sec"; break;
-                case ConversionType.Minute: retValue += " min"; break;
-                case ConversionType.Milimetar: retValue += " mm"; break;
-            
-            }
-
-            return value.ToString() + " mm";
+            return Prefix + value.ToString() + Postfix;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            object retValue = 0;
-            string metric = " S";
-            string textMM = System.Convert.ToString(value);
-
-            switch (ConvType)
-            {
-                case ConversionType.Amper: metric= " A"; break;
-                case ConversionType.Ohm: metric = " Ohm"; break;
-                case ConversionType.Celsius: metric = " C"; break;
-                case ConversionType.Second: metric = " sec"; break;
-                case ConversionType.Minute: metric = " min"; break;
-                case ConversionType.Milimetar: metric = " mm"; break;
-
-            }
-
+            string text = System.Convert.ToString(value);
+            string returnValue = null;
             //Во случај да неможе да го конвертира во број внесениот стринг да врати -1
             try
             {
-                if (textMM.Contains(metric))
+                if (text.Contains(Prefix))
                 {
-                    retValue = System.Convert.ToInt32(System.Convert.ToString(value).Substring(0, textMM.Length - metric.Length));
+                    text = text.Replace(Prefix, "");
                 }
-                else
+                if (text.Contains(Postfix))
                 {
-                    retValue = System.Convert.ToInt32(textMM);
+                    text = text.Replace(Postfix, "");
                 }
-
+                returnValue = System.Convert.ToInt32(text);
             }
             catch
             {
-                retValue = null ;
+                return null;
             }
-
-            return retValue;
-
         }
     }
 
