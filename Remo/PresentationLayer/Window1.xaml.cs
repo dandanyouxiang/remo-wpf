@@ -40,7 +40,8 @@ namespace PresentationLayer
 
                 TestCurrentTempTextBox.DataContext = datasource.root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel];
                 NoOFSamplesTempTextBox.DataContext = datasource.root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel];
-                
+                //SampleRateRessTextBox.DataContext = datasource.root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel];
+
                 DCColdTemperatureTable.ItemsSource = datasource.DCColdTemperatureTable();
                 DCColdTemperatureTable.DataContext = datasource;
 
@@ -64,6 +65,12 @@ namespace PresentationLayer
         public void DCColdTemperatureTable_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             DCColdTemperatureTable.ItemsSource = datasource.DCColdTemperatureTable();
+
+            //Promena na vrednostite na termometrite
+            thermometerChannel1.Value = datasource.T1MeanDCColdTempTable;
+            thermometerChannel2.Value = datasource.T2MeanDCColdTempTable;
+            thermometerChannel3.Value = datasource.T3MeanDCColdTempTable;
+            thermometerChannel4.Value = datasource.T4MeanDCColdTempTable;
         }
 
         public void DCColdRessistanceTable_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -104,6 +111,15 @@ namespace PresentationLayer
                 //NoOFSamplesTempTextBox.DataContext = null;
             }
         }
+
+
+
+        private void DCColdTemperatureTable_SourceUpdated(object sender, DataTransferEventArgs e)
+        {
+          //  thermometerChannelAC1.Value = datasource.root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last<EntityLayer.TempMeasurenment>().T1;
+        }
+
+  
         
     }
 }
