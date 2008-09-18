@@ -21,6 +21,9 @@ namespace PresentationLayer
     /// </summary>
     public partial class ResssistanceCalibration : Window
     {
+
+        private const string RessistanceCalibrationFilePath = "RessistanceCalibration.xml";
+
         DNBSoft.WPF.WPFGraph.WPFGraphSeries series1;
         private EntityLayer.RessistanceCalibration r;
         public ResssistanceCalibration()
@@ -28,8 +31,7 @@ namespace PresentationLayer
             InitializeComponent();
 
             r = new EntityLayer.RessistanceCalibration();
-            r.RessistanceCalMeasurenments = new EntityLayer.ListWithChangeEvents<EntityLayer.RessistanceCalMeasurenment>();
-            r.RessistanceCalMeasurenments.Add(new EntityLayer.RessistanceCalMeasurenment { Time=DateTime.Now, RRef = 100, RMeas = 99, Current = 1});
+            r.readXml(RessistanceCalibrationFilePath);
 
             r.RessistanceCalMeasurenments.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(tempCalibrationService_PropertyChanged);
 
@@ -51,6 +53,8 @@ namespace PresentationLayer
             {
                 r.RessistanceCalMeasurenments.Add(d.RessistanceCalMeasurenment);
                 refreshGraph();
+
+                r.writeToXml(RessistanceCalibrationFilePath);
             }
         }
 
@@ -59,6 +63,7 @@ namespace PresentationLayer
             if (MeasurenmentListView.SelectedItem != null)
             {
                 r.RessistanceCalMeasurenments.Remove((EntityLayer.RessistanceCalMeasurenment)MeasurenmentListView.SelectedItem);
+                r.writeToXml(RessistanceCalibrationFilePath);
             }
         }
 
@@ -105,15 +110,17 @@ namespace PresentationLayer
                 if (point.X < minX)
                     minX = point.X - 0.1;
                 series1.Points.Add(point);
+            }
+                graph.IntervalYRange = (maxY - minY) / 20;
+                graph.IntervalXRange = (maxX - minX) / 10;
 
                 graph.MaxYRange = maxY;
                 graph.MinYRange = minY;
                 graph.MaxXRange = maxX;
                 graph.MinXRange = minX;
-                graph.IntervalYRange = (maxY - minY) / 20;
-                graph.IntervalXRange = (maxX - minX) / 10;
+               
                 graph.Refresh();
-            }
+            
         }
 
     }

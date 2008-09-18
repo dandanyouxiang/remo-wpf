@@ -13,7 +13,7 @@ namespace DataAccessLayer
     [ValueConversion(typeof(double), typeof(string))]
     [ValueConversion(typeof(int), typeof(string))]
     [ValueConversion(typeof(decimal), typeof(string))]
-    public class PrePostFixConvertor : IValueConverter
+    public class PrePostFixConverter : IValueConverter
     {
         public enum ConversionTypesEnum { _double, _int, _decimal };
         private ConversionTypesEnum _conversionType = ConversionTypesEnum._double;
@@ -39,7 +39,7 @@ namespace DataAccessLayer
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return Prefix + " " + ConvertToString(value) + " " + Postfix;
+            return Prefix + " " + ConvertToString(value, culture) + " " + Postfix;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -64,28 +64,51 @@ namespace DataAccessLayer
                 return "";
             }
         }
-        public object ConvertToType(string s, CultureInfo culture)
+        protected virtual object ConvertToType(string s, CultureInfo culture)
         {
             switch (ConversionType)
             {
-                case ConversionTypesEnum._double: return Math.Round(Double.Parse(s, NumberStyles.Any, culture), Decimals);
-                case ConversionTypesEnum._int: return Int32.Parse(s);
-                case ConversionTypesEnum._decimal: return Math.Round(Decimal.Parse(s, NumberStyles.Any, culture), Decimals);
+                case ConversionTypesEnum._double:   return Math.Round(Double.Parse(s, NumberStyles.Any, culture), Decimals);
+                case ConversionTypesEnum._int:      return Int32.Parse(s);
+                case ConversionTypesEnum._decimal:  return Math.Round(Decimal.Parse(s, NumberStyles.Any, culture), Decimals);
             }
             return null;
         }
-        public string ConvertToString(object o)
+        protected virtual string ConvertToString(object o, CultureInfo culture)
         {
             switch (ConversionType)
             {
-                case ConversionTypesEnum._double: return Math.Round((double)o, Decimals).ToString();
+                case ConversionTypesEnum._double: return Math.Round((double)o, Decimals).ToString("F"+Decimals, culture);
                 case ConversionTypesEnum._int: return o.ToString();
-                case ConversionTypesEnum._decimal: return Math.Round((decimal)o, Decimals).ToString();
+                case ConversionTypesEnum._decimal: return Math.Round((decimal)o, Decimals).ToString("F" + Decimals, culture);
             }
             return "";
 
         }
     }
+    [ValueConversion(typeof(DateTime), typeof(string))]
+    public class DateTimeConverter : PrePostFixConverter
+    {
+        /// <summary>
+        /*  Short Date d M/d/yyyy For example: 10/30/2008
+            Long Date D dddd, MMMM dd, yyyy For example: Wednesday, January 30, 2008
+            Long Date and Short Time f dddd, MMMM dd, yyyy HH:mm aa For example: Wednesday, January 30, 2008 10:00 AM
+            Long Date and Long Time F dddd, MMMM dd, yyyy HH:mm:ss aa For example: Wednesday, January 30, 2008 10:00:23 AM
+            ISO Sortable Standard s yyyy-MM-dd HH:mm:ss For example: 2008-01-30 10:00:23
+            Month and Day M MMMM dd For example: January 30
+            General G M/d/yyyy HH:mm:ss aa  (depends on locale-specific settings) For example: 10/30/2008 10:00:23 AM*/
+        /// </summary>
+        public string FormatString { get; set; }
+        protected override string ConvertToString(object o, CultureInfo culture)
+        {
+            return ((DateTime)o).ToString(FormatString, culture);
+        }
+        protected override object ConvertToType(string s, CultureInfo culture)
+        {
+            return DateTime.Parse(s);
+        }
+    }
+
 
     public enum ConversionType 
     {
@@ -151,13 +174,11 @@ namespace DataAccessLayer
                 {
                     retValue = System.Convert.ToInt32(textMM);
                 }
-
             }
             catch
             {
                 retValue = null ;
             }
-
             return retValue;
 
         }

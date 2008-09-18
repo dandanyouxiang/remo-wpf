@@ -4,8 +4,8 @@
         xmlns:local="clr-namespace:DataAccessLayer"
     Title="Window1" Height="300" Width="300">
     <Window.Resources>
-        <local:PrePostFixConvertor x:Key="DollarConverterDouble"  Decimals="3" Prefix="$" Postfix="dollars" ConversionType="_double"/>
-        <local:PrePostFixConvertor x:Key="DollarConverterInt"   Prefix="$" Postfix="dollars" ConversionType="_int"/>
+        <local:PrePostFixConverter x:Key="DollarConverterDouble"  Decimals="3" Prefix="$" Postfix="dollars" ConversionType="_double"/>
+        <local:PrePostFixConverter x:Key="DollarConverterInt"   Prefix="$" Postfix="dollars" ConversionType="_int"/>
 
     </Window.Resources>
     <Grid>

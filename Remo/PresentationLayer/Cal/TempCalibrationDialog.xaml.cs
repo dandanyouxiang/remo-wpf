@@ -35,38 +35,51 @@ namespace PresentationLayer
             dataSourceServices = new DataSourceServices();
             dataSourceServices.start_TempMeasurenment(1, 1, _tempMeasurenments);
             dataSourceServices.TempMeasurenmentFinished+=new DataSourceServices.TempMeasurenmentFinishedEventHandler(dataSourceServices_TempMeasurenmentFinished);
-            
+            T1Meas.DataContext = this;
+            T2Meas.DataContext = this;
+            T3Meas.DataContext = this;
+            T4Meas.DataContext = this;
         }
-
+        class Temps
+        {
+            public double T1 { get; set; }
+            public double T2 { get; set; }
+            public double T3 { get; set; }
+            public double T4 { get; set; }
+        }
+        Temps t;
         private void dataSourceServices_TempMeasurenmentFinished()
         {
-            // Get the dispatcher from the current window, and use it to invoke
-            // the update code.
-            this.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-            (DataSourceServices.TempMeasurenmentFinishedEventHandler)delegate()
-            {
-                T1.DataContext = T2.DataContext = T3.DataContext = T4.DataContext = _tempMeasurenments[0];
-                dataSourceServices.start_TempMeasurenment(1, 1, _tempMeasurenments);
-            }
-            );       
+            t = new Temps { T1 = _tempMeasurenments[0].T1, T2 = _tempMeasurenments[0].T2, T3 = _tempMeasurenments[0].T3, T4 = _tempMeasurenments[0].T4 };
+            T1Meas.DataContext = t;
+            T2Meas.DataContext = t;
+            T3Meas.DataContext = t;
+            T4Meas.DataContext = t;
+            dataSourceServices.start_TempMeasurenment(1, 1, _tempMeasurenments);    
         }
 
         private void okButton_Click(object sender, RoutedEventArgs e)
         {
-            //Контруирај entity објект со мерените и внесените вредности
-            //Todo потребни се конвертори и валидатори
-            _tempCalMeasurenment = new EntityLayer.TempCalMeasurenment(
+            try
+            {
+                //Контруирај entity објект со мерените и внесените вредности
+                _tempCalMeasurenment = new EntityLayer.TempCalMeasurenment(
                 DateTime.Now,
-                Convert.ToDouble(T1.Text.Replace(".",",")),
+                t.T1,
                 Convert.ToDouble(T1Ref.Text.Replace(".", ",")),
-                Convert.ToDouble(T2.Text.Replace(".", ",")),
+                t.T2,
                 Convert.ToDouble(T2Ref.Text.Replace(".", ",")),
-                Convert.ToDouble(T3.Text.Replace(".", ",")),
+                t.T3,
                 Convert.ToDouble(T3Ref.Text.Replace(".", ",")),
-                Convert.ToDouble(T4.Text.Replace(".", ",")),
+                t.T4,
                 Convert.ToDouble(T4Ref.Text.Replace(".", ","))
                 );
-            this.DialogResult = true;
+                this.DialogResult = true;
+            }
+            catch (FormatException ex) 
+            {
+                this.DialogResult = false;
+            }            
         }
     }
 }

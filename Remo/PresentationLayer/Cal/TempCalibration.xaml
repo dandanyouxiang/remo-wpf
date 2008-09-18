@@ -2,10 +2,19 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:graph="clr-namespace:DNBSoft.WPF.WPFGraph;assembly=WPFGraph"
-        
-    x:Class="PresentationLayer.TempCalibration"
-        
-    Title="Калибрирање на температури" Height="600" Width="800" ResizeMode="NoResize" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" WindowStartupLocation="CenterScreen">
+        xmlns:dal="clr-namespace:DataAccessLayer"   
+        xmlns:s="clr-namespace:System;assembly=mscorlib"
+    x:Class="PresentationLayer.TempCalibration"       
+    Title="Калибрирање на температури" Height="650" Width="1000" ResizeMode="NoResize" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" WindowStartupLocation="CenterScreen" FontSize="14">
+    
+    <Window.Resources>
+        <dal:PrePostFixConverter x:Key="TempConverter"     Decimals="1" Postfix="C" ConversionType="_double"/>
+        <Style TargetType="{x:Type ListView}">
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+        <s:Double x:Key="TempColumnsWidth">60</s:Double>
+    </Window.Resources>
+    
     <Grid Margin="0 0 0 20">
         <Grid.Resources>
             <Style TargetType="{x:Type Button}">
@@ -13,39 +22,39 @@
                 <Setter Property="Height" Value="30"/>
                 <Setter Property="Margin" Value="10 5 10 5"/>
                 <Setter Property="FontFamily" Value="Tahoma" />
-                <Setter Property="FontSize" Value="14" />
+                <Setter Property="FontSize" Value="14"/>
             </Style>
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />
             <RowDefinition Height="100*"/>
-            <RowDefinition Height="50*"/>
-            <RowDefinition Height="180*"/>
+            <RowDefinition Height="40*"/>
+            <RowDefinition Height="200*"/>
         </Grid.RowDefinitions>
         <ListView x:Name="MeasurenmentListView" Grid.Row="1" Margin="30 10 30 10">
             <ListView.View>
                 <GridView AllowsColumnReorder="False">
-                	<GridViewColumn Header="Дата/Време" DisplayMemberBinding="{Binding Path=Time}"/>
-                	<GridViewColumn Header="T1 Meas"    DisplayMemberBinding="{Binding Path=T1}"/>
-                	<GridViewColumn Header="T1 Ref"     DisplayMemberBinding="{Binding Path=T1Ref}"/>
-                	<GridViewColumn Header="T1 Err"     DisplayMemberBinding="{Binding Path=T1Err}"/>
+                	<GridViewColumn Header="Дата/Време" DisplayMemberBinding="{Binding Path=Time}" Width="160" />
+                	<GridViewColumn Header="T1 Meas"    DisplayMemberBinding="{Binding Path=T1, Converter={StaticResource TempConverter}}" Width="{StaticResource TempColumnsWidth}" />
+                	<GridViewColumn Header="T1 Ref"     DisplayMemberBinding="{Binding Path=T1Ref, Converter={StaticResource TempConverter}}" Width="{StaticResource TempColumnsWidth}" />
+                	<GridViewColumn Header="T1 Err"     DisplayMemberBinding="{Binding Path=T1Err, Converter={StaticResource TempConverter}}" Width="{StaticResource TempColumnsWidth}" />
                 	<GridViewColumn                     DisplayMemberBinding="{Binding Path=null}"/>
-                	<GridViewColumn Header="T2 Meas"    DisplayMemberBinding="{Binding Path=T2}"/>
-                	<GridViewColumn Header="T2 Ref"     DisplayMemberBinding="{Binding Path=T2Ref}"/>
-                	<GridViewColumn Header="T2 Err"     DisplayMemberBinding="{Binding Path=T2Err}"/>
+                	<GridViewColumn Header="T2 Meas"    DisplayMemberBinding="{Binding Path=T2, Converter={StaticResource TempConverter}}" Width="{StaticResource TempColumnsWidth}" />
+                	<GridViewColumn Header="T2 Ref"     DisplayMemberBinding="{Binding Path=T2Ref, Converter={StaticResource TempConverter}}" Width="{StaticResource TempColumnsWidth}" />
+                	<GridViewColumn Header="T2 Err"     DisplayMemberBinding="{Binding Path=T2Err, Converter={StaticResource TempConverter}}" Width="{StaticResource TempColumnsWidth}" />
                 	<GridViewColumn                     DisplayMemberBinding="{Binding Path=null}"/>
-                	<GridViewColumn Header="T3 Meas"    DisplayMemberBinding="{Binding Path=T3}"/>
-                	<GridViewColumn Header="T3 Ref"     DisplayMemberBinding="{Binding Path=T3Ref}"/>
-                	<GridViewColumn Header="T3 Err"     DisplayMemberBinding="{Binding Path=T3Err}"/>
+                	<GridViewColumn Header="T3 Meas"    DisplayMemberBinding="{Binding Path=T3, Converter={StaticResource TempConverter}}" Width="{StaticResource TempColumnsWidth}" />
+                	<GridViewColumn Header="T3 Ref"     DisplayMemberBinding="{Binding Path=T3Ref, Converter={StaticResource TempConverter}}" Width="{StaticResource TempColumnsWidth}" />
+                	<GridViewColumn Header="T3 Err"     DisplayMemberBinding="{Binding Path=T3Err, Converter={StaticResource TempConverter}}" Width="{StaticResource TempColumnsWidth}" />
                 	<GridViewColumn                     DisplayMemberBinding="{Binding Path=null}"/>
-                	<GridViewColumn Header="T4 Meas"    DisplayMemberBinding="{Binding Path=T4}"/>
-                	<GridViewColumn Header="T4 Ref"     DisplayMemberBinding="{Binding Path=T4Ref}"/>
-                	<GridViewColumn Header="T4 Err"     DisplayMemberBinding="{Binding Path=T4Err}"/>
+                	<GridViewColumn Header="T4 Meas"    DisplayMemberBinding="{Binding Path=T4, Converter={StaticResource TempConverter}}" Width="{StaticResource TempColumnsWidth}" />
+                	<GridViewColumn Header="T4 Ref"     DisplayMemberBinding="{Binding Path=T4Ref, Converter={StaticResource TempConverter}}" Width="{StaticResource TempColumnsWidth}" />
+                	<GridViewColumn Header="T4 Err"     DisplayMemberBinding="{Binding Path=T4Err, Converter={StaticResource TempConverter}}" Width="{StaticResource TempColumnsWidth}" />
                 </GridView>
             </ListView.View>
         </ListView>
         
-        <StackPanel Grid.Row="2" Width="305" Margin="0,0,30,22" x:Name="stackPanel1" Orientation="Horizontal" HorizontalAlignment="Right">       
+        <StackPanel Grid.Row="2" Width="305" Margin="0,0,30,0" x:Name="stackPanel1" Orientation="Horizontal" HorizontalAlignment="Right">       
             <Button x:Name="dodadiButton"   Click="dodadiButton_Click" Content="Додади"/>
             <Button x:Name="izbrisiButton"  Click="izbrisiButton_Click" Content="Избриши"/>
             <Button x:Name="izlezButton"    Click="izlezButton_Click" IsCancel="True" Content="Излез"/>

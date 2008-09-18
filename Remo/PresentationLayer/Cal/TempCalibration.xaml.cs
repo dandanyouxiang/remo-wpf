@@ -130,8 +130,10 @@ namespace PresentationLayer
 
         private void refreshGraph()
         {
-            double maxY = 2;
-            double minY = -2;
+            double maxY = graph.MaxYRange;
+            double minY = graph.MinYRange;
+            double maxX = 0;
+            double minX = 1000;
 
             series1.Points.Clear();
             foreach (EntityLayer.TempCalMeasurenment t in tempCalibrationService.TempCalibrationEntity.TempCalMeasurenments)
@@ -143,6 +145,10 @@ namespace PresentationLayer
                     maxY = point.Y;
                 if(point.Y < minY)
                     minY = point.Y;
+                if (point.X > maxX)
+                    maxX = point.X + 0.1;
+                if (point.X < minX)
+                    minX = point.X - 0.1;
                 series1.Points.Add(point);
             }
 
@@ -156,6 +162,10 @@ namespace PresentationLayer
                     maxY = point.Y;
                 if (point.Y < minY)
                     minY = point.Y;
+                if (point.X > maxX)
+                    maxX = point.X + 0.1;
+                if (point.X < minX)
+                    minX = point.X - 0.1;
                 series2.Points.Add(point);
             }
 
@@ -169,6 +179,10 @@ namespace PresentationLayer
                     maxY = point.Y;
                 if (point.Y < minY)
                     minY = point.Y;
+                if (point.X > maxX)
+                    maxX = point.X + 0.1;
+                if (point.X < minX)
+                    minX = point.X - 0.1;
                 series3.Points.Add(point);
             }
 
@@ -182,11 +196,19 @@ namespace PresentationLayer
                     maxY = point.Y;
                 if (point.Y < minY)
                     minY = point.Y;
+                if (point.X > maxX)
+                    maxX = point.X + 0.1;
+                if (point.X < minX)
+                    minX = point.X - 0.1;
                 series4.Points.Add(point);
             }
             graph.MaxYRange = maxY;
             graph.MinYRange = minY;
+            graph.MaxXRange = maxX;
+            graph.MinXRange = minX;
             graph.IntervalYRange = (maxY - minY) / 20;
+            graph.IntervalXRange = (graph.MaxXRange - graph.MinXRange) / 20;
+
             graph.Refresh();
         }
     }

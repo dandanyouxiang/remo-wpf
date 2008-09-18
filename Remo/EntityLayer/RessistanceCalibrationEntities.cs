@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace EntityLayer
 {
@@ -10,6 +12,50 @@ namespace EntityLayer
     public class RessistanceCalibration
     {
         public ListWithChangeEvents<RessistanceCalMeasurenment> RessistanceCalMeasurenments { get; set; }
+
+        #region XmlSerialize services
+        private Type[] types = new Type[] { 
+                        typeof(RessistanceCalibration),
+                        typeof(ListWithChangeEvents<RessistanceCalMeasurenment>),
+                        typeof(RessistanceCalMeasurenment)
+                     };
+
+        public void writeToXml(string path)
+        {
+            try
+            {
+                using (Stream fStream = new FileStream(path,
+                                FileMode.Create, FileAccess.ReadWrite, FileShare.None))
+                {
+                    XmlSerializer xmlFormat = new XmlSerializer(typeof(RessistanceCalibration), types);
+                    xmlFormat.Serialize(fStream, this);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public void readXml(string path)
+        {
+            RessistanceCalibration root;
+            try
+            {
+                using (Stream fStream = new FileStream(path,
+                                FileMode.Open, FileAccess.Read, FileShare.None))
+                {
+                    XmlSerializer xmlFormat = new XmlSerializer(typeof(RessistanceCalibration), types);
+                    root = (RessistanceCalibration)xmlFormat.Deserialize(fStream);
+                }
+                this.RessistanceCalMeasurenments = root.RessistanceCalMeasurenments;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+        #endregion
     }
     [Serializable]
     public class RessistanceCalMeasurenment : INotifyPropertyChanged

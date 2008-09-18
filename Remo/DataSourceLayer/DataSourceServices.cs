@@ -30,19 +30,23 @@ namespace DataSourceLayer
 
         private void OnTempMeasurenmentFinished()
         {
+            //Call this method on the Right Thread
             if (TempMeasurenmentFinished != null)
-                TempMeasurenmentFinished();
+                ((System.Windows.Threading.DispatcherObject)TempMeasurenmentFinished.Target).Dispatcher.
+                    BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, TempMeasurenmentFinished);
         }
         private void OnRessistanceMeasurenmentFinished()
         {
+            //Call this method on the Right Thread
             if (RessistanceMeasurenmentFinished != null)
-                RessistanceMeasurenmentFinished();
+                ((System.Windows.Threading.DispatcherObject)RessistanceMeasurenmentFinished.Target).Dispatcher.
+                    BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, RessistanceMeasurenmentFinished);
         }
 
         /// <summary>
-        /// Стартување на мерење на температури. Оваа метода веднаш враќа и ја врши стартува нов Thread ,ов кој се врши мерењето.
+        /// Стартување на мерење на температури. Оваа метода веднаш враќа и ја врши стартува нов Thread, во кој се врши мерењето.
         /// </summary>
-        /// <param name="sampleRate"></param>
+        /// <param name="sampleRate">sampleRate во секунди</param>
         /// <param name="numberOfSamples"></param>
         /// <param name="tempMeasurenments"></param>
         public void start_TempMeasurenment(int sampleRate, int numberOfSamples, List<TempMeasurenment> tempMeasurenments)
@@ -55,9 +59,9 @@ namespace DataSourceLayer
             measurenmentThread.Start();
         }
         /// <summary>
-        /// Стартување на мерење на отпори. Оваа метода веднаш враќа и ја врши стартува нов Thread ,ов кој се врши мерењето.
+        /// Стартување на мерење на отпори. Оваа метода веднаш враќа и ја врши стартува нов Thread, во кој се врши мерењето.
         /// </summary>
-        /// <param name="sampleRate"></param>
+        /// <param name="sampleRate">sampleRate во секунди</param>
         /// <param name="numberOfSamples"></param>
         /// <param name="tempMeasurenments"></param>
         public void start_RessistanceMeasurenment(int sampleRate, int numberOfSamples, List<RessistanceMeasurenment> ressistanceMeasurenments)
@@ -69,7 +73,6 @@ namespace DataSourceLayer
             measurenmentThread = new Thread(ressistanceMeasurenmentDoWork);
             measurenmentThread.Start();
         }
-
 
         private Thread measurenmentThread;
 
@@ -86,21 +89,21 @@ namespace DataSourceLayer
             {
                 _tempMeasurenments.Clear();
             }
+            Random rand = new Random();
             for (int i = 0; i < _numberOfSamples; i++)
             {
                 Thread.Sleep(_sampleRate * 1000);
                 _tempMeasurenments.Add(new TempMeasurenment(
-                    DateTime.Now,
-                    new Random().NextDouble() * 10 + 20,
-                    new Random().NextDouble() * 10 + 20,
-                    new Random().NextDouble() * 10 + 20,
-                    new Random().NextDouble() * 10 + 20)
+                    DateTime.Now, 
+                    rand.NextDouble() * 10 + 20,
+                    rand.NextDouble() * 10 + 20,
+                    rand.NextDouble() * 10 + 20,
+                    rand.NextDouble() * 10 + 20)
                     );
             }
             //throw event
             OnTempMeasurenmentFinished();
         }
-
 
         private void ressistanceMeasurenmentDoWork()
         {
@@ -110,15 +113,17 @@ namespace DataSourceLayer
             {
                 _ressistanceMeasurenments.Clear();
             }
+            Random rand = new Random();
+            int channel = 1;
             for (int i = 0; i < _numberOfSamples; i++)
             {
+                if (i % 2 == 0)
+                    channel = 1;
+                else
+                    channel = 2;
                 Thread.Sleep(_sampleRate * 1000);
-                _ressistanceMeasurenments.Add(new RessistanceMeasurenment(
-                    DateTime.Now,
-                    1,
-                    new Random().Next(1, 10), 
-                    new Random().Next(1, 5))
-                    );
+                _ressistanceMeasurenments.Add(
+                    new RessistanceMeasurenment(DateTime.Now, channel, rand.NextDouble() * 10, rand.NextDouble() * 10) );
             }
             //throw event
             OnRessistanceMeasurenmentFinished();

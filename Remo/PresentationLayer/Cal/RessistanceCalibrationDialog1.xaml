@@ -1,7 +1,13 @@
 ﻿<Window x:Class="PresentationLayer.RessistanceCalibrationDialog1"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dal="clr-namespace:DataAccessLayer"
+
     Title="Избор на стандарден отпорник" Height="315" Width="300" WindowStyle="ToolWindow" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <dal:PrePostFixConverter x:Key="CurrentConverter" Decimals="1" Postfix="A" ConversionType="_double"/>
+        <dal:PrePostFixConverter x:Key="ResConverter"     Decimals="6" Postfix="Ohm" ConversionType="_double"/>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="4*"></RowDefinition>
@@ -16,13 +22,12 @@
                 <Setter Property="FontSize" Value="14" />
             </Style>
         </Grid.Resources>
-        <ListView Name="StdRessistorsCurrentList" Grid.Row="1" Margin="30,6,30,10">
+        <ListView Name="StdRessistorsCurrentList" Grid.Row="1" Margin="30,6,30,10" FontSize="14" SelectedIndex="0" SelectionMode="Single">
             <ListView.View>
                 <GridView AllowsColumnReorder="False">
                     <GridView.Columns>
-                        <GridViewColumn Header="R STD" DisplayMemberBinding="{Binding Path=RStd}">
-                        </GridViewColumn>
-                        <GridViewColumn Header="Test Current" DisplayMemberBinding="{Binding Path=Current}"/>
+                        <GridViewColumn Header="R STD" DisplayMemberBinding="{Binding Path=RStd, Converter={StaticResource ResConverter}}"/>
+                        <GridViewColumn Header="Test Current" DisplayMemberBinding="{Binding Path=Current, Converter={StaticResource CurrentConverter}}"/>
                     </GridView.Columns>
                 </GridView>
             </ListView.View>

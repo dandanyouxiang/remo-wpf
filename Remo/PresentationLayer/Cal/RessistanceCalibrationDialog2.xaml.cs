@@ -24,18 +24,33 @@ namespace PresentationLayer
         /// </summary>
         public EntityLayer.RessistanceCalMeasurenment RessistanceCalMeasurenment { get; set; }
 
-        public RessistanceCalibrationDialog2()
+        DataSourceLayer.DataSourceServices s;
+        List<EntityLayer.RessistanceMeasurenment> m;
+        public RessistanceCalibrationDialog2(EntityLayer.RessistanceCalMeasurenment ressistanceCalMeasurenment)
         {
             InitializeComponent();
+
+            RessistanceCalMeasurenment = ressistanceCalMeasurenment;
+
+            s = new DataSourceLayer.DataSourceServices();
+            m = new List<EntityLayer.RessistanceMeasurenment>();
+            s.RessistanceMeasurenmentFinished += new DataSourceLayer.DataSourceServices.RessistanceMeasurenmentFinishedEventHandler(s_RessistanceMeasurenmentFinished);
         }
-       
+        
         private void cancelButton_Click(object sender, RoutedEventArgs e)
         {
-            RessistanceCalMeasurenment = new EntityLayer.RessistanceCalMeasurenment();
-            RessistanceCalMeasurenment.Time = DateTime.Now;
-            RessistanceCalMeasurenment.RRef = 100;
-            RessistanceCalMeasurenment.RMeas = 100.01;
+            this.DialogResult = false;
+        }
+        public void s_RessistanceMeasurenmentFinished()
+        {
+            RessistanceCalMeasurenment.RMeas = m[0].Voltage / m[0].Current;
             this.DialogResult = true;
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            //Започни го мерењто на отпор
+            s.start_RessistanceMeasurenment(1, 1, m);
         }
 
     }

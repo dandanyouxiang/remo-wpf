@@ -45,16 +45,24 @@ namespace PresentationLayer
 
         private void okButton_Click(object sender, RoutedEventArgs e)
         {
-            RessistanceCalibrationDialog2 d2 = new RessistanceCalibrationDialog2();
-            if (d2.ShowDialog() == true)
+            if (StdRessistorsCurrentList.SelectedItem != null)
             {
-                this.RessistanceCalMeasurenment = d2.RessistanceCalMeasurenment;
-                this.DialogResult = true;
+                RessistanceCalMeasurenment = new EntityLayer.RessistanceCalMeasurenment();
+                RessistanceCalMeasurenment.Current = ((StdRessistorCurrent)StdRessistorsCurrentList.SelectedItem).Current;
+                RessistanceCalMeasurenment.RRef = ((StdRessistorCurrent)StdRessistorsCurrentList.SelectedItem).RStd;
+
+                RessistanceCalibrationDialog2 d2 = new RessistanceCalibrationDialog2(RessistanceCalMeasurenment);
+                if (d2.ShowDialog() == true)
+                {
+                    RessistanceCalMeasurenment.Time = DateTime.Now;
+                    this.DialogResult = true;
+                }
+                else
+                {
+                    this.DialogResult = false;
+                }
             }
-            else
-            {
-                this.DialogResult = false;
-            }
+
         }
     }
 }
