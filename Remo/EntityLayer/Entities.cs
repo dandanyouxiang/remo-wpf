@@ -77,7 +77,7 @@ namespace EntityLayer
                 new ListWithChangeEvents<RessistanceTransformerChannel>()
                 {
                     new RessistanceTransformerChannel(
-                        11, 12, 13, 14, true, true,
+                        1, 12, 13, 14, true, true,
                         
                         new ListWithChangeEvents<RessistanceMeasurenment>(){
                             new RessistanceMeasurenment( new DateTime(2008, 1, 1, 10, 0, 0), 1, 1, 1),
