@@ -86,12 +86,22 @@ namespace EntityLayer
                             new RessistanceMeasurenment( new DateTime(2008, 1, 1, 10, 0, 3), 2, 4, 1)
                             }
                     )
-                 }
+                 
+                 
+            }
             );
+            AcHotMeasurenments acHotMeasurenments=new AcHotMeasurenments(new TempMeasurenementConfiguration(true,true,true,false,true,false,true,true,new ListWithChangeEvents<TempMeasurenment>(){
+                            new TempMeasurenment(new DateTime(2008,1,1,1,1,1),20.1, 20.2, 20.3, 21.1),
+                                new TempMeasurenment(new DateTime(2008,1,1,1,1,2),20.1, 20.2, 20.3, 22.1),
+                                new TempMeasurenment(new DateTime(2008,1,1,1,1,3),20.1, 20.2, 20.3, 23.1),
+                                new TempMeasurenment(new DateTime(2008,1,1,1,1,4),20.1, 20.2, 20.3, 24.1),
+                                new TempMeasurenment(new DateTime(2008,1,1,1,1,1),20.1, 20.2, 20.3, 25.1),
+                                new TempMeasurenment(new DateTime(2008,1,1,1,1,1),20.1, 20.2, 20.3, 26.1)
+            }));
 
             Root root = new Root();
             root.DcColdMeasurenments = dcColdMeasurenments;
-            root.AcHotMeasurenments = new AcHotMeasurenments();
+            root.AcHotMeasurenments = acHotMeasurenments;
             root.DcCoolingMeasurenments = new DcCoolingMeasurenments(new RessistanceTransformerChannel(1,12,1,1,true,false,new ListWithChangeEvents<RessistanceMeasurenment>()
             {
                 new RessistanceMeasurenment(DateTime.Now),

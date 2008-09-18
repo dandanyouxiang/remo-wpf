@@ -32,9 +32,11 @@ namespace PresentationLayer
         {
             InitializeComponent();
             _tempMeasurenments = new EntityLayer.ListWithChangeEvents<EntityLayer.TempMeasurenment>();
+            
             dataSourceServices = new DataSourceServices();
             dataSourceServices.start_TempMeasurenment(1, 1, _tempMeasurenments);
             dataSourceServices.TempMeasurenmentFinished+=new DataSourceServices.TempMeasurenmentFinishedEventHandler(dataSourceServices_TempMeasurenmentFinished);
+            
             T1Meas.DataContext = this;
             T2Meas.DataContext = this;
             T3Meas.DataContext = this;

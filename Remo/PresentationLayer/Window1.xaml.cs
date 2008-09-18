@@ -36,10 +36,10 @@ namespace PresentationLayer
                 DCColdRessistanceTable.DataContext = datasource;
 
                 NoOfSamplesRessTextBox.DataContext = datasource.root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel];
-                SampleRateRessTextBox.DataContext = datasource.root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel];
+                SampleRateTempTextBox.DataContext = datasource.root.DcColdMeasurenments.TempMeasurenementConfiguration;
 
                 TestCurrentTempTextBox.DataContext = datasource.root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel];
-                NoOFSamplesTempTextBox.DataContext = datasource.root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel];
+                NoOFSamplesTempTextBox.DataContext = datasource.root.DcColdMeasurenments.TempMeasurenementConfiguration;
                 //SampleRateRessTextBox.DataContext = datasource.root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel];
 
                 DCColdTemperatureTable.ItemsSource = datasource.DCColdTemperatureTable();
@@ -49,10 +49,17 @@ namespace PresentationLayer
 
                 ACTable.ItemsSource = datasource.ACHeatingTable();
 
-
+                //thermometerChannel1.DataContext = datasource;
                 //cooling
                 TestCurrentTextBox.DataContext = datasource.root.DcCoolingMeasurenments.RessistanceTransformerChannels;
                 NoOfSamplesTextBox.DataContext = datasource.root.DcCoolingMeasurenments.RessistanceTransformerChannels;
+
+                //postavuvanje na datakontest na kanalite vo vtoriot tab
+
+                thermometerChannelAC1.DataContext = datasource.root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last<EntityLayer.TempMeasurenment>();
+                thermometerChannelAC2.DataContext = datasource.root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last<EntityLayer.TempMeasurenment>();
+                thermometerChannelAC3.DataContext = datasource.root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last<EntityLayer.TempMeasurenment>();
+                thermometerChannelAC4.DataContext = datasource.root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last<EntityLayer.TempMeasurenment>();
 
             }
             catch (Exception ex) 
@@ -67,10 +74,10 @@ namespace PresentationLayer
             DCColdTemperatureTable.ItemsSource = datasource.DCColdTemperatureTable();
 
             //Promena na vrednostite na termometrite
-            thermometerChannel1.Value = datasource.T1MeanDCColdTempTable;
-            thermometerChannel2.Value = datasource.T2MeanDCColdTempTable;
-            thermometerChannel3.Value = datasource.T3MeanDCColdTempTable;
-            thermometerChannel4.Value = datasource.T4MeanDCColdTempTable;
+            //thermometerChannel1.Value = datasource.T1MeanDCColdTempTable;
+            //thermometerChannel2.Value = datasource.T2MeanDCColdTempTable;
+            //thermometerChannel3.Value = datasource.T3MeanDCColdTempTable;
+            //thermometerChannel4.Value = datasource.T4MeanDCColdTempTable;
         }
 
         public void DCColdRessistanceTable_PropertyChanged(object sender, PropertyChangedEventArgs e)
