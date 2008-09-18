@@ -528,9 +528,6 @@ namespace DataAccessLayer
 
                 new EntityLayer.XmlServices().writeToXmlTest(path);
 
-
-
-
                 root = serv.readXml(path);
 
                 root = new EntityLayer.XmlServices().readXml(path);
