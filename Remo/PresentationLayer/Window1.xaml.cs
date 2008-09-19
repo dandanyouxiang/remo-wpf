@@ -90,7 +90,7 @@ namespace PresentationLayer
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button1_Click(object sender, RoutedEventArgs e)
+        private void startTempMeasDcColdButton_Click(object sender, RoutedEventArgs e)
         {
             //Кои канали се On или Off
             datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel1On = thermometerChannel1.IsChannelOn;
@@ -106,16 +106,26 @@ namespace PresentationLayer
             //Стартувај го мерењето на температура
             DataSourceLayer.DataSourceServices ds = new DataSourceLayer.DataSourceServices();
             ds.TempMeasurenmentFinished += new DataSourceLayer.DataSourceServices.TempMeasurenmentFinishedEventHandler(ds_TempMeasurenmentFinished);
-            int sampleRate = datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration.TempSampleRateCurrentState;
-            int numberOfSamples = datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration.TempNoOfSamplesCurrentState;
-            ds.start_TempMeasurenment(sampleRate, numberOfSamples, datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration.TempMeasurenments);
+            ds.start_TempMeasurenment(datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration);
             //
         }
+
         /// <summary>
         /// Handler за крај на температурнто мерење
         /// </summary>
         private void ds_TempMeasurenmentFinished()
         {
+        }
+
+        private void startResMeasDcColdButton_Click(object sender, RoutedEventArgs e)
+        {
+            datasource.Root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel].IsChannel1On = true;
+            datasource.Root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel].IsChannel2On = true;
+            //Стартувај го мерењето на отпор
+            DataSourceLayer.DataSourceServices ds = new DataSourceLayer.DataSourceServices();
+            ds.TempMeasurenmentFinished += new DataSourceLayer.DataSourceServices.TempMeasurenmentFinishedEventHandler(ds_TempMeasurenmentFinished);
+            ds.start_RessistanceMeasurenment(datasource.Root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel]);
+            //
         }
 
         private void ChannelsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -151,6 +161,7 @@ namespace PresentationLayer
           //  thermometerChannelAC1.Value = datasource.root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last<EntityLayer.TempMeasurenment>().T1;
         }
 
+        
   
         
     }

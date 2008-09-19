@@ -65,7 +65,7 @@ namespace DataAccessLayer
                     private double OilDCColdTempTbl;
                     private double AmbDCColdTempTbl;
 
-                    private int SelectedChnnl;
+                    private int _selectedChannel;
                     private TableTempHeader DCColdTemperatureTableHdr;
      
             #endregion
@@ -74,16 +74,14 @@ namespace DataAccessLayer
 
                     public static List<string> Channels = new List<string> { "A-B", "B-C", "C-A" };
 
-                    public int selectedChannelIndex {get;set; }
-
                     public int SelectedChannel 
                     {
-                        get { return SelectedChnnl; }
+                        get { return _selectedChannel; }
                         set 
                         {
-                            if (SelectedChnnl != value) 
+                            if (_selectedChannel != value) 
                             {
-                                SelectedChnnl = value;
+                                _selectedChannel = value;
 
                                 OnPropertyChanged(new PropertyChangedEventArgs(null));
 
@@ -432,10 +430,18 @@ namespace DataAccessLayer
         /// <returns></returns>
         private double evalOilDCColdTempTable() 
         {
-            int channelInOil=((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel1Oil)?1:0)+((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel2Oil)?1:0)+((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel3Oil)?1:0)+((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel4Oil)?1:0);
-            double channelInOilSum=((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel1Oil)?T1MeanDCColdTempTable:0)+((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel2Oil)?T2MeanDCColdTempTable:0)+((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel3Oil)?T3MeanDCColdTempTable:0)+((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel4Oil)?T4MeanDCColdTempTable:0);
+            int channelInOil = 
+                ((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel1Oil && Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel1On) ? 1 : 0)
+                + ((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel2Oil && Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel2On) ? 1 : 0)
+                + ((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel3Oil && Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel3On) ? 1 : 0) 
+                + ((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel4Oil && Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel4On) ? 1 : 0);
+            double channelInOilSum = 
+                ((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel1Oil) ? T1MeanDCColdTempTable : 0) 
+                + ((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel2Oil) ? T2MeanDCColdTempTable : 0) 
+                + ((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel3Oil) ? T3MeanDCColdTempTable : 0) 
+                + ((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel4Oil) ? T4MeanDCColdTempTable : 0);
 
-            return channelInOilSum / channelInOil;
+            return channelInOil == 0 ? double.NaN : channelInOilSum / channelInOil;
         }
 
         /// <summary>
@@ -458,23 +464,24 @@ namespace DataAccessLayer
         ///////////////////////////////
         #region Private memebers
 
-            private double R1AtStdT;
-            private double R2AtStdT;
-            private double R1Ph;
-            private double R2Ph;
-            private string R1AtStdTHdr;
-            private string R2AtStdTHdr;
-            private string R1PhHdr;
-            private string R2PhHdr;
-            private int StdT;
+            private double _r1AtStdTemp;
+            private double _r2AtStdTemp;
+            private double _r1Phase;
+            private double _r2Phase;
+            private int _stdTemp;
+            private string _r1AtStdTempHeader;
+            private string _r2AtStdTempHeader;
+            private string _r1PhaseHeader;
+            private string _r2PhaseHeader;
+           
             /// <summary>
             /// Средни вредности за првиот отпонички канал.
             /// </summary>
-            private double R1Cld;
+            private double _r1Cold;
             /// <summary>
             /// Средни вредности за вториот отпонички канал.
             /// </summary>
-            private double R2Cld;          
+            private double _r2Cold;          
 
             private double StdDevTR1;
             private double StdDevTR2;
@@ -505,12 +512,12 @@ namespace DataAccessLayer
         
             public double R1AtStdTemp
             {
-                get { return R1AtStdT; }
+                get { return _r1AtStdTemp; }
                 set
                 {
-                    if (R1AtStdT != value)
+                    if (_r1AtStdTemp != value)
                     {
-                        R1AtStdT = value;
+                        _r1AtStdTemp = value;
                         OnPropertyChanged(new PropertyChangedEventArgs("R1AtStdTemp"));
                     }
                 }
@@ -518,12 +525,12 @@ namespace DataAccessLayer
 
             public double R2AtStdTemp
             {
-                get { return R2AtStdT; }
+                get { return _r2AtStdTemp; }
                 set
                 {
-                    if (R2AtStdT != value)
+                    if (_r2AtStdTemp != value)
                     {
-                        R2AtStdT = value;
+                        _r2AtStdTemp = value;
                         OnPropertyChanged(new PropertyChangedEventArgs("R2AtStdTemp"));
                     }
                 }
@@ -531,12 +538,12 @@ namespace DataAccessLayer
 
             public double R1Phase
             {
-                get { return R2AtStdT; }
+                get { return _r2AtStdTemp; }
                 set
                 {
-                    if (R1Ph != value)
+                    if (_r1Phase != value)
                     {
-                        R1Ph = value;
+                        _r1Phase = value;
                         OnPropertyChanged(new PropertyChangedEventArgs("R1Phase"));
                     }
                 }
@@ -544,12 +551,12 @@ namespace DataAccessLayer
 
             public double R2Phase
             {
-                get { return R2Ph; }
+                get { return _r2Phase; }
                 set
                 {
-                    if (R2Ph != value)
+                    if (_r2Phase != value)
                     {
-                        R2Ph = value;
+                        _r2Phase = value;
                         OnPropertyChanged(new PropertyChangedEventArgs("R2Phase"));
                     }
                 }
@@ -557,12 +564,12 @@ namespace DataAccessLayer
 
             public string R1AtStdTempHeader
             {
-                get { return R1AtStdTHdr; }
+                get { return _r1AtStdTempHeader; }
                 set
                 {
-                    if (R1AtStdTHdr != value)
+                    if (_r1AtStdTempHeader != value)
                     {
-                        R1AtStdTHdr = value;
+                        _r1AtStdTempHeader = value;
                         OnPropertyChanged(new PropertyChangedEventArgs("R1AtStdTempHeader"));
                     }
                 }
@@ -570,12 +577,12 @@ namespace DataAccessLayer
 
             public string R2AtStdTempHeader
             {
-                get { return R2AtStdTHdr; }
+                get { return _r2AtStdTempHeader; }
                 set
                 {
-                    if (R2AtStdTHdr != value)
+                    if (_r2AtStdTempHeader != value)
                     {
-                        R2AtStdTHdr = value;
+                        _r2AtStdTempHeader = value;
                         OnPropertyChanged(new PropertyChangedEventArgs("R2AtStdTempHeader"));
                     }
                 }
@@ -583,12 +590,12 @@ namespace DataAccessLayer
 
             public string R1PhaseHeader
             {
-                get { return R1PhHdr; }
+                get { return _r1PhaseHeader; }
                 set
                 {
-                    if (R1PhHdr != value)
+                    if (_r1PhaseHeader != value)
                     {
-                        R1PhHdr = value;
+                        _r1PhaseHeader = value;
                         OnPropertyChanged(new PropertyChangedEventArgs("R1PhaseHeader"));
                     }
                 }
@@ -596,12 +603,12 @@ namespace DataAccessLayer
 
             public string R2PhaseHeader
             {
-                get { return R2PhHdr; }
+                get { return _r2PhaseHeader; }
                 set
                 {
-                    if (R2PhHdr != value)
+                    if (_r2PhaseHeader != value)
                     {
-                        R2PhHdr = value;
+                        _r2PhaseHeader = value;
                         OnPropertyChanged(new PropertyChangedEventArgs("R2PhaseHeader"));
                     }
                 }
@@ -612,12 +619,12 @@ namespace DataAccessLayer
             /// </summary>
             public double R1Cold
             {
-                get { return R1Cld; }
+                get { return _r1Cold; }
                 set
                 {
-                    if (R1Cld != value)
+                    if (_r1Cold != value)
                     {
-                        R1Cld = value;
+                        _r1Cold = value;
                         OnPropertyChanged(new PropertyChangedEventArgs("R1Cold"));
                     }
                 }
@@ -627,12 +634,12 @@ namespace DataAccessLayer
             /// </summary>
             public double R2Cold
             {
-                get { return R2Cld; }
+                get { return _r2Cold; }
                 set
                 {
-                    if (R2Cld != value)
+                    if (_r2Cold != value)
                     {
-                        R2Cld = value;
+                        _r2Cold = value;
                         OnPropertyChanged(new PropertyChangedEventArgs("R2Cold"));
                     }
                 }
@@ -643,12 +650,12 @@ namespace DataAccessLayer
             /// </summary>
             public int StdTemp
             {
-                get { return StdT; }
+                get { return _stdTemp; }
                 set
                 {
-                    if (StdT != value)
+                    if (_stdTemp != value)
                     {
-                        StdT = value;
+                        _stdTemp = value;
                         OnPropertyChanged(new PropertyChangedEventArgs("StdTemp"));
                     }
                 }
@@ -817,8 +824,7 @@ namespace DataAccessLayer
 
         private double evalTCold() 
         {
-            //Средна вредност од температурите.    
-            return -1;
+            return OilDCColdTempTable;
         }
 
         ////////////////////////////

@@ -442,8 +442,8 @@ namespace DataAccessLayer
                 R1Cold = evalR1Cold();
                 R2Cold = evalR2Cold();
 
-                StdDevTempR1 = evalStdDevTempR1(selectedChannelIndex);
-                StdDevTempR2 = evalStdDevTempR2(selectedChannelIndex);
+                StdDevTempR1 = evalStdDevTempR1(SelectedChannel);
+                StdDevTempR2 = evalStdDevTempR2(SelectedChannel);
 
                 
             }

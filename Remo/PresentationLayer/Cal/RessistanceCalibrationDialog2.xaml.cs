@@ -25,7 +25,7 @@ namespace PresentationLayer
         public EntityLayer.RessistanceCalMeasurenment RessistanceCalMeasurenment { get; set; }
 
         DataSourceLayer.DataSourceServices s;
-        EntityLayer.ListWithChangeEvents<EntityLayer.RessistanceMeasurenment> m;
+        EntityLayer.RessistanceTransformerChannel ch;
         public RessistanceCalibrationDialog2(EntityLayer.RessistanceCalMeasurenment ressistanceCalMeasurenment)
         {
             InitializeComponent();
@@ -33,7 +33,8 @@ namespace PresentationLayer
             RessistanceCalMeasurenment = ressistanceCalMeasurenment;
 
             s = new DataSourceLayer.DataSourceServices();
-            m = new EntityLayer.ListWithChangeEvents<EntityLayer.RessistanceMeasurenment>();
+            ch = new EntityLayer.RessistanceTransformerChannel();
+            ch.RessistanceMeasurenments = new EntityLayer.ListWithChangeEvents<EntityLayer.RessistanceMeasurenment>();
             s.RessistanceMeasurenmentFinished += new DataSourceLayer.DataSourceServices.RessistanceMeasurenmentFinishedEventHandler(s_RessistanceMeasurenmentFinished);
         }
         
@@ -43,14 +44,14 @@ namespace PresentationLayer
         }
         public void s_RessistanceMeasurenmentFinished()
         {
-            RessistanceCalMeasurenment.RMeas = m[0].Voltage / m[0].Current;
+            RessistanceCalMeasurenment.RMeas = ch.RessistanceMeasurenments[0].Voltage / ch.RessistanceMeasurenments[0].Current;
             this.DialogResult = true;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             //Започни го мерењто на отпор
-            s.start_RessistanceMeasurenment(1, 1, m);
+            s.start_RessistanceMeasurenment(ch);
         }
 
     }

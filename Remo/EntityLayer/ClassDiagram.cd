@@ -76,7 +76,7 @@
     </Compartments>
     <AssociationLine Name="RessistanceMeasurenments" Type="EntityLayer.RessistanceMeasurenment" FixedToPoint="true">
       <Path>
-        <Point X="11.625" Y="9.198" />
+        <Point X="11.625" Y="9.363" />
         <Point X="11.625" Y="11" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true">

@@ -49,11 +49,11 @@ namespace DataSourceLayer
         /// <param name="sampleRate">sampleRate во секунди</param>
         /// <param name="numberOfSamples"></param>
         /// <param name="tempMeasurenments"></param>
-        public void start_TempMeasurenment(int sampleRate, int numberOfSamples, EntityLayer.ListWithChangeEvents<TempMeasurenment> tempMeasurenments)
+        public void start_TempMeasurenment(EntityLayer.TempMeasurenementConfiguration tempMeasurenmentConfiguration)
         {
-            this._sampleRate = sampleRate;
-            this._numberOfSamples = numberOfSamples;
-            this._tempMeasurenments = tempMeasurenments;
+            this._sampleRate = tempMeasurenmentConfiguration.TempSampleRateCurrentState;
+            this._numberOfSamples = tempMeasurenmentConfiguration.TempNoOfSamplesCurrentState;
+            this._tempMeasurenementConfiguration = tempMeasurenmentConfiguration;
 
             measurenmentThread = new Thread(tempMeasurenmentDoWork);
             measurenmentThread.Start();
@@ -64,11 +64,13 @@ namespace DataSourceLayer
         /// <param name="sampleRate">sampleRate во секунди</param>
         /// <param name="numberOfSamples"></param>
         /// <param name="tempMeasurenments"></param>
-        public void start_RessistanceMeasurenment(int sampleRate, int numberOfSamples, EntityLayer.ListWithChangeEvents<RessistanceMeasurenment> ressistanceMeasurenments)
+        public void start_RessistanceMeasurenment(EntityLayer.RessistanceTransformerChannel ressistanceTransformerChannel)
         {
-            _sampleRate = sampleRate;
-            _numberOfSamples = numberOfSamples;
-            _ressistanceMeasurenments = ressistanceMeasurenments;
+            _sampleRate = ressistanceTransformerChannel.RessistanceSampleRateCurrentState;
+            _numberOfSamples = ressistanceTransformerChannel.RessistanceNoOfSamplesCurrentState;
+            _current = ressistanceTransformerChannel.TestCurrent;
+
+            _ressistanceTransformerChannel = ressistanceTransformerChannel;
 
             measurenmentThread = new Thread(ressistanceMeasurenmentDoWork);
             measurenmentThread.Start();
@@ -78,28 +80,27 @@ namespace DataSourceLayer
 
         private int _sampleRate;
         private int _numberOfSamples;
-        private EntityLayer.ListWithChangeEvents<TempMeasurenment> _tempMeasurenments;
-        private EntityLayer.ListWithChangeEvents<RessistanceMeasurenment> _ressistanceMeasurenments;
+        private double _current;
+        private EntityLayer.TempMeasurenementConfiguration _tempMeasurenementConfiguration;
+        private EntityLayer.RessistanceTransformerChannel _ressistanceTransformerChannel;
 
         private void tempMeasurenmentDoWork()
         {
-            if (_tempMeasurenments == null)
-                _tempMeasurenments = new EntityLayer.ListWithChangeEvents<TempMeasurenment>();
-            lock (_tempMeasurenments)
+            lock (_tempMeasurenementConfiguration.TempMeasurenments)
             {
-                //_tempMeasurenments.Clear();
-            }
-            Random rand = new Random();
-            for (int i = 0; i < _numberOfSamples; i++)
-            {       
-                _tempMeasurenments.Add(new TempMeasurenment(
-                    DateTime.Now, 
-                    rand.NextDouble() * 10 + 20,
-                    rand.NextDouble() * 10 + 20,
-                    double.NaN,
-                    rand.NextDouble() * 10 + 20)
-                    );
-                Thread.Sleep(_sampleRate * 1000);
+                _tempMeasurenementConfiguration.TempMeasurenments.Clear();
+                Random rand = new Random();
+                for (int i = 0; i < _numberOfSamples; i++)
+                {
+                    _tempMeasurenementConfiguration.TempMeasurenments.Add(new TempMeasurenment(
+                        DateTime.Now,
+                        _tempMeasurenementConfiguration.IsChannel1On ? rand.NextDouble() * 10 + 20 : double.NaN,
+                        _tempMeasurenementConfiguration.IsChannel2On ? rand.NextDouble() * 10 + 20 : double.NaN,
+                        _tempMeasurenementConfiguration.IsChannel3On ? rand.NextDouble() * 10 + 20 : double.NaN,
+                        _tempMeasurenementConfiguration.IsChannel4On ? rand.NextDouble() * 10 + 20 : double.NaN
+                        ));
+                    Thread.Sleep(_sampleRate * 1000);
+                }
             }
             //throw event
             OnTempMeasurenmentFinished();
@@ -107,11 +108,9 @@ namespace DataSourceLayer
 
         private void ressistanceMeasurenmentDoWork()
         {
-            if (_ressistanceMeasurenments == null)
-                _ressistanceMeasurenments = new EntityLayer.ListWithChangeEvents<RessistanceMeasurenment>();
-            lock (_ressistanceMeasurenments)
+            lock (_ressistanceTransformerChannel.RessistanceMeasurenments)
             {
-                _ressistanceMeasurenments.Clear();
+                _ressistanceTransformerChannel.RessistanceMeasurenments.Clear();
             }
             Random rand = new Random();
             int channel = 1;
@@ -121,8 +120,8 @@ namespace DataSourceLayer
                     channel = 1;
                 else
                     channel = 2;
-                _ressistanceMeasurenments.Add(
-                    new RessistanceMeasurenment(DateTime.Now, channel, rand.NextDouble() * 10, rand.NextDouble() * 10) );
+                _ressistanceTransformerChannel.RessistanceMeasurenments.Add(
+                    new RessistanceMeasurenment(DateTime.Now, channel, rand.NextDouble() * 10, rand.NextDouble() * 10));
                 Thread.Sleep(_sampleRate * 1000);
             }
             //throw event

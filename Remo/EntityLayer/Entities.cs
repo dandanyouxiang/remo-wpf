@@ -77,17 +77,15 @@ namespace EntityLayer
                 new ListWithChangeEvents<RessistanceTransformerChannel>()
                 {
                     new RessistanceTransformerChannel(
-                        1, 12, 13, 14, true, true,
-                        
+                        1, 1, 1, 4, true, true,                       
                         new ListWithChangeEvents<RessistanceMeasurenment>(){
                             new RessistanceMeasurenment( new DateTime(2008, 1, 1, 10, 0, 0), 1, 1, 1),
                             new RessistanceMeasurenment( new DateTime(2008, 1, 1, 10, 0, 1), 2, 2, 1),
                             new RessistanceMeasurenment( new DateTime(2008, 1, 1, 10, 0, 2), 1, 3, 1),
                             new RessistanceMeasurenment( new DateTime(2008, 1, 1, 10, 0, 3), 2, 4, 1)
-                            }
-                    )
-                 
-                 
+                            }),
+                    new RessistanceTransformerChannel( 1, 1, 1, 4, true, true, new ListWithChangeEvents<RessistanceMeasurenment>()),
+                    new RessistanceTransformerChannel( 1, 1, 1, 4, true, true, new ListWithChangeEvents<RessistanceMeasurenment>())
             }
             );
             AcHotMeasurenments acHotMeasurenments=new AcHotMeasurenments(new TempMeasurenementConfiguration(true,true,true,false,true,false,true,true,new ListWithChangeEvents<TempMeasurenment>(){
@@ -493,7 +491,10 @@ namespace EntityLayer
         /// Мерења на отпор
         /// </summary>
         public ListWithChangeEvents<RessistanceMeasurenment> RessistanceMeasurenments { get; set; }
-        
+        public void RessistanceMeasurenments_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            OnPropertyChanged(e);
+        }
         public RessistanceTransformerChannel(
             int channelNo, 
             int testCurrent,
@@ -511,6 +512,7 @@ namespace EntityLayer
             this.IsChannel2On = isChannel2On;
 
             RessistanceMeasurenments = ressistanceMeasurenments;
+            RessistanceMeasurenments.PropertyChanged+=new PropertyChangedEventHandler(RessistanceMeasurenments_PropertyChanged);
 
         }
         public RessistanceTransformerChannel() : this(1, 1, 1, 1, true, true, new ListWithChangeEvents<RessistanceMeasurenment>()) { }
@@ -818,7 +820,7 @@ namespace EntityLayer
             IsChannel4Oil = isChannel4Oil;
 
             TempMeasurenments = tempMeasurenments;
-            TempMeasurenments.PropertyChanged+=new PropertyChangedEventHandler(TempMeasurenments_PropertyChanged);
+            TempMeasurenments.PropertyChanged += new PropertyChangedEventHandler(TempMeasurenments_PropertyChanged);
         }
         public TempMeasurenementConfiguration() : this(false, false, false, false, false, false, false, false, new ListWithChangeEvents<TempMeasurenment>())
         {

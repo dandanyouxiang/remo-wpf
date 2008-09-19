@@ -25,16 +25,17 @@ namespace PresentationLayer
         private EntityLayer.TempCalMeasurenment _tempCalMeasurenment;
         public EntityLayer.TempCalMeasurenment TempCalMeasurenment { get { return _tempCalMeasurenment; } }
 
-        private EntityLayer.ListWithChangeEvents<EntityLayer.TempMeasurenment> _tempMeasurenments;
+        private EntityLayer.TempMeasurenementConfiguration _tempMeasurenementConfiguration;
 
         private DataSourceServices dataSourceServices;
         public TempCalibrationDialog()
         {
             InitializeComponent();
-            _tempMeasurenments = new EntityLayer.ListWithChangeEvents<EntityLayer.TempMeasurenment>();
-            
+            _tempMeasurenementConfiguration = new EntityLayer.TempMeasurenementConfiguration { IsChannel1On = true, IsChannel2On = true, IsChannel3On = true, IsChannel4On = true };
+            _tempMeasurenementConfiguration.TempMeasurenments = new EntityLayer.ListWithChangeEvents<EntityLayer.TempMeasurenment>();
+
             dataSourceServices = new DataSourceServices();
-            dataSourceServices.start_TempMeasurenment(1, 1, _tempMeasurenments);
+            dataSourceServices.start_TempMeasurenment(_tempMeasurenementConfiguration);
             dataSourceServices.TempMeasurenmentFinished+=new DataSourceServices.TempMeasurenmentFinishedEventHandler(dataSourceServices_TempMeasurenmentFinished);
             
             T1Meas.DataContext = this;
@@ -52,12 +53,17 @@ namespace PresentationLayer
         Temps t;
         private void dataSourceServices_TempMeasurenmentFinished()
         {
-            t = new Temps { T1 = _tempMeasurenments[0].T1, T2 = _tempMeasurenments[0].T2, T3 = _tempMeasurenments[0].T3, T4 = _tempMeasurenments[0].T4 };
+            t = new Temps { 
+                T1 = _tempMeasurenementConfiguration.TempMeasurenments[0].T1, 
+                T2 = _tempMeasurenementConfiguration.TempMeasurenments[0].T2,
+                T3 = _tempMeasurenementConfiguration.TempMeasurenments[0].T3,
+                T4 = _tempMeasurenementConfiguration.TempMeasurenments[0].T4
+            };
             T1Meas.DataContext = t;
             T2Meas.DataContext = t;
             T3Meas.DataContext = t;
             T4Meas.DataContext = t;
-            dataSourceServices.start_TempMeasurenment(1, 1, _tempMeasurenments);    
+            dataSourceServices.start_TempMeasurenment(_tempMeasurenementConfiguration);    
         }
 
         private void okButton_Click(object sender, RoutedEventArgs e)

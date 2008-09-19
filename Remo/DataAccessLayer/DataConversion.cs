@@ -19,6 +19,7 @@ namespace DataAccessLayer
         private ConversionTypesEnum _conversionType = ConversionTypesEnum._double;
         public ConversionTypesEnum ConversionType { get { return _conversionType; } set { _conversionType = value; } }
 
+        private const string EMPTY_STRING = "- - -";
         private int _decimals = 1;
         /// <summary>
         /// Број на децимални места
@@ -40,7 +41,10 @@ namespace DataAccessLayer
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             string s1 = Prefix == "" ? " " : "";
-            return Prefix + s1 + ConvertToString(value,culture) + " " + Postfix;
+            if(ConvertToString(value,culture).Equals(EMPTY_STRING))
+                return EMPTY_STRING;
+            else
+                return Prefix + s1 + ConvertToString(value,culture) + " " + Postfix;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -71,7 +75,7 @@ namespace DataAccessLayer
         {
             switch (ConversionType)
             {
-                case ConversionTypesEnum._double: return Math.Round((double)o, Decimals).ToString("F"+Decimals, culture);
+                case ConversionTypesEnum._double: return double.IsNaN((double)o) ? "- - -" : Math.Round((double)o, Decimals).ToString("F"+Decimals, culture);
                 case ConversionTypesEnum._int: return o.ToString();
                 case ConversionTypesEnum._decimal: return Math.Round((decimal)o, Decimals).ToString("F" + Decimals, culture);
             }
