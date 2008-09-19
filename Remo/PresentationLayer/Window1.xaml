@@ -4,9 +4,36 @@
     xmlns:data="clr-namespace:DataAccessLayer"
     Title="Window1" Height="850" Width="1200">
     <Window.Resources>
-        <data:PrePostFixConverter x:Key="OhmConvertor" Postfix="Ohm" ConversionType="_double"/>
-        <data:PrePostFixConverter x:Key="AmperConvertor" Postfix="A" ConversionType="_double"/>
-        <data:PrePostFixConverter x:Key="CelsiusConvertor" Postfix="C" ConversionType="_int"/>
+            <DataTemplate x:Key="BlueHeader">
+                <StackPanel Orientation="Horizontal" Margin="-5,-5,-5,-5" MinWidth="120" MaxWidth="200" HorizontalAlignment="Stretch" >
+                    <StackPanel.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF223B84" Offset="1"/>
+                            <GradientStop Color="#FF57A0F4" Offset="0.5"/>
+                            <GradientStop Color="#FF4B94EC" Offset="0.5"/>
+                        </LinearGradientBrush>
+                    </StackPanel.Background>
+                    <TextBlock Margin="10,10,10,10" Text="{Binding}" VerticalAlignment="Center"  Foreground="White"/>
+        </StackPanel>
+            </DataTemplate>
+        <Style x:Key="GeneralStyle">
+            <Setter Property="Control.FontFamily" Value="Times New Roman" />
+            <Setter Property="Control.FontSize" Value="18" />
+            <Setter Property="Control.FontWeight" Value="Bold" />
+            <Setter Property="Control.Height"  Value="30" />
+        </Style>
+        <Style TargetType="Button" BasedOn="{StaticResource GeneralStyle}">
+        </Style>
+        <Style TargetType="TextBox" BasedOn="{StaticResource GeneralStyle}">
+        </Style>
+        <Style TargetType="Label" BasedOn="{StaticResource GeneralStyle}">
+        </Style>
+        <Style TargetType="ListView" BasedOn="{StaticResource GeneralStyle}">
+        </Style>
+        <data:PrePostFixConverter x:Key="OhmConvertor" Postfix="Ohm" Decimals="6" ConversionType="_double"/>
+        <data:PrePostFixConverter x:Key="AmperConvertor" Postfix="A" Decimals="1" ConversionType="_double"/>
+        <data:PrePostFixConverter x:Key="CelsiusConvertor" Postfix="C" Decimals="1" ConversionType="_int"/>
+        <data:PrePostFixConverter x:Key="CelsiusConverter" Postfix="C" Decimals="1" ConversionType="_double"/>
         <data:PrePostFixConverter x:Key="SecondConvertor" Postfix="sec"  ConversionType="_int"/>
         <data:PrePostFixConverter x:Key="MinuteConvertor" Postfix="min" ConversionType="_int"/>
         <data:PrePostFixConverter x:Key="PrePostFixConvertor"/>
@@ -70,7 +97,7 @@
                                         <Label Margin="161,72.083,163,73.917" Name="label10" Content="{Binding Path=R2AtStdTempHeader}"></Label>
                                         <Label Margin="161,24.084,163,0" Name="label11" Height="28" VerticalAlignment="Top" Content="{Binding Path=R1AtStdTempHeader}"></Label>
                                         <Label Margin="16,72.083,0,73.917" Name="label12" HorizontalAlignment="Left" Width="120">No. of Samples</Label>
-                                        <Button Height="23" Margin="189,0,180,22" Name="button4" VerticalAlignment="Bottom">Start</Button>
+                                        <Button Name="startResMeasDcColdButton" Height="23" Margin="189,0,180,22" VerticalAlignment="Bottom" Click="startResMeasDcColdButton_Click">Start</Button>
                                         <TextBox Height="23" HorizontalAlignment="Right" Margin="0,48.027,20,0" Name="evalStdDevTempR1textBox" Text="{Binding Path=StdDevTempR1,Converter={StaticResource OhmConvertor}}" VerticalAlignment="Top" Width="120" IsEnabled="True" IsReadOnly="True" />
                                         <TextBox HorizontalAlignment="Right" Margin="0,0,20,53.917" Name="evalStdDevTempR2textBox" Width="120" Height="23" VerticalAlignment="Bottom" Text="{Binding Path=StdDevTempR2,Converter={StaticResource OhmConvertor}}" IsEnabled="True" IsReadOnly="True" />
                                         <Label HorizontalAlignment="Right" Margin="0,72.083,20,73.917" Name="label6" Width="120" Content="{Binding Path=StdDevTempR2Header}"></Label>
@@ -120,31 +147,33 @@
                         </TabItem>
                         <TabItem Header="Temperature Measurenment">
                             <Grid>
-                                <GroupBox Header="Tempetare measurenment" Height="326" HorizontalAlignment="Left" Margin="10,10,0,0" Name="groupBox2" VerticalAlignment="Top" Width="371.687">
-                                    <Grid Height="229" Width="337">
-                                        <TextBox Height="24" Margin="119.079,0,97.263,76.356" Name="TColdRessTextBox" VerticalAlignment="Bottom" IsEnabled="True" IsReadOnly="True" >
+                                <GroupBox Header="Tempetare measurenment" HorizontalAlignment="Left" Margin="80,44,0,368.447" Name="groupBox2" Width="192">
+                                    <Grid Height="296" Width="186">
+                                        <TextBox Margin="17,0,0,60" Name="TColdRessTextBox" VerticalAlignment="Bottom" IsEnabled="True" IsReadOnly="True" HorizontalAlignment="Left" Width="120.658">
                                             <TextBox.Text>
-                                                <Binding Path="TCold" Converter="{StaticResource CelsiusConvertor}" NotifyOnValidationError="True">
+                                                <Binding Path="TCold" Converter="{StaticResource CelsiusConverter}" NotifyOnValidationError="True">
                                                     <Binding.ValidationRules>
                                                         <data:RegexValidator RegularExpression="^\s*\d*\s*[c|C]?\s*$" />
                                                     </Binding.ValidationRules>
                                                 </Binding>
                                             </TextBox.Text>
                                         </TextBox>
-                                        <TextBox Height="24" HorizontalAlignment="Left" Margin="24,62.944,0,0" Name="SampleRateTempTextBox" VerticalAlignment="Top" Width="120" >
+                                        <TextBox Margin="17,45.14,32,220" Name="SampleRateTempTextBox" VerticalAlignment="Bottom" >
                                             <TextBox.Text>
                                                 <Binding Path="TempSampleRateCurrentState" Converter="{StaticResource SecondConvertor}" NotifyOnValidationError="True">
                                                     <Binding.ValidationRules>
-                                                        <data:RegexValidator RegularExpression="^\s*([1-9]|[1-5]\d)\s*((s|S)(e|E)(c|C))?\s*$" />
+
+                                                        <data:RegexValidator RegularExpression="^\s*([1-9]|[1-5]\d)\s*(sec)?\s*$"/>
+
                                                     </Binding.ValidationRules>
                                                 </Binding>
                                             </TextBox.Text>
                                         </TextBox>
 
-                                        <Label Height="28" HorizontalAlignment="Left" Margin="24,39,0,0" Name="label5" VerticalAlignment="Top" Width="120">Sample Rate</Label>
-                                        <Label Margin="119.079,101.808,97.263,0" Name="label7" Height="28" VerticalAlignment="Top">T Cold</Label>
-                                        <Button Height="23" Margin="135,0,127,24.277" Name="button1" VerticalAlignment="Bottom" Click="button1_Click">Start</Button>
-                                        <TextBox Height="23" Margin="0,61.723,32,0"  Name="NoOFSamplesTempTextBox" VerticalAlignment="Top" HorizontalAlignment="Right" Width="120" >
+                                        <Label Height="28" HorizontalAlignment="Left" Margin="17,15.056,0,255" Name="label5" VerticalAlignment="Bottom"  Width="120">Sample Rate</Label>
+                                        <Label Margin="17.658,0,30.684,95" Name="label7" Height="28" VerticalAlignment="Bottom">T Cold</Label>
+                                        <Button Margin="37,0,0,10" Name="startTempMeasDcColdButton" VerticalAlignment="Bottom" Click="startTempMeasDcColdButton_Click" HorizontalAlignment="Left" Width="75">Start</Button>
+                                        <TextBox Margin="17,125,32,140"  Name="NoOFSamplesTempTextBox" VerticalAlignment="Bottom">
                                             <TextBox.Text>
                                                 <Binding Path="TempNoOfSamplesCurrentState" NotifyOnValidationError="True">
                                                     <Binding.ValidationRules>
@@ -153,42 +182,84 @@
                                                 </Binding>
                                             </TextBox.Text>
                                         </TextBox>
-                                        <Label Height="28" Margin="0,37.723,32,0" Name="label16" VerticalAlignment="Top" HorizontalAlignment="Right" Width="120">No. of Samples</Label>
+                                        <Label Height="28" Margin="17,97,32,175" Name="label16" VerticalAlignment="Bottom">No. of Samples</Label>
                                     </Grid>
                                 </GroupBox>
-                                <ListView Margin="397,10,13,0" Name="DCColdTemperatureTable" Height="326" VerticalAlignment="Top" SourceUpdated="DCColdTemperatureTable_SourceUpdated">
+                                <ListView Margin="27.344,0,416,10" Name="DCColdTemperatureTable" Height="326" VerticalAlignment="Bottom" SourceUpdated="DCColdTemperatureTable_SourceUpdated" HorizontalContentAlignment="Stretch" HorizontalAlignment="Stretch">
+                                    <ListView.Background>
+                                        <LinearGradientBrush EndPoint="0.939,0.919" StartPoint="0.041,0.081">
+                                            <GradientStop Color="#FF223B84" Offset="0"/>
+                                            <GradientStop Color="#FF57A0F4" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </ListView.Background>
+                                    
+                                    <ListView.Resources>
+                                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Yellow" />
+                                    </ListView.Resources>
+                                    
+                                    <ListView.ItemContainerStyle>
+                                        <Style TargetType="{x:Type ListViewItem}"  >
+                                            <Setter Property="Height" Value="24" />
+                                            <Setter Property="Foreground" Value="White"/>
+
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="true">
+                                                    <Setter Property="Foreground" Value="DarkBlue" />
+                                                    <Setter Property="Background">
+                                                        <Setter.Value>
+                                                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                                <GradientStop Color="#FFFFC704" Offset="0.986"/>
+                                                                <GradientStop Color="#FFF4E057" Offset="0.5"/>
+                                                                <GradientStop Color="#FFF4E057" Offset="0.51"/>
+                                                            </LinearGradientBrush>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Trigger>
+                                                
+                                                <Trigger Property="IsSelected"  Value="true">
+                                                    <Setter Property="Foreground" Value="Green" />
+                                                    <Setter Property="Background" Value="White">
+                                                    </Setter>
+                                                </Trigger>
+
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
+
                                     <ListView.View>
                                         <GridView >
+                                            
                                             <GridView.Columns>
-                                                <GridViewColumn Header="Time" DisplayMemberBinding="{Binding Path=Time}"/>
-                                                <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Path=Date}"/>
-                                                <GridViewColumn Header="{Binding Path=DCColdTemperatureTableHeader.T1}" DisplayMemberBinding="{Binding Path=T1}"/>
-                                                <GridViewColumn Header="{Binding Path=DCColdTemperatureTableHeader.T2}" DisplayMemberBinding="{Binding Path=T2}"/>
-                                                <GridViewColumn Header="{Binding Path=DCColdTemperatureTableHeader.T3}" DisplayMemberBinding="{Binding Path=T3}"/>
-                                                <GridViewColumn Header="{Binding Path=DCColdTemperatureTableHeader.T4}" DisplayMemberBinding="{Binding Path=T4}"/>
-                                                <GridViewColumn Header="TAmb" DisplayMemberBinding="{Binding Path=TAmb}"/>
-                                                <GridViewColumn Header="TOil" DisplayMemberBinding="{Binding Path=TOil}"/>
+                                                <GridViewColumn Header="Time" DisplayMemberBinding="{Binding Path=Time}" Width="120" HeaderTemplate="{StaticResource BlueHeader}"/>
+                                                <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Path=Date}" Width="120" HeaderTemplate="{StaticResource BlueHeader}"/>
+                                                <GridViewColumn Header="{Binding Path=DCColdTemperatureTableHeader.T1}" DisplayMemberBinding="{Binding Path=T1, Converter={StaticResource CelsiusConverter}}" HeaderTemplate="{StaticResource BlueHeader}"/>
+                                                <GridViewColumn Header="{Binding Path=DCColdTemperatureTableHeader.T2}" DisplayMemberBinding="{Binding Path=T2, Converter={StaticResource CelsiusConverter}}" HeaderTemplate="{StaticResource BlueHeader}"/>
+                                                <GridViewColumn Header="{Binding Path=DCColdTemperatureTableHeader.T3}" DisplayMemberBinding="{Binding Path=T3, Converter={StaticResource CelsiusConverter}}" HeaderTemplate="{StaticResource BlueHeader}"/>
+                                                <GridViewColumn Header="{Binding Path=DCColdTemperatureTableHeader.T4}" DisplayMemberBinding="{Binding Path=T4, Converter={StaticResource CelsiusConverter}}" HeaderTemplate="{StaticResource BlueHeader}"/>
+                                                <GridViewColumn Header="TAmb" DisplayMemberBinding="{Binding Path=TAmb, Converter={StaticResource CelsiusConverter}}" HeaderTemplate="{StaticResource BlueHeader}"/>
+                                                <GridViewColumn Header="TOil" DisplayMemberBinding="{Binding Path=TOil, Converter={StaticResource CelsiusConverter}}" HeaderTemplate="{StaticResource BlueHeader}"/>
                                             </GridView.Columns>
                                         </GridView>
                                     </ListView.View>
                                 </ListView>
-                                <TextBox Height="23" Margin="0,0,69,265" Name="T2MeanDCColdTextBox" VerticalAlignment="Bottom" Text="{Binding Path=T2MeanDCColdTempTable,Converter={StaticResource CelsiusConvertor}}" HorizontalAlignment="Right" Width="150.05" IsEnabled="True" IsReadOnly="True" />
-                                <Label Height="28" Margin="0,0,69,284" Name="T2MeanDCColdLabel" VerticalAlignment="Bottom"  Content="{Binding Path=T2MeanDCColdTempTableHeader}" HorizontalAlignment="Right" Width="150"></Label>
-                                <TextBox Height="23" Margin="0,0,68,216" Name="T3MeanDCColdTextBox" Text="{Binding Path=T3MeanDCColdTempTable,Converter={StaticResource CelsiusConvertor}}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="150.05" IsEnabled="True" IsReadOnly="True" />
-                                <Label Height="28" Margin="0,0,69,235" Name="T3MeanDCColdLabel" VerticalAlignment="Bottom" Content="{Binding Path=T3MeanDCColdTempTableHeader}" HorizontalAlignment="Right" Width="150"></Label>
-                                <TextBox Height="23" Margin="0,0,99,52" Name="AmbDCColdTempTableTextBox" Text="{Binding Path=AmbDCColdTempTable,Converter={StaticResource CelsiusConvertor}}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="120" IsEnabled="True" IsReadOnly="True" />
-                                <Label Height="28" Margin="0,0,99,71" Name="label17" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="120">T Oil</Label>
-                                <TextBox Margin="0,0,99,100" Name="OilDCColdTempTableTextBox" Height="23.111" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="120" Text="{Binding Path=OilDCColdTempTable,Converter={StaticResource CelsiusConvertor}}" IsEnabled="True" IsReadOnly="True" />
-                                <Label Height="28" Margin="0,0,99,119" Name="label18" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="120">T Amb</Label>
-                                <TextBox Height="23" Margin="0,0,69,313" Name="T1MeanDCColdTextBox" Text="{Binding Path=T1MeanDCColdTempTable,Converter={StaticResource CelsiusConvertor}}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="150.05" IsEnabled="True" IsReadOnly="True" />
-                                <Label Margin="0,0,69,332" Name="T1TempLabel" Content="{Binding Path=T1MeanDCColdTempTableHeader}" HorizontalAlignment="Right" Width="150" Height="28.111" VerticalAlignment="Bottom"></Label>
-                                <TextBox Height="23" Margin="0,0,69,168" Name="T4MeanDCColdTextBox" Text="{Binding Path=T4MeanDCColdTempTable,Converter={StaticResource CelsiusConvertor}}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="150.05" IsEnabled="True" IsReadOnly="True" />
-                                <Label Margin="0,0,69,188" Name="T4MeanDCColdLabel" Content="{Binding Path=T4MeanDCColdTempTableHeader}" HorizontalAlignment="Right" Width="150" Height="28.447" VerticalAlignment="Bottom"></Label>
-                                <my:ThermometerChannel Margin="0,0,281,32.111" Name="thermometerChannel4" xmlns:my="clr-namespace:WpfCustomControlLibrary;assembly=WpfCustomControlLibrary" Height="330" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="178" Header="Channel 4" Value="{Binding Path=T4MeanDCColdTempTable}"/>
-                                <my:ThermometerChannel Margin="59.343,0,0,32.111" Name="thermometerChannel1" xmlns:my="clr-namespace:WpfCustomControlLibrary;assembly=WpfCustomControlLibrary" HorizontalAlignment="Left" Width="178" Height="330" VerticalAlignment="Bottom" MinHeight="0" Value="{Binding Path=T1MeanDCColdTempTable}" >
+                                <Label Height="28" Margin="0,0,30,305" Name="label18" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="120">T Amb</Label>
+                                <TextBox Margin="780,435,0,0" Name="T1MeanDCColdTextBox" Text="{Binding Path=T1MeanDCColdTempTable,Converter={StaticResource CelsiusConverter}}" VerticalAlignment="Top" HorizontalAlignment="Left" Width="150.05" IsEnabled="True" IsReadOnly="True"/>
+                                <TextBox Margin="780,500,0,0" Name="T2MeanDCColdTextBox" VerticalAlignment="Top" Text="{Binding Path=T2MeanDCColdTempTable,Converter={StaticResource CelsiusConverter}}" HorizontalAlignment="Left" Width="150.05" IsEnabled="True" IsReadOnly="True" />
+                                <Label Margin="780,470,249,244" Name="T2MeanDCColdLabel" VerticalAlignment="Top"  Content="{Binding Path=T2MeanDCColdTempTableHeader}" HorizontalAlignment="Left" Width="150" Height="30"></Label>
+                                <TextBox Margin="780,570,0,0" Name="T3MeanDCColdTextBox" Text="{Binding Path=T3MeanDCColdTempTable,Converter={StaticResource CelsiusConverter}}" VerticalAlignment="Top" HorizontalAlignment="Left" Width="150.05" IsEnabled="True" IsReadOnly="True" Height="30" />
+                                <Label Margin="780,540,0,0" Name="T3MeanDCColdLabel" VerticalAlignment="Top" Content="{Binding Path=T3MeanDCColdTempTableHeader}" HorizontalAlignment="Left" Width="150" Height="30"></Label>
+                                <TextBox Margin="0,0,30,200" Name="AmbDCColdTempTableTextBox" Text="{Binding Path=AmbDCColdTempTable,Converter={StaticResource CelsiusConverter}}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="120" IsEnabled="True" IsReadOnly="True" />
+                                <Label Margin="0,0,30,235" Name="label17" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="120">T Oil</Label>
+                                <TextBox Margin="0,0,30,270" Name="OilDCColdTempTableTextBox" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="120" Text="{Binding Path=OilDCColdTempTable,Converter={StaticResource CelsiusConverter}}" IsEnabled="True" IsReadOnly="True" />
+                                <Label Margin="780,400,249,304" Name="T1TempLabel" Content="{Binding Path=T1MeanDCColdTempTableHeader}" HorizontalAlignment="Left" Width="150" VerticalAlignment="Top"></Label>
+                                <TextBox Margin="0,0,249,72" Name="T4MeanDCColdTextBox" Text="{Binding Path=T4MeanDCColdTempTable,Converter={StaticResource CelsiusConverter}}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="150.05" IsEnabled="True" IsReadOnly="True" Height="30" />
+                                <Label Margin="780,580,0,0" Name="T4MeanDCColdLabel" Content="{Binding Path=T4MeanDCColdTempTableHeader}" HorizontalAlignment="Left" Width="150" VerticalAlignment="Top"  ></Label>
+                                
+                                <my:ThermometerChannel Margin="0,44,70,0" Name="thermometerChannel4" xmlns:my="clr-namespace:WpfCustomControlLibrary;assembly=WpfCustomControlLibrary" VerticalAlignment="Top" HorizontalAlignment="Right" Width="180" Header="Channel 4" Value="{Binding Path=T4MeanDCColdTempTable}"/>
+                                <my:ThermometerChannel Margin="0,44,670,0" Name="thermometerChannel1" xmlns:my="clr-namespace:WpfCustomControlLibrary;assembly=WpfCustomControlLibrary" HorizontalAlignment="Right" Width="178" MinHeight="0" Value="{Binding Path=T1MeanDCColdTempTable}" VerticalAlignment="Top" >
                                 </my:ThermometerChannel>
-                                <my:ThermometerChannel HorizontalAlignment="Left" Margin="267,0,0,30.111" Name="thermometerChannel2" Width="178" xmlns:my="clr-namespace:WpfCustomControlLibrary;assembly=WpfCustomControlLibrary" Height="330" VerticalAlignment="Bottom" Header="Channel 2" Value="{Binding Path=T2MeanDCColdTempTable}"/>
-                                <my:ThermometerChannel Margin="478,0,491,32.111" Name="thermometerChannel3" xmlns:my="clr-namespace:WpfCustomControlLibrary;assembly=WpfCustomControlLibrary" Height="330" VerticalAlignment="Bottom" Header="Channel 3" Value="{Binding Path=T3MeanDCColdTempTable}"/>
+                                <my:ThermometerChannel Margin="0,44,470,0" Name="thermometerChannel2" xmlns:my="clr-namespace:WpfCustomControlLibrary;assembly=WpfCustomControlLibrary" Header="Channel 2" Value="{Binding Path=T2MeanDCColdTempTable}" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                                <my:ThermometerChannel Margin="0,44,270,0" Name="thermometerChannel3" xmlns:my="clr-namespace:WpfCustomControlLibrary;assembly=WpfCustomControlLibrary" Header="Channel 3" Value="{Binding Path=T3MeanDCColdTempTable}" VerticalAlignment="Top" HorizontalAlignment="Right" Width="178" />
                             </Grid>
                         </TabItem>
                     </TabControl>
@@ -322,7 +393,7 @@
                                                 <Label Name="TColdLabel">T Cold</Label>
                                                 <TextBox Name="TColdTextBox" IsReadOnly="{Binding ElementName=MeasuredRadioButton, Path=IsChecked}">
                                                     <TextBox.Text>
-                                                        <Binding Path="TCold" Converter="{StaticResource CelsiusConvertor}" NotifyOnValidationError="True">
+                                                        <Binding Path="TCold" Converter="{StaticResource CelsiusConverter}" NotifyOnValidationError="True">
                                                             <Binding.ValidationRules>
                                                                 <data:RegexValidator RegularExpression="^\s*\d*\s*[C|c]?\s*$"></data:RegexValidator>
                                                             </Binding.ValidationRules>
