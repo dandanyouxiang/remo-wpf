@@ -39,30 +39,23 @@ namespace DataAccessLayer
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return Prefix + " " + ConvertToString(value, culture) + " " + Postfix;
+            string s1 = Prefix == "" ? " " : "";
+            return Prefix + s1 + ConvertToString(value,culture) + " " + Postfix;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             string text = System.Convert.ToString(value);
-            //Во случај да неможе да го конвертира во број внесениот стринг да врати -1
-            try
+            if (Prefix != "" && text.Contains(Prefix))
             {
-                if (text.Contains(Prefix))
-                {
-                    text = text.Replace(Prefix, "");
-                }
-                if (text.Contains(Postfix))
-                {
-                    text = text.Replace(Postfix, "");
-                }
-                object retValue = ConvertToType(text, culture);
-                return retValue;
+                text = text.Replace(Prefix, "");
             }
-            catch
+            if (Postfix != "" && text.Contains(Postfix))
             {
-                return "";
+                text = text.Replace(Postfix, "");
             }
+            object retValue = ConvertToType(text, culture);
+            return retValue;
         }
         protected virtual object ConvertToType(string s, CultureInfo culture)
         {

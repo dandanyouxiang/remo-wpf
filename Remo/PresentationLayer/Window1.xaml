@@ -20,7 +20,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <TabControl Name="tabControl1" Grid.Row="0" Grid.Column="0" SelectedIndex="1">
+        <TabControl Name="tabControl1" Grid.Row="0" Grid.Column="0" SelectedIndex="0">
             <TabItem  Header="DC - Cold Measurenment">
                 <Grid >
                     <Grid.RowDefinitions>
@@ -144,7 +144,7 @@
                                         <Label Height="28" HorizontalAlignment="Left" Margin="24,39,0,0" Name="label5" VerticalAlignment="Top" Width="120">Sample Rate</Label>
                                         <Label Margin="119.079,101.808,97.263,0" Name="label7" Height="28" VerticalAlignment="Top">T Cold</Label>
                                         <Button Height="23" Margin="135,0,127,24.277" Name="button1" VerticalAlignment="Bottom" Click="button1_Click">Start</Button>
-                                        <TextBox Height="23" Margin="0,61.723,32,0" Name="NoOFSamplesTempTextBox" VerticalAlignment="Top" HorizontalAlignment="Right" Width="120" >
+                                        <TextBox Height="23" Margin="0,61.723,32,0"  Name="NoOFSamplesTempTextBox" VerticalAlignment="Top" HorizontalAlignment="Right" Width="120" >
                                             <TextBox.Text>
                                                 <Binding Path="TempNoOfSamplesCurrentState" NotifyOnValidationError="True">
                                                     <Binding.ValidationRules>

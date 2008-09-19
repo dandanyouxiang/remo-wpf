@@ -18,8 +18,8 @@
         <Point X="11.938" Y="4.731" />
         <Point X="11.938" Y="6.25" />
       </Path>
-      <MemberNameLabel ManuallyPlaced="true">
-        <Position X="-0.751" Y="1.209" />
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="-0.928" Y="1.209" Height="0.16" Width="2.333" />
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
@@ -115,7 +115,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="EntityLayer.XmlServices" Collapsed="true">
-    <Position X="19" Y="2" Width="1.5" />
+    <Position X="18.5" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAgAAAAAAAAAAAAAAAAAAAAgAAAAAAAQIAAAA=</HashCode>
       <FileName>EntityLayer\Entities.cs</FileName>
@@ -127,8 +127,8 @@
       <Path>
         <Point X="8.688" Y="2.732" />
         <Point X="8.688" Y="2.944" />
-        <Point X="4.688" Y="2.944" />
-        <Point X="4.688" Y="3.75" />
+        <Point X="5.938" Y="2.944" />
+        <Point X="5.938" Y="3.75" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true">
         <Position X="-1.479" Y="0.898" />
@@ -177,7 +177,7 @@
     </ShowAsAssociation>
   </Class>
   <Class Name="EntityLayer.TransformerProperties">
-    <Position X="2.75" Y="3.75" Width="2.5" />
+    <Position X="4" Y="3.75" Width="2.5" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
@@ -223,18 +223,14 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="EntityLayer.RessistanceCalibration">
-    <Position X="29.5" Y="9.5" Width="1.75" />
-    <AssociationLine Name="RessistanceCalMeasurenments" Type="EntityLayer.RessistanceCalMeasurenment" FixedFromPoint="true">
-      <Path>
-        <Point X="30.667" Y="10.109" />
-        <Point X="30.667" Y="11.5" />
-      </Path>
+    <Position X="29.25" Y="9" Width="1.75" />
+    <AssociationLine Name="RessistanceCalMeasurenments" Type="EntityLayer.RessistanceCalMeasurenment">
       <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
-        <Position X="-2.217" Y="0.633" Height="0.16" Width="2.01" />
+        <Position X="-2.19" Y="0.126" Height="0.16" Width="2.01" />
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAIAAgAAAAAAAAAAAAAAAAAAAAgAAAAAAAAIAAAA=</HashCode>
       <FileName>EntityLayer\RessistanceCalibrationEntities.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
@@ -271,34 +267,18 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="PresentationLayer.TempCalibration">
-    <Position X="21.25" Y="3.75" Width="4.25" />
-    <AssociationLine Name="c" Type="DataAccessLayer.TempCalibrationService" FixedFromPoint="true">
-      <Path>
-        <Point X="24.312" Y="5.509" />
-        <Point X="24.312" Y="6.75" />
-      </Path>
-      <MemberNameLabel ManuallyPlaced="true">
-        <Position X="-0.601" Y="0.454" />
-      </MemberNameLabel>
-    </AssociationLine>
-    <TypeIdentifier>
-      <HashCode>AAAAAAABAAAAAAAAAEAAAAAAAAAAACCQAAAAAAAAAAA=</HashCode>
-      <FileName>PresentationLayer\Calibration\TempCalibration.xaml.cs</FileName>
-    </TypeIdentifier>
-    <ShowAsAssociation>
-      <Field Name="c" />
-    </ShowAsAssociation>
-  </Class>
   <Class Name="DataAccessLayer.TempCalibrationService">
-    <Position X="22" Y="6.75" Width="3.25" />
-    <AssociationLine Name="TempCalibrationEntity" Type="EntityLayer.TempCalibration" FixedFromPoint="true">
-      <Path>
-        <Point X="22.812" Y="8.823" />
-        <Point X="22.812" Y="10.25" />
-      </Path>
-      <MemberNameLabel ManuallyPlaced="true">
-        <Position X="-1.626" Y="0.391" />
+    <Position X="21.75" Y="7" Width="3.25" />
+    <NestedTypes>
+      <Class Name="DataAccessLayer.TempCalibrationService.TempCalMeasurenmentsView" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DataAccessLayer\CalibrationServices.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <AssociationLine Name="TempCalibrationEntity" Type="EntityLayer.TempCalibration">
+      <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
+        <Position X="-1.791" Y="0.147" Height="0.16" Width="1.586" />
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
@@ -313,10 +293,29 @@
   <Class Name="EntityLayer.RessistanceCalMeasurenment">
     <Position X="28.25" Y="11.5" Width="3.25" />
     <TypeIdentifier>
-      <HashCode>IAAAAAAAAAAgAAAAIAAAAAAEgAAAAAAAACAQMAAAAQA=</HashCode>
+      <HashCode>IAAAAAAAAAAgAAAAIACAAAAEgAAAAAAAACAQNAAAAQA=</HashCode>
       <FileName>EntityLayer\RessistanceCalibrationEntities.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PresentationLayer.TempCalibration">
+    <Position X="21.75" Y="2.5" Width="3.25" />
+    <AssociationLine Name="tempCalibrationService" Type="DataAccessLayer.TempCalibrationService" FixedFromPoint="true">
+      <Path>
+        <Point X="23.625" Y="5.462" />
+        <Point X="23.625" Y="7" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-1.667" Y="0.633" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>8AAACAABAAAAAAAAAAAABAAIAAAAACAQBAAAAAAAAAA=</HashCode>
+      <FileName>PresentationLayer\Cal\TempCalibration.xaml.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="tempCalibrationService" />
+    </ShowAsAssociation>
   </Class>
   <Font Name="Tahoma" Size="8.25" />
 </ClassDiagram>

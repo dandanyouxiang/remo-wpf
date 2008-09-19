@@ -25,7 +25,7 @@ namespace PresentationLayer
         public Window1()
         {
             InitializeComponent();
-            datasource = new DataSource(@"C:\Documents and Settings\Gjore\Desktop\Remo\root.xml");
+            datasource = new DataSource(@"E:\root.xml");
             MainGrid.DataContext = datasource;
             try
             {
@@ -35,11 +35,11 @@ namespace PresentationLayer
                 DCColdRessistanceTable.ItemsSource = datasource.DCColdRessistanceTable(datasource.SelectedChannel);
                 DCColdRessistanceTable.DataContext = datasource;
 
-                NoOfSamplesRessTextBox.DataContext = datasource.root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel];
-                SampleRateTempTextBox.DataContext = datasource.root.DcColdMeasurenments.TempMeasurenementConfiguration;
+                NoOfSamplesRessTextBox.DataContext = datasource.Root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel];
+                SampleRateTempTextBox.DataContext = datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration;
 
-                TestCurrentTempTextBox.DataContext = datasource.root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel];
-                NoOFSamplesTempTextBox.DataContext = datasource.root.DcColdMeasurenments.TempMeasurenementConfiguration;
+                TestCurrentTempTextBox.DataContext = datasource.Root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel];
+                NoOFSamplesTempTextBox.DataContext = datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration;
                 //SampleRateRessTextBox.DataContext = datasource.root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel];
 
                 DCColdTemperatureTable.ItemsSource = datasource.DCColdTemperatureTable();
@@ -51,15 +51,15 @@ namespace PresentationLayer
 
                 //thermometerChannel1.DataContext = datasource;
                 //cooling
-                TestCurrentTextBox.DataContext = datasource.root.DcCoolingMeasurenments.RessistanceTransformerChannels;
-                NoOfSamplesTextBox.DataContext = datasource.root.DcCoolingMeasurenments.RessistanceTransformerChannels;
+                TestCurrentTextBox.DataContext = datasource.Root.DcCoolingMeasurenments.RessistanceTransformerChannels;
+                NoOfSamplesTextBox.DataContext = datasource.Root.DcCoolingMeasurenments.RessistanceTransformerChannels;
 
                 //postavuvanje na datakontest na kanalite vo vtoriot tab
 
-                thermometerChannelAC1.DataContext = datasource.root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last<EntityLayer.TempMeasurenment>();
-                thermometerChannelAC2.DataContext = datasource.root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last<EntityLayer.TempMeasurenment>();
-                thermometerChannelAC3.DataContext = datasource.root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last<EntityLayer.TempMeasurenment>();
-                thermometerChannelAC4.DataContext = datasource.root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last<EntityLayer.TempMeasurenment>();
+                thermometerChannelAC1.DataContext = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last<EntityLayer.TempMeasurenment>();
+                thermometerChannelAC2.DataContext = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last<EntityLayer.TempMeasurenment>();
+                thermometerChannelAC3.DataContext = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last<EntityLayer.TempMeasurenment>();
+                thermometerChannelAC4.DataContext = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last<EntityLayer.TempMeasurenment>();
 
             }
             catch (Exception ex) 
@@ -85,12 +85,37 @@ namespace PresentationLayer
             DCColdRessistanceTable.ItemsSource = datasource.DCColdRessistanceTable(ChannelsListBox.SelectedIndex);
         }
 
+        /// <summary>
+        /// Старт на температурно мерење
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button1_Click(object sender, RoutedEventArgs e)
         {
+            //Кои канали се On или Off
+            datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel1On = thermometerChannel1.IsChannelOn;
+            datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel2On = thermometerChannel2.IsChannelOn;
+            datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel3On = thermometerChannel3.IsChannelOn;
+            datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel4On = thermometerChannel4.IsChannelOn;
+            //Кои канали се Oil или Amb
+            datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel1Oil = thermometerChannel1.IsOil;
+            datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel2Oil = thermometerChannel2.IsOil;
+            datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel3Oil = thermometerChannel3.IsOil;
+            datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel4Oil = thermometerChannel4.IsOil;
 
-            //datasource.root.DcColdMeasurenments.RessistanceTransformerChannels[0].TestCurrent = 23;
-            datasource.root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel1Oil = true;
-            datasource.root.DcColdMeasurenments.TempMeasurenementConfiguration.TempMeasurenments[0].Time = DateTime.Now;
+            //Стартувај го мерењето на температура
+            DataSourceLayer.DataSourceServices ds = new DataSourceLayer.DataSourceServices();
+            ds.TempMeasurenmentFinished += new DataSourceLayer.DataSourceServices.TempMeasurenmentFinishedEventHandler(ds_TempMeasurenmentFinished);
+            int sampleRate = datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration.TempSampleRateCurrentState;
+            int numberOfSamples = datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration.TempNoOfSamplesCurrentState;
+            ds.start_TempMeasurenment(sampleRate, numberOfSamples, datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration.TempMeasurenments);
+            //
+        }
+        /// <summary>
+        /// Handler за крај на температурнто мерење
+        /// </summary>
+        private void ds_TempMeasurenmentFinished()
+        {
         }
 
         private void ChannelsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -98,7 +123,7 @@ namespace PresentationLayer
             datasource.setValuesForSelectedChannel();
 
             GridViewColumn colum = new GridViewColumn();
-            if (datasource.SelectedChannel < datasource.root.DcColdMeasurenments.RessistanceTransformerChannels.Count)
+            if (datasource.SelectedChannel < datasource.Root.DcColdMeasurenments.RessistanceTransformerChannels.Count)
             {
                 DCColdRessistanceTable.ItemsSource = datasource.DCColdRessistanceTable(datasource.SelectedChannel);
                 

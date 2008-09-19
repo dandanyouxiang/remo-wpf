@@ -401,12 +401,13 @@ namespace DataAccessLayer
             }
         }
 #endregion
+
     public partial class DataSource : INotifyPropertyChanged
     {
         /// <summary>
         /// Објектот со сите ентитети во него.
         /// </summary>
-        public EntityLayer.Root root;
+        public EntityLayer.Root Root { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
             /// <summary>
@@ -415,8 +416,16 @@ namespace DataAccessLayer
             /// <param name="e"></param>
             public void OnPropertyChanged(PropertyChangedEventArgs e)
             {
+                    //Call this method on the Right Thread
                 if (PropertyChanged != null)
-                    PropertyChanged(this, e);
+                {
+                    System.Windows.Threading.DispatcherObject d = PropertyChanged.Target as System.Windows.Threading.DispatcherObject;
+                    if (d == null)
+                        PropertyChanged(this, e);
+                    else
+                        ((System.Windows.Threading.DispatcherObject)PropertyChanged.Target).Dispatcher.
+                             BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, PropertyChanged, this, e);
+                }
             }
             
             /// <summary>
@@ -528,22 +537,22 @@ namespace DataAccessLayer
 
                 new EntityLayer.XmlServices().writeToXmlTest(path);
 
-                root = serv.readXml(path);
+                Root = serv.readXml(path);
 
-                root = new EntityLayer.XmlServices().readXml(path);
+                Root = new EntityLayer.XmlServices().readXml(path);
 
 
                 //DCCold
-                root.DcColdMeasurenments.RessistanceTransformerChannels.PropertyChanged += new PropertyChangedEventHandler(DcColdMeasurenments_RessistanceTransformerChannels_PropertyChanged);
-                root.DcColdMeasurenments.TempMeasurenementConfiguration.PropertyChanged += new PropertyChangedEventHandler(DcColdMeasurenments_TempMeasurenementConfiguration_PropertyChanged);
+                Root.DcColdMeasurenments.RessistanceTransformerChannels.PropertyChanged += new PropertyChangedEventHandler(DcColdMeasurenments_RessistanceTransformerChannels_PropertyChanged);
+                Root.DcColdMeasurenments.TempMeasurenementConfiguration.PropertyChanged += new PropertyChangedEventHandler(DcColdMeasurenments_TempMeasurenementConfiguration_PropertyChanged);
                 //ACHeating
-                root.AcHotMeasurenments.TempMeasurenementConfiguration.PropertyChanged += new PropertyChangedEventHandler(AcHotMeasurenments_TempMeasurenementConfiguration_PropertyChanged);
+                Root.AcHotMeasurenments.TempMeasurenementConfiguration.PropertyChanged += new PropertyChangedEventHandler(AcHotMeasurenments_TempMeasurenementConfiguration_PropertyChanged);
                 //DCCooling
-                root.DcCoolingMeasurenments.RessistanceTransformerChannels.PropertyChanged += new PropertyChangedEventHandler(DcCoolingMeasurenments_RessistanceTransformerChannels_PropertyChanged);
+                Root.DcCoolingMeasurenments.RessistanceTransformerChannels.PropertyChanged += new PropertyChangedEventHandler(DcCoolingMeasurenments_RessistanceTransformerChannels_PropertyChanged);
                 //TransformatorProperties
-                root.TransformerProperties.PropertyChanged += new PropertyChangedEventHandler(TransformerProperties_PropertyChanged);
+                Root.TransformerProperties.PropertyChanged += new PropertyChangedEventHandler(TransformerProperties_PropertyChanged);
 
-                root.DcColdMeasurenments.TempMeasurenementConfiguration.OnPropertyChanged(new PropertyChangedEventArgs(null));
+                Root.DcColdMeasurenments.TempMeasurenementConfiguration.OnPropertyChanged(new PropertyChangedEventArgs(null));
             }
 
     }

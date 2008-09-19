@@ -106,12 +106,12 @@ namespace DataAccessLayer
         /// <returns></returns>
         public IEnumerable ACHeatingTable()
         {
-            var acch = root.AcHotMeasurenments.TempMeasurenementConfiguration;
-            IEnumerable ACValues = from ac in root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments
+            var acch = Root.AcHotMeasurenments.TempMeasurenementConfiguration;
+            IEnumerable ACValues = from ac in Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments
                                    select new
                                    {
                                        Time = ac.Time.ToLongTimeString(),
-                                       No = root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.IndexOf(ac),
+                                       No = Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.IndexOf(ac),
                                        T1 = ac.T1,
                                        T2 = ac.T2,
                                        T3 = ac.T3,
@@ -144,7 +144,7 @@ namespace DataAccessLayer
          */
         private ACTableHeader evalACHeatingTableHeader() 
         {
-            var acch = root.AcHotMeasurenments.TempMeasurenementConfiguration;
+            var acch = Root.AcHotMeasurenments.TempMeasurenementConfiguration;
             return new ACTableHeader("Time", "No", "T1" + ((acch.IsChannel1Oil) ? "(Oil)" : "(Amb)"), "T2" + ((acch.IsChannel2Oil) ? "(Oil)" : "(Amb)"), "T3" + ((acch.IsChannel3Oil) ? "(Oil)" : "(Amb)"), "T4" + ((acch.IsChannel4Oil) ? "(Oil)" : "(Amb)"), "T Amb", "T Oil", "Temp Rise"); 
         }
 

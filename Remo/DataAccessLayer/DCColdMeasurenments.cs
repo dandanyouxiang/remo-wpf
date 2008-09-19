@@ -273,10 +273,10 @@ namespace DataAccessLayer
         public IEnumerable DCColdTemperatureTable()
         {
             IEnumerable exp;
-            var tempch = root.DcColdMeasurenments.TempMeasurenementConfiguration;
+            var tempch = Root.DcColdMeasurenments.TempMeasurenementConfiguration;
             try
             {
-                            exp = from temp in root.DcColdMeasurenments.TempMeasurenementConfiguration.TempMeasurenments
+                            exp = from temp in Root.DcColdMeasurenments.TempMeasurenementConfiguration.TempMeasurenments
                                   select new
                                   {
                                       Time = temp.Time.Date,
@@ -325,7 +325,7 @@ namespace DataAccessLayer
 
         public TableTempHeader evalDCColdTemperatureTableHeader()
         {
-            var tempch = root.DcColdMeasurenments.TempMeasurenementConfiguration;
+            var tempch = Root.DcColdMeasurenments.TempMeasurenementConfiguration;
             return new TableTempHeader("Date","Time","T1" + ((tempch.IsChannel1Oil) ? "(Oil)" : "(Amb)"),"T2" + ((tempch.IsChannel2Oil) ? "(Oil)" : "(Amb)"),"T3" + ((tempch.IsChannel3Oil) ? "(Oil)" : "(Amb)"),"T4" + ((tempch.IsChannel4Oil) ? "(Oil)" : "(Amb)"),"T Amb","T Oil");
         }
         /////////////////////////////////////////
@@ -343,11 +343,11 @@ namespace DataAccessLayer
         private double evalT1MeanDCColdTempTable()
         {
             double retValue = 0;
-            for (int i = 0; i < root.DcColdMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Count; i++)
+            for (int i = 0; i < Root.DcColdMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Count; i++)
             {
-                retValue += root.DcColdMeasurenments.TempMeasurenementConfiguration.TempMeasurenments[i].T1;
+                retValue += Root.DcColdMeasurenments.TempMeasurenementConfiguration.TempMeasurenments[i].T1;
             }
-            retValue /= root.DcColdMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Count;
+            retValue /= Root.DcColdMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Count;
             return retValue;
         }
         /// <summary>
@@ -356,7 +356,7 @@ namespace DataAccessLayer
         /// <returns></returns>
         private string evalT1MeanDCColdTempTableHeader()
         {
-            return ((root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel1Oil) ? "T1(Oil)" : "T1(Amb)");
+            return ((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel1Oil) ? "T1(Oil)" : "T1(Amb)");
         }
 
         /// <summary>
@@ -366,11 +366,11 @@ namespace DataAccessLayer
         private double evalT2MeanDCColdTempTable()
         {
             double retValue = 0;
-            for (int i = 0; i < root.DcColdMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Count; i++)
+            for (int i = 0; i < Root.DcColdMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Count; i++)
             {
-                retValue += root.DcColdMeasurenments.TempMeasurenementConfiguration.TempMeasurenments[i].T2;
+                retValue += Root.DcColdMeasurenments.TempMeasurenementConfiguration.TempMeasurenments[i].T2;
             }
-            retValue /= root.DcColdMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Count;
+            retValue /= Root.DcColdMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Count;
             return retValue;
         }
         /// <summary>
@@ -379,7 +379,7 @@ namespace DataAccessLayer
         /// <returns></returns>
         private string evalT2MeanDCColdTempTableHeader()
         {
-            return ((root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel2Oil) ? "T2(Oil)" : "T2(Amb)");
+            return ((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel2Oil) ? "T2(Oil)" : "T2(Amb)");
         }
         /// <summary>
         /// Ја пресметува средната вредноста за третиот канал.
@@ -388,11 +388,11 @@ namespace DataAccessLayer
         private double evalT3MeanDCColdTempTable()
         {
             double retValue = 0;
-            for (int i = 0; i < root.DcColdMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Count; i++)
+            for (int i = 0; i < Root.DcColdMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Count; i++)
             {
-                retValue += root.DcColdMeasurenments.TempMeasurenementConfiguration.TempMeasurenments[i].T3;
+                retValue += Root.DcColdMeasurenments.TempMeasurenementConfiguration.TempMeasurenments[i].T3;
             }
-            retValue /= root.DcColdMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Count;
+            retValue /= Root.DcColdMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Count;
             return retValue;
         }
         /// <summary>
@@ -401,7 +401,7 @@ namespace DataAccessLayer
         /// <returns></returns>
         private string evalT3MeanDCColdTempTableHeader()
         {
-            return ((root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel3Oil) ? "T3(Oil)" : "T3(Amb)");
+            return ((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel3Oil) ? "T3(Oil)" : "T3(Amb)");
         }
         /// <summary>
         /// Ја пресметува средната вредноста за четвртиот канал.
@@ -410,11 +410,11 @@ namespace DataAccessLayer
         private double evalT4MeanDCColdTempTable()
         {
             double retValue = 0;
-            for (int i = 0; i < root.DcColdMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Count; i++)
+            for (int i = 0; i < Root.DcColdMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Count; i++)
             {
-                retValue += root.DcColdMeasurenments.TempMeasurenementConfiguration.TempMeasurenments[i].T4;
+                retValue += Root.DcColdMeasurenments.TempMeasurenementConfiguration.TempMeasurenments[i].T4;
             }
-            retValue /= root.DcColdMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Count;
+            retValue /= Root.DcColdMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Count;
             return retValue;
         }
 
@@ -424,7 +424,7 @@ namespace DataAccessLayer
         /// <returns></returns>
         private string evalT4MeanDCColdTempTableHeader()
         {
-            return ((root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel4Oil) ? "T4(Oil)" : "T4(Amb)");
+            return ((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel4Oil) ? "T4(Oil)" : "T4(Amb)");
         }
         /// <summary>
         /// Пресметка на средната вредност на температурата во масло.
@@ -432,8 +432,8 @@ namespace DataAccessLayer
         /// <returns></returns>
         private double evalOilDCColdTempTable() 
         {
-            int channelInOil=((root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel1Oil)?1:0)+((root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel2Oil)?1:0)+((root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel3Oil)?1:0)+((root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel4Oil)?1:0);
-            double channelInOilSum=((root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel1Oil)?T1MeanDCColdTempTable:0)+((root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel2Oil)?T2MeanDCColdTempTable:0)+((root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel3Oil)?T3MeanDCColdTempTable:0)+((root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel4Oil)?T4MeanDCColdTempTable:0);
+            int channelInOil=((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel1Oil)?1:0)+((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel2Oil)?1:0)+((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel3Oil)?1:0)+((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel4Oil)?1:0);
+            double channelInOilSum=((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel1Oil)?T1MeanDCColdTempTable:0)+((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel2Oil)?T2MeanDCColdTempTable:0)+((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel3Oil)?T3MeanDCColdTempTable:0)+((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel4Oil)?T4MeanDCColdTempTable:0);
 
             return channelInOilSum / channelInOil;
         }
@@ -444,8 +444,8 @@ namespace DataAccessLayer
         /// <returns></returns>
         private double evalAmbDCColdTempTable()
         {
-            int channelInOil = ((!root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel1Oil) ? 1 : 0) + ((!root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel2Oil) ? 1 : 0) + ((!root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel3Oil) ? 1 : 0) + ((!root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel4Oil) ? 1 : 0);
-            double channelInOilSum = ((!root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel1Oil) ? T1MeanDCColdTempTable : 0) + ((!root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel2Oil) ? T2MeanDCColdTempTable : 0) + ((!root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel3Oil) ? T3MeanDCColdTempTable : 0) + ((!root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel4Oil) ? T4MeanDCColdTempTable : 0);
+            int channelInOil = ((!Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel1Oil) ? 1 : 0) + ((!Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel2Oil) ? 1 : 0) + ((!Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel3Oil) ? 1 : 0) + ((!Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel4Oil) ? 1 : 0);
+            double channelInOilSum = ((!Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel1Oil) ? T1MeanDCColdTempTable : 0) + ((!Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel2Oil) ? T2MeanDCColdTempTable : 0) + ((!Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel3Oil) ? T3MeanDCColdTempTable : 0) + ((!Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel4Oil) ? T4MeanDCColdTempTable : 0);
 
             return channelInOilSum / channelInOil;
         }
@@ -738,7 +738,7 @@ namespace DataAccessLayer
             IEnumerable exp;
             try
             {
-                            exp = from ress in root.DcColdMeasurenments.RessistanceTransformerChannels[channelIndex].RessistanceMeasurenments
+                            exp = from ress in Root.DcColdMeasurenments.RessistanceTransformerChannels[channelIndex].RessistanceMeasurenments
                                   select new
                                   {
                                       Time = ress.Time.Date,
@@ -834,7 +834,7 @@ namespace DataAccessLayer
             double r1M = 0;
             double r1StdDev = 0;
 
-            var r1 = from ress in root.DcColdMeasurenments.RessistanceTransformerChannels[channelIndex].RessistanceMeasurenments
+            var r1 = from ress in Root.DcColdMeasurenments.RessistanceTransformerChannels[channelIndex].RessistanceMeasurenments
                      where ress.ChannelNo == 0
                      select new { Ressistance = ress.Voltage / ress.Current };
 
@@ -864,7 +864,7 @@ namespace DataAccessLayer
             double r2StdDev = 0;
 
             //Оделување на отпорите во низа
-            var r2 = from ress in root.DcColdMeasurenments.RessistanceTransformerChannels[channelIndex].RessistanceMeasurenments
+            var r2 = from ress in Root.DcColdMeasurenments.RessistanceTransformerChannels[channelIndex].RessistanceMeasurenments
                      where ress.ChannelNo == 1
                      select new { Ressistance = ress.Voltage / ress.Current };
 

@@ -58,16 +58,23 @@ namespace EntityLayer
                     {
                         base[index] = value;
                         OnPropertyChanged(new PropertyChangedEventArgs(null));
-                    }
-                    
+                    }      
                 }
             }
 
             public event PropertyChangedEventHandler PropertyChanged;
             public void OnPropertyChanged(PropertyChangedEventArgs e)
             {
+                //Call this method on the Right Thread
                 if (PropertyChanged != null)
-                    PropertyChanged(this, e);
+                {
+                    System.Windows.Threading.DispatcherObject d = PropertyChanged.Target as System.Windows.Threading.DispatcherObject;
+                    if (d == null)
+                        PropertyChanged(this, e);
+                    else
+                        ((System.Windows.Threading.DispatcherObject)PropertyChanged.Target).Dispatcher.
+                             BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, PropertyChanged, null, new object[] { this, e });
+                }
             }
 
         }

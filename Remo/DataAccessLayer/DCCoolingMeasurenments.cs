@@ -43,11 +43,11 @@ namespace DataAccessLayer
             #region Functions
             public IEnumerable DCCoolingTable()
             {
-                IEnumerable DCValues = from dc in root.DcCoolingMeasurenments.RessistanceTransformerChannels.RessistanceMeasurenments
+                IEnumerable DCValues = from dc in Root.DcCoolingMeasurenments.RessistanceTransformerChannels.RessistanceMeasurenments
                                        select new
                                        {
                                            Time = dc.Time.ToLongTimeString(),
-                                           No = root.DcCoolingMeasurenments.RessistanceTransformerChannels.RessistanceMeasurenments.IndexOf(dc),
+                                           No = Root.DcCoolingMeasurenments.RessistanceTransformerChannels.RessistanceMeasurenments.IndexOf(dc),
                                            R1 = (dc.ChannelNo == 0) ? dc.Voltage / dc.Current : 0,
                                            R1Diff = 0,//Todo: da se dopravi R1Diff
                                            R2 = (dc.ChannelNo == 1) ? dc.Voltage / dc.Current : 0,

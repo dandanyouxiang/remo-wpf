@@ -49,7 +49,7 @@ namespace DataSourceLayer
         /// <param name="sampleRate">sampleRate во секунди</param>
         /// <param name="numberOfSamples"></param>
         /// <param name="tempMeasurenments"></param>
-        public void start_TempMeasurenment(int sampleRate, int numberOfSamples, List<TempMeasurenment> tempMeasurenments)
+        public void start_TempMeasurenment(int sampleRate, int numberOfSamples, EntityLayer.ListWithChangeEvents<TempMeasurenment> tempMeasurenments)
         {
             this._sampleRate = sampleRate;
             this._numberOfSamples = numberOfSamples;
@@ -64,7 +64,7 @@ namespace DataSourceLayer
         /// <param name="sampleRate">sampleRate во секунди</param>
         /// <param name="numberOfSamples"></param>
         /// <param name="tempMeasurenments"></param>
-        public void start_RessistanceMeasurenment(int sampleRate, int numberOfSamples, List<RessistanceMeasurenment> ressistanceMeasurenments)
+        public void start_RessistanceMeasurenment(int sampleRate, int numberOfSamples, EntityLayer.ListWithChangeEvents<RessistanceMeasurenment> ressistanceMeasurenments)
         {
             _sampleRate = sampleRate;
             _numberOfSamples = numberOfSamples;
@@ -78,28 +78,28 @@ namespace DataSourceLayer
 
         private int _sampleRate;
         private int _numberOfSamples;
-        private List<TempMeasurenment> _tempMeasurenments;
-        private List<RessistanceMeasurenment> _ressistanceMeasurenments;
+        private EntityLayer.ListWithChangeEvents<TempMeasurenment> _tempMeasurenments;
+        private EntityLayer.ListWithChangeEvents<RessistanceMeasurenment> _ressistanceMeasurenments;
 
         private void tempMeasurenmentDoWork()
         {
             if (_tempMeasurenments == null)
-                _tempMeasurenments = new List<TempMeasurenment>();
+                _tempMeasurenments = new EntityLayer.ListWithChangeEvents<TempMeasurenment>();
             lock (_tempMeasurenments)
             {
-                _tempMeasurenments.Clear();
+                //_tempMeasurenments.Clear();
             }
             Random rand = new Random();
             for (int i = 0; i < _numberOfSamples; i++)
-            {
-                Thread.Sleep(_sampleRate * 1000);
+            {       
                 _tempMeasurenments.Add(new TempMeasurenment(
                     DateTime.Now, 
                     rand.NextDouble() * 10 + 20,
                     rand.NextDouble() * 10 + 20,
-                    rand.NextDouble() * 10 + 20,
+                    double.NaN,
                     rand.NextDouble() * 10 + 20)
                     );
+                Thread.Sleep(_sampleRate * 1000);
             }
             //throw event
             OnTempMeasurenmentFinished();
@@ -108,7 +108,7 @@ namespace DataSourceLayer
         private void ressistanceMeasurenmentDoWork()
         {
             if (_ressistanceMeasurenments == null)
-                _ressistanceMeasurenments = new List<RessistanceMeasurenment>();
+                _ressistanceMeasurenments = new EntityLayer.ListWithChangeEvents<RessistanceMeasurenment>();
             lock (_ressistanceMeasurenments)
             {
                 _ressistanceMeasurenments.Clear();
@@ -121,9 +121,9 @@ namespace DataSourceLayer
                     channel = 1;
                 else
                     channel = 2;
-                Thread.Sleep(_sampleRate * 1000);
                 _ressistanceMeasurenments.Add(
                     new RessistanceMeasurenment(DateTime.Now, channel, rand.NextDouble() * 10, rand.NextDouble() * 10) );
+                Thread.Sleep(_sampleRate * 1000);
             }
             //throw event
             OnRessistanceMeasurenmentFinished();

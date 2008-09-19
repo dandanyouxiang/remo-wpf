@@ -25,7 +25,7 @@ namespace PresentationLayer
         public EntityLayer.RessistanceCalMeasurenment RessistanceCalMeasurenment { get; set; }
 
         DataSourceLayer.DataSourceServices s;
-        List<EntityLayer.RessistanceMeasurenment> m;
+        EntityLayer.ListWithChangeEvents<EntityLayer.RessistanceMeasurenment> m;
         public RessistanceCalibrationDialog2(EntityLayer.RessistanceCalMeasurenment ressistanceCalMeasurenment)
         {
             InitializeComponent();
@@ -33,7 +33,7 @@ namespace PresentationLayer
             RessistanceCalMeasurenment = ressistanceCalMeasurenment;
 
             s = new DataSourceLayer.DataSourceServices();
-            m = new List<EntityLayer.RessistanceMeasurenment>();
+            m = new EntityLayer.ListWithChangeEvents<EntityLayer.RessistanceMeasurenment>();
             s.RessistanceMeasurenmentFinished += new DataSourceLayer.DataSourceServices.RessistanceMeasurenmentFinishedEventHandler(s_RessistanceMeasurenmentFinished);
         }
         
