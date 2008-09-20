@@ -29,6 +29,12 @@ namespace WpfCustomControlLibrary
         }
         public bool IsChannelOn { get { return (bool)OnOffButton.IsChecked; } }
 
+        public Thermometer ThermometerControl
+        {
+            get { return thermometer; }
+            set { thermometer = value; }
+        }
+
         public double Value 
         {
             get { return thermometer.Value; }

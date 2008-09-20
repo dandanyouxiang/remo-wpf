@@ -8,7 +8,7 @@
             <RowDefinition Height="10*"></RowDefinition>
             <RowDefinition Height="90*"></RowDefinition>
         </Grid.RowDefinitions>
-            <graph:WPFScatterGraph Name="graph" Grid.Row="1" GraphBackground="LightGray" />
-        <Button HorizontalAlignment="Left" Margin="20,13,0,0" Name="button1" Width="75" Click="button1_Click">Button</Button>
+        <graph:WPFScatterGraph Name="graph" Grid.Row="1" GraphBackground="LightGray" />
+            <Button HorizontalAlignment="Left" Margin="20,13,0,0" Name="button1" Width="75" Click="button1_Click">Button</Button>
     </Grid>
 </Window>

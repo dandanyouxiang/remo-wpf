@@ -18,7 +18,7 @@
         
         <Border Name="topBorder" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
         <Border Name="sideBorder" Grid.Row="0" Grid.Column="2" Grid.RowSpan="3"/>    
-        <Border Name="verticalAxisBorder" Grid.Row="1" Grid.Column="0">
+        <Border Name="verticalAxisBorder" Grid.Row="1" Grid.Column="0" BorderThickness="0,0,1,0" BorderBrush="Black" >
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -38,7 +38,7 @@
             </Grid>
         </Border>
         <Border Name="cornerAxisBorder" Grid.Row="2" Grid.Column="0"
-                BorderThickness="0,1,1,0" BorderBrush="Black">
+                BorderThickness="0,0,0,0" BorderBrush="Black">
             
         </Border>
         <Border Name="horizontalAxisBorder" Grid.Row="2" Grid.Column="1"

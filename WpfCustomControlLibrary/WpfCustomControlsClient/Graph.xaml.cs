@@ -23,8 +23,8 @@ namespace Client
         public Window1()
         {
             InitializeComponent();
-            WPFGraphSeries series1 = new WPFGraphSeries();
-            graph.Series.Add(series1);
+            //WPFGraphSeries series1 = new WPFGraphSeries();
+            //graph.Series.Add(series1);
             
             graph.MaxYRange = 2;
             graph.MinYRange = -2;

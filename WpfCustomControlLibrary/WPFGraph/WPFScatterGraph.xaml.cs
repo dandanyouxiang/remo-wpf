@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DNBSoft.Generics;
+using System.Windows.Markup;
 
 namespace DNBSoft.WPF.WPFGraph
 {
@@ -23,6 +24,11 @@ namespace DNBSoft.WPF.WPFGraph
         private double minY = 0;
         private double maxY = 100;
         private double intervalY = 10;
+
+        private int xAxisDecimals = 1;
+        public int XAxisDecimals { get { return xAxisDecimals; } set { xAxisDecimals = value; } }
+        private int yAxisDecimals = 1;
+        public int YAxisDecimals { get { return yAxisDecimals; } set { yAxisDecimals = value; } }
 
         private Brush axisTitleTickBrush = new SolidColorBrush(Color.FromRgb(0, 0, 0));
         private double axisTitleTickThickness = 1;
@@ -103,14 +109,13 @@ namespace DNBSoft.WPF.WPFGraph
                 }
 
                 updateXKey();
+                updateYKey();
             }
             catch (Exception err)
             {
                 Console.WriteLine("Render ERROR: " + err.ToString());
             }
         }
-
-
         #region axis accessors
         public Brush AxisBrush
         {
@@ -250,7 +255,7 @@ namespace DNBSoft.WPF.WPFGraph
                 if (minX != value)
                 {
                     minX = value;
-                    updateXKey();
+                    //updateXKey();
                 }
             }
         }
@@ -266,7 +271,7 @@ namespace DNBSoft.WPF.WPFGraph
                 if (maxX != value)
                 {
                     maxX = value;
-                    updateXKey();
+                    //updateXKey();
                 }
             }
         }
@@ -282,7 +287,7 @@ namespace DNBSoft.WPF.WPFGraph
                 if (intervalX != value)
                 {
                     intervalX = value;
-                    updateXKey();
+                    //updateXKey();
                 }
             }
         }
@@ -311,7 +316,7 @@ namespace DNBSoft.WPF.WPFGraph
             for (double d = minX + intervalX; d < maxX; d += intervalX)
             {
                 Label label = new Label();
-                label.Content = d.ToString();
+                label.Content = Math.Round(d, XAxisDecimals).ToString();
                 label.SetValue(Canvas.TopProperty, 8.0);
                 horizontalAxis.Children.Add(label);
                 label.UpdateLayout();
@@ -351,7 +356,7 @@ namespace DNBSoft.WPF.WPFGraph
                 if (minY != value)
                 {
                     minY = value;
-                    updateYKey();
+                    //updateYKey();
                 }
             }
         }
@@ -367,7 +372,7 @@ namespace DNBSoft.WPF.WPFGraph
                 if (maxY != value)
                 {
                     maxY = value;
-                    updateYKey();
+                    //updateYKey();
                 }
             }
         }
@@ -383,7 +388,7 @@ namespace DNBSoft.WPF.WPFGraph
                 if (intervalY != value)
                 {
                     intervalY = value;
-                    updateYKey();
+                    //updateYKey();
                 }
             }
         }
@@ -412,7 +417,7 @@ namespace DNBSoft.WPF.WPFGraph
             for (double d = minY + intervalY; d < maxY; d += intervalY)
             {
                 Label label = new Label();
-                label.Content = Math.Round(d,1).ToString();
+                label.Content = Math.Round(d, YAxisDecimals).ToString();
                 verticalAxis.Children.Add(label);
                 label.UpdateLayout();
                 label.SetValue(Canvas.LeftProperty, verticalAxis.ActualWidth - (10 + label.ActualWidth));

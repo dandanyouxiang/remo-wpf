@@ -15,7 +15,7 @@ using DNBSoft.Generics;
 
 namespace DNBSoft.WPF.WPFGraph
 {
-    public class WPFGraphSeries
+    public class WPFGraphSeries 
     {
         #region class variables
         private ListenableList<WPFGraphDataPoint> points = new ListenableList<WPFGraphDataPoint>();
