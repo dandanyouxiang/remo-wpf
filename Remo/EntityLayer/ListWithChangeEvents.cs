@@ -73,7 +73,7 @@ namespace EntityLayer
                         PropertyChanged(this, e);
                     else
                         ((System.Windows.Threading.DispatcherObject)PropertyChanged.Target).Dispatcher.
-                             BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, PropertyChanged, null, new object[] { this, e });
+                             BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, PropertyChanged, this, e);
                 }
             }
 

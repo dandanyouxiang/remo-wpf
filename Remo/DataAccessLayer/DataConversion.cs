@@ -40,7 +40,7 @@ namespace DataAccessLayer
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string s1 = Prefix == "" ? " " : "";
+            string s1 = Prefix == "" ? "" : " ";
             if(ConvertToString(value,culture).Equals(EMPTY_STRING))
                 return EMPTY_STRING;
             else
@@ -105,8 +105,6 @@ namespace DataAccessLayer
             return DateTime.Parse(s);
         }
     }
-
-
     public enum ConversionType 
     {
         Milimetar,

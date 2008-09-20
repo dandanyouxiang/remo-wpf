@@ -11,10 +11,56 @@ namespace DataAccessLayer
     {
         #region Settings
         #region Private Members
+            private int _selectedChannelDcCool;
+            private double _r1ColdAtDcCool;
+            private double _r2ColdAtDcCool;
             private double EndAcTmp;
             private double KDropInOl;
+
         #endregion
         #region Public Members
+
+            /// <summary>
+            /// Избраниот канал на трансформаторот на кој ќе се врши мерење на ладење
+            /// </summary>
+            public int SelectedChannelDcCool
+            {
+                get { return _selectedChannelDcCool; }
+                set
+                {
+                    if (_selectedChannelDcCool != value)
+                    {
+                        _selectedChannelDcCool = value;
+                        R1ColdAtDcCool = evalR1Cold(_selectedChannelDcCool);
+                        R2ColdAtDcCool = evalR2Cold(_selectedChannelDcCool);
+                    }
+                }
+            }
+            public double R1ColdAtDcCool
+            {
+                get { return _r1ColdAtDcCool; }
+                set
+                {
+                    if (_r1ColdAtDcCool != value)
+                    {
+                        _r1ColdAtDcCool = value;
+                        OnPropertyChanged(new PropertyChangedEventArgs("R1ColdAtDcCool"));
+                    }
+                }
+            }
+            public double R2ColdAtDcCool
+            {
+                get { return _r2ColdAtDcCool; }
+                set
+                {
+                    if (_r2ColdAtDcCool != value)
+                    {
+                        _r2ColdAtDcCool = value;
+                        OnPropertyChanged(new PropertyChangedEventArgs("R2ColdAtDcCool"));
+                    }
+                }
+            }
+
             public double EndAcTemp 
             {
                 get { return EndAcTmp; }
@@ -43,15 +89,24 @@ namespace DataAccessLayer
             #region Functions
             public IEnumerable DCCoolingTable()
             {
-                IEnumerable DCValues = from dc in Root.DcCoolingMeasurenments.RessistanceTransformerChannels.RessistanceMeasurenments
+                EntityLayer.ListWithChangeEvents<EntityLayer.RessistanceMeasurenment> meas = Root.DcCoolingMeasurenments.RessistanceTransformerChannel.RessistanceMeasurenments;
+                IEnumerable DCValues = from dc in Root.DcCoolingMeasurenments.RessistanceTransformerChannel.RessistanceMeasurenments
                                        select new
                                        {
-                                           Time = dc.Time.ToLongTimeString(),
-                                           No = Root.DcCoolingMeasurenments.RessistanceTransformerChannels.RessistanceMeasurenments.IndexOf(dc),
-                                           R1 = (dc.ChannelNo == 0) ? dc.Voltage / dc.Current : 0,
-                                           R1Diff = 0,//Todo: da se dopravi R1Diff
-                                           R2 = (dc.ChannelNo == 1) ? dc.Voltage / dc.Current : 0,
-                                           R2Diff = 0,//Todo: da se dopravi R1Diff
+                                           Time = (dc.Time - Root.DcCoolingMeasurenments.RessistanceTransformerChannel.RessistanceMeasurenments[0].Time).Seconds,
+                                           No = Root.DcCoolingMeasurenments.RessistanceTransformerChannel.RessistanceMeasurenments.IndexOf(dc) + 1,
+                                           R1 = (dc.ChannelNo == 1) ? dc.Voltage / dc.Current : double.NaN,
+                                           R1Diff = (dc.ChannelNo == 1) ? 
+                                               (meas.IndexOf(dc) >= 2 ? 
+                                                    ( 100 * (dc.Voltage / dc.Current - meas[meas.IndexOf(dc) - 2].Voltage / meas[meas.IndexOf(dc) - 2].Current)/ (meas[meas.IndexOf(dc) - 2].Voltage / meas[meas.IndexOf(dc) - 2].Current) )
+                                                    : double.NaN)
+                                                : double.NaN,
+                                           R2 = (dc.ChannelNo == 2) ? dc.Voltage / dc.Current : double.NaN,
+                                           R2Diff = (dc.ChannelNo == 2) ?
+                                               (meas.IndexOf(dc) >= 2 ?
+                                                    (100 * (dc.Voltage / dc.Current - meas[meas.IndexOf(dc) - 2].Voltage / meas[meas.IndexOf(dc) - 2].Current) / (meas[meas.IndexOf(dc) - 2].Voltage / meas[meas.IndexOf(dc) - 2].Current) )
+                                                    : double.NaN)
+                                                : double.NaN
                                        };
                 return DCValues;
             }

@@ -111,18 +111,18 @@ namespace DataSourceLayer
             lock (_ressistanceTransformerChannel.RessistanceMeasurenments)
             {
                 _ressistanceTransformerChannel.RessistanceMeasurenments.Clear();
-            }
-            Random rand = new Random();
-            int channel = 1;
-            for (int i = 0; i < _numberOfSamples; i++)
-            {
-                if (i % 2 == 0)
-                    channel = 1;
-                else
-                    channel = 2;
-                _ressistanceTransformerChannel.RessistanceMeasurenments.Add(
-                    new RessistanceMeasurenment(DateTime.Now, channel, rand.NextDouble() * 10, rand.NextDouble() * 10));
-                Thread.Sleep(_sampleRate * 1000);
+                Random rand = new Random();
+                int channel = 1;
+                for (int i = 0; i < _numberOfSamples; i++)
+                {
+                    if (i % 2 == 0)
+                        channel = 1;
+                    else
+                        channel = 2;
+                    _ressistanceTransformerChannel.RessistanceMeasurenments.Add(
+                        new RessistanceMeasurenment(DateTime.Now, channel, rand.NextDouble() * 10, rand.NextDouble() * 10));
+                    Thread.Sleep(_sampleRate * 1000);
+                }
             }
             //throw event
             OnRessistanceMeasurenmentFinished();

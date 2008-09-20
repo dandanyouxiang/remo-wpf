@@ -7,401 +7,6 @@ using System.ComponentModel;
 
 namespace DataAccessLayer
 {
-    #region dzabe rabota
-    class RessistanceTransformerChannel
-    {
-        private EntityLayer.RessistanceTransformerChannel ressistanceTransformerChannel;
-        /*
-        private int ChNo;
-        private double TestCrr;
-        private int RessistanceSampleRateCurrentSt;
-        private int RessistanceNoOfSamplesCurrentSmp;
-        private bool IsCh1On;
-        private bool IsCh2On;
-         */
-        //private EntityLayer.ListWithChangeEvents<RessistanceMeasurenment> RessistanceMeasurenments { get; set; }
-
-        /// <summary>
-        /// Број на каналот.
-        /// </summary>
-        public int ChannelNo
-        {
-            get { return ressistanceTransformerChannel.ChannelNo; }
-            set
-            {
-                if (ressistanceTransformerChannel.ChannelNo != value)
-                {
-                    ressistanceTransformerChannel.ChannelNo = value;
-                    ressistanceTransformerChannel.OnPropertyChanged(new PropertyChangedEventArgs("ChannelNo"));
-                }
-            }
-        }
-
-        public double TestCurrent
-        {
-            get { return ressistanceTransformerChannel.TestCurrent; }
-            set
-            {
-                if (ressistanceTransformerChannel.TestCurrent != value)
-                {
-                    ressistanceTransformerChannel.TestCurrent = value;
-                    ressistanceTransformerChannel.OnPropertyChanged(new PropertyChangedEventArgs("TestCurrent"));
-                }
-            }
-        }
-
-        public int RessistanceSampleRateCurrentState
-        {
-            get { return ressistanceTransformerChannel.RessistanceSampleRateCurrentState; }
-            set
-            {
-                if (ressistanceTransformerChannel.RessistanceSampleRateCurrentState != value)
-                {
-                    ressistanceTransformerChannel.RessistanceSampleRateCurrentState = value;
-                    ressistanceTransformerChannel.OnPropertyChanged(new PropertyChangedEventArgs("RessistanceSampleRateCurrentState"));
-                }
-            }
-        }
-
-        public int RessistanceNoOfSamplesCurrentState
-        {
-            get { return ressistanceTransformerChannel.RessistanceNoOfSamplesCurrentState; }
-            set
-            {
-                if (ressistanceTransformerChannel.RessistanceNoOfSamplesCurrentState != value)
-                {
-                    ressistanceTransformerChannel.RessistanceNoOfSamplesCurrentState = value;
-                    ressistanceTransformerChannel.OnPropertyChanged(new PropertyChangedEventArgs("RessistanceNoOfSamplesCurrentState"));
-                }
-            }
-        }
-
-        public bool IsChannel1On
-        {
-            get { return ressistanceTransformerChannel.IsChannel1On; }
-            set
-            {
-                if (ressistanceTransformerChannel.IsChannel1On != value)
-                {
-                    ressistanceTransformerChannel.IsChannel1On = value;
-                    ressistanceTransformerChannel.OnPropertyChanged(new PropertyChangedEventArgs("IsChannelOn"));
-                }
-            }
-        }
-
-        public bool IsChannel2On
-        {
-            get { return ressistanceTransformerChannel.IsChannel2On; }
-            set
-            {
-                if (ressistanceTransformerChannel.IsChannel2On != value)
-                {
-                    ressistanceTransformerChannel.IsChannel2On = value;
-                    ressistanceTransformerChannel.OnPropertyChanged(new PropertyChangedEventArgs("IsChanne2On"));
-                }
-            }
-        }
-
-        public EntityLayer.ListWithChangeEvents<EntityLayer.RessistanceMeasurenment> RessistanceMeasurenments
-        {
-            get { return ressistanceTransformerChannel.RessistanceMeasurenments; }
-            set
-            {
-                if (ressistanceTransformerChannel.RessistanceMeasurenments != value)
-                {
-                    ressistanceTransformerChannel.RessistanceMeasurenments = value;
-                }
-            }
-        }
-
-        public RessistanceTransformerChannel()
-        {
-            ressistanceTransformerChannel = new EntityLayer.RessistanceTransformerChannel();
-        }
-    }
-    class TempMeasurenementConfiguration
-        {
-            
-
-            private EntityLayer.TempMeasurenementConfiguration tempMeasurenementConfiguration;
-            public DateTime TimeOfReduction
-            {
-                get { return tempMeasurenementConfiguration.TimeOfReduction; }
-                set
-                {
-                    if (tempMeasurenementConfiguration.TimeOfReduction != value)
-                    {
-                        tempMeasurenementConfiguration.TimeOfReduction = value;
-                        tempMeasurenementConfiguration.OnPropertyChanged(new PropertyChangedEventArgs("TimeOfReduction"));
-                    }
-                }
-            }
-            public int TempSampleRateCurrentState
-            {
-                get { return tempMeasurenementConfiguration.TempSampleRateCurrentState; }
-                set
-                {
-                    if (tempMeasurenementConfiguration.TempSampleRateCurrentState != value)
-                    {
-                        tempMeasurenementConfiguration.TempSampleRateCurrentState = value;
-                        tempMeasurenementConfiguration.OnPropertyChanged(new PropertyChangedEventArgs("TempSampleRateCurrentState"));
-                    }
-                }
-            }
-            public int TempNoOfSamplesCurrentState
-            {
-                get { return tempMeasurenementConfiguration.TempNoOfSamplesCurrentState; }
-                set
-                {
-                    if (tempMeasurenementConfiguration.TempNoOfSamplesCurrentState != value)
-                    {
-                        tempMeasurenementConfiguration.TempNoOfSamplesCurrentState = value;
-                        tempMeasurenementConfiguration.OnPropertyChanged(new PropertyChangedEventArgs("TempNoOfSamplesCurrentState"));
-                    }
-                }
-            }
-            public bool IsChannel1On
-            {
-                get { return tempMeasurenementConfiguration.IsChannel1On; }
-                set
-                {
-                    if (tempMeasurenementConfiguration.IsChannel1On != value)
-                    {
-                        tempMeasurenementConfiguration.IsChannel1On = value;
-                        tempMeasurenementConfiguration.OnPropertyChanged(new PropertyChangedEventArgs("IsChannel1On"));
-                    }
-                }
-            }
-            public bool IsChannel2On
-            {
-                get { return tempMeasurenementConfiguration.IsChannel2On; }
-                set
-                {
-                    if (tempMeasurenementConfiguration.IsChannel2On != value)
-                    {
-                        tempMeasurenementConfiguration.IsChannel2On = value;
-                        tempMeasurenementConfiguration.OnPropertyChanged(new PropertyChangedEventArgs("IsChannel2On"));
-                    }
-                }
-            }
-            public bool IsChannel3On
-            {
-                get { return tempMeasurenementConfiguration.IsChannel3On; }
-                set
-                {
-                    if (tempMeasurenementConfiguration.IsChannel3On != value)
-                    {
-                        tempMeasurenementConfiguration.IsChannel3On = value;
-                        tempMeasurenementConfiguration.OnPropertyChanged(new PropertyChangedEventArgs("IsChannel3On"));
-                    }
-                }
-            }
-            public bool IsChannel4On
-            {
-                get { return tempMeasurenementConfiguration.IsChannel4On; }
-                set
-                {
-                    if (tempMeasurenementConfiguration.IsChannel4On != value)
-                    {
-                        tempMeasurenementConfiguration.IsChannel4On = value;
-                        tempMeasurenementConfiguration.OnPropertyChanged(new PropertyChangedEventArgs("IsChannel4On"));
-                    }
-                }
-            }
-
-            public bool IsChannel1Oil
-            {
-                get { return tempMeasurenementConfiguration.IsChannel1Oil; }
-                set
-                {
-                    if (tempMeasurenementConfiguration.IsChannel1Oil != value)
-                    {
-                        tempMeasurenementConfiguration.IsChannel1Oil = value;
-                        tempMeasurenementConfiguration.OnPropertyChanged(new PropertyChangedEventArgs("IsChannel1Oil"));
-                    }
-                }
-            }
-            public bool IsChannel2Oil
-            {
-                get { return tempMeasurenementConfiguration.IsChannel2Oil; }
-                set
-                {
-                    if (tempMeasurenementConfiguration.IsChannel2Oil != value)
-                    {
-                        tempMeasurenementConfiguration.IsChannel2Oil = value;
-                        tempMeasurenementConfiguration.OnPropertyChanged(new PropertyChangedEventArgs("IsChannel1Oil"));
-                    }
-                }
-            }
-            public bool IsChanne31Oil
-            {
-                get { return tempMeasurenementConfiguration.IsChannel1Oil; }
-                set
-                {
-                    if (tempMeasurenementConfiguration.IsChannel3Oil != value)
-                    {
-                        tempMeasurenementConfiguration.IsChannel3Oil = value;
-                        tempMeasurenementConfiguration.OnPropertyChanged(new PropertyChangedEventArgs("IsChannel3Oil"));
-                    }
-                }
-            }
-            public bool IsChannel4Oil
-            {
-                get { return tempMeasurenementConfiguration.IsChannel4Oil; }
-                set
-                {
-                    if (tempMeasurenementConfiguration.IsChannel4Oil != value)
-                    {
-                        tempMeasurenementConfiguration.IsChannel4Oil = value;
-                        tempMeasurenementConfiguration.OnPropertyChanged(new PropertyChangedEventArgs("IsChannel4Oil"));
-                    }
-                }
-            }
-            public EntityLayer.ListWithChangeEvents<EntityLayer.TempMeasurenment> TempMeasurenments
-            {
-                get { return tempMeasurenementConfiguration.TempMeasurenments; }
-                set
-                {
-                    if (tempMeasurenementConfiguration.TempMeasurenments != value)
-                    {
-                        tempMeasurenementConfiguration.TempMeasurenments = value;
-                    }
-                }
-            }
-            public TempMeasurenementConfiguration()
-            {
-                //   tempMeasurenementConfiguration=new EntityLayer.TempMeasurenementConfiguration(
-            }
-        }
-
-    class TransformerProperties
-        {
-            private EntityLayer.TransformerProperties transformerProperties;
-
-            public String TransformatorSeries
-            {
-                get { return transformerProperties.TransformatorSeries; }
-                set
-                {
-                    if (transformerProperties.TransformatorSeries != value)
-                    {
-                        transformerProperties.TransformatorSeries = value;
-                        transformerProperties.OnPropertyChanged(new PropertyChangedEventArgs("TransformatorSeries"));
-                    }
-                }
-            }
-            public String TransformatorSerialNo
-            {
-                get { return transformerProperties.TransformatorSerialNo; }
-                set
-                {
-                    if (transformerProperties.TransformatorSerialNo != value)
-                    {
-                        transformerProperties.TransformatorSerialNo = value;
-                        transformerProperties.OnPropertyChanged(new PropertyChangedEventArgs("TransformatorSerialNo"));
-                    }
-                }
-            }
-            public String PresentAtTest
-            {
-                get { return transformerProperties.PresentAtTest; }
-                set
-                {
-                    if (transformerProperties.PresentAtTest != value)
-                    {
-                        transformerProperties.PresentAtTest = value;
-                        transformerProperties.OnPropertyChanged(new PropertyChangedEventArgs("PresentAtTest"));
-                    }
-                }
-            }
-            public String Comment
-            {
-                get { return transformerProperties.Comment; }
-                set
-                {
-                    if (transformerProperties.Comment != value)
-                    {
-                        transformerProperties.Comment = value;
-                        transformerProperties.OnPropertyChanged(new PropertyChangedEventArgs("Comment"));
-                    }
-                }
-            }
-            public EntityLayer.TransformerProperties.ConnectionType HV
-            {
-                get { return transformerProperties.HV; }
-                set
-                {
-                    if (transformerProperties.HV != value)
-                    {
-                        transformerProperties.HV = value;
-                        transformerProperties.OnPropertyChanged(new PropertyChangedEventArgs("HV"));
-
-                    }
-                }
-            }
-            public EntityLayer.TransformerProperties.ConnectionType LV
-            {
-                get { return transformerProperties.LV; }
-                set
-                {
-                    if (transformerProperties.LV != value)
-                    {
-                        transformerProperties.LV = value;
-                        transformerProperties.OnPropertyChanged(new PropertyChangedEventArgs("LV"));
-                    }
-                }
-            }
-            public EntityLayer.TransformerProperties.Material HvMaterial
-            {
-                get { return transformerProperties.HvMaterial; }
-                set
-                {
-                    if (transformerProperties.HvMaterial != value)
-                    {
-                        transformerProperties.HvMaterial = value;
-                        transformerProperties.OnPropertyChanged(new PropertyChangedEventArgs("HvMaterial"));
-                    }
-                }
-            }
-            public EntityLayer.TransformerProperties.Material LvMaterial
-            {
-                get { return transformerProperties.LvMaterial; }
-                set
-                {
-                    if (transformerProperties.LvMaterial != value)
-                    {
-                        transformerProperties.LvMaterial = value;
-                        transformerProperties.OnPropertyChanged(new PropertyChangedEventArgs("LvMaterial"));
-                    }
-                }
-            }
-            public double HvTempCoefficient
-            {
-                get { return transformerProperties.HvTempCoefficient; }
-                set
-                {
-                    if (transformerProperties.HvTempCoefficient != value)
-                    {
-                        transformerProperties.HvTempCoefficient = value;
-                        transformerProperties.OnPropertyChanged(new PropertyChangedEventArgs("HvTempCoefficient"));
-                    }
-                }
-            }
-            public double LvTempCoefficient
-            {
-                get { return transformerProperties.LvTempCoefficient; }
-                set
-                {
-                    if (transformerProperties.LvTempCoefficient != value)
-                    {
-                        transformerProperties.LvTempCoefficient = value;
-                        transformerProperties.OnPropertyChanged(new PropertyChangedEventArgs("LvTempCoefficient"));
-                    }
-                }
-            }
-        }
-#endregion
-
     public partial class DataSource : INotifyPropertyChanged
     {
         /// <summary>
@@ -416,7 +21,7 @@ namespace DataAccessLayer
             /// <param name="e"></param>
             public void OnPropertyChanged(PropertyChangedEventArgs e)
             {
-                    //Call this method on the Right Thread
+                //Call this method on the Right Thread
                 if (PropertyChanged != null)
                 {
                     System.Windows.Threading.DispatcherObject d = PropertyChanged.Target as System.Windows.Threading.DispatcherObject;
@@ -435,17 +40,23 @@ namespace DataAccessLayer
             /// <param name="e"></param>
             public void DcColdMeasurenments_RessistanceTransformerChannels_PropertyChanged(object sender, PropertyChangedEventArgs e)
             {
+                this.calcDcResValues();
+            }
+            public void calcDcResValues()
+            {
+                R1Cold = evalR1Cold(SelectedChannel);
+                R2Cold = evalR2Cold(SelectedChannel);
+
                 R1AtStdTemp = evalR1AtStdTemp();
                 R2AtStdTemp = evalR2AtStdTemp();
                 R1Phase = evalR1Phase();
-                R2Phase = evalR1Phase();
-                R1Cold = evalR1Cold();
-                R2Cold = evalR2Cold();
+                R2Phase = evalR2Phase();
 
                 StdDevTempR1 = evalStdDevTempR1(SelectedChannel);
                 StdDevTempR2 = evalStdDevTempR2(SelectedChannel);
 
-                
+                R1ColdAtDcCool = evalR1Cold(SelectedChannelDcCool);
+                R2ColdAtDcCool = evalR2Cold(SelectedChannelDcCool);
             }
             /// <summary>
             /// Во DcColdMeasurenments,во подтабот TemperatureMeasurenments Ако се смени некој прочитан податок, одново да се пресметаат вредностите на полињата што се добиваат преку некако функција.
@@ -481,10 +92,10 @@ namespace DataAccessLayer
             /// <param name="e"></param>
             public void AcHotMeasurenments_TempMeasurenementConfiguration_PropertyChanged(object sender, PropertyChangedEventArgs e)
             {
-                ACHeatingTableHeader=evalACHeatingTableHeader();
+                ACHeatingTableHeader = evalACHeatingTableHeader();
 
-                MinutesSampleRate=evalMinutesSampleRate();
-                SecondesSampleRate=evalSecondesSampleRate();
+                //MinutesSampleRate = evalMinutesSampleRate();
+                //SecondesSampleRate = evalSecondesSampleRate();
                 //Todo: Najverojatno ova treba da se trgne.
                 SamplesDone=evalSamplesDone();
 
@@ -548,7 +159,7 @@ namespace DataAccessLayer
                 //ACHeating
                 Root.AcHotMeasurenments.TempMeasurenementConfiguration.PropertyChanged += new PropertyChangedEventHandler(AcHotMeasurenments_TempMeasurenementConfiguration_PropertyChanged);
                 //DCCooling
-                Root.DcCoolingMeasurenments.RessistanceTransformerChannels.PropertyChanged += new PropertyChangedEventHandler(DcCoolingMeasurenments_RessistanceTransformerChannels_PropertyChanged);
+                Root.DcCoolingMeasurenments.RessistanceTransformerChannel.PropertyChanged += new PropertyChangedEventHandler(DcCoolingMeasurenments_RessistanceTransformerChannels_PropertyChanged);
                 //TransformatorProperties
                 Root.TransformerProperties.PropertyChanged += new PropertyChangedEventHandler(TransformerProperties_PropertyChanged);
 

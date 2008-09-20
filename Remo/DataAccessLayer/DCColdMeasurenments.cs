@@ -468,7 +468,7 @@ namespace DataAccessLayer
             private double _r2AtStdTemp;
             private double _r1Phase;
             private double _r2Phase;
-            private int _stdTemp;
+            private double _stdTemp;
             private string _r1AtStdTempHeader;
             private string _r2AtStdTempHeader;
             private string _r1PhaseHeader;
@@ -648,7 +648,7 @@ namespace DataAccessLayer
             /// <summary>
             /// Се задава, за пресметување на полињата подоле.
             /// </summary>
-            public int StdTemp
+            public double StdTemp
             {
                 get { return _stdTemp; }
                 set
@@ -745,14 +745,14 @@ namespace DataAccessLayer
             IEnumerable exp;
             try
             {
-                            exp = from ress in Root.DcColdMeasurenments.RessistanceTransformerChannels[channelIndex].RessistanceMeasurenments
-                                  select new
-                                  {
-                                      Time = ress.Time.Date,
-                                      Date = ress.Time.ToLongTimeString(),
-                                      RCA = (ress.ChannelNo == 1) ? (ress.Voltage / ress.Voltage).ToString() : "-",
-                                      Rca = (ress.ChannelNo == 2) ? (ress.Voltage / ress.Voltage).ToString() : "-"
-                                  };
+                exp = from ress in Root.DcColdMeasurenments.RessistanceTransformerChannels[channelIndex].RessistanceMeasurenments
+                      select new
+                      {
+                          Time = ress.Time.Date,
+                          Date = ress.Time.ToLongTimeString(),
+                          RCA = (ress.ChannelNo == 1) ? (ress.Voltage / ress.Current) : double.NaN,
+                          Rca = (ress.ChannelNo == 2) ? (ress.Voltage / ress.Current) : double.NaN
+                      };
             }
             catch 
             {
@@ -772,8 +772,9 @@ namespace DataAccessLayer
         /// <returns></returns>
         private double evalR1AtStdTemp()
         {
-            //  f(R1Cold, StdTemp, TempCoeffR1)
-            return -1;
+            double r1TempCoeff = Root.TransformerProperties.HvTempCoefficient;
+            double value = R1Cold * (StdTemp + r1TempCoeff) / (TCold + r1TempCoeff);
+            return value == 0 ? double.NaN : value;
         }
 
         /// <summary>
@@ -782,8 +783,9 @@ namespace DataAccessLayer
         /// <returns></returns>
         private double evalR2AtStdTemp()
         {
-            //  f(R2Cold, StdTemp, TempCoeffR2)
-            return -1;
+            double r2TempCoeff = Root.TransformerProperties.LvTempCoefficient;
+            double value = R2Cold * (StdTemp + r2TempCoeff) / (TCold + r2TempCoeff);
+            return value == 0 ? double.NaN : value;
         }
         /// <summary>
         /// Пресметка на R1Phase
@@ -791,8 +793,11 @@ namespace DataAccessLayer
         /// <returns></returns>
         private double evalR1Phase()
         {
-            //   f(R1AtStdTemp, HV)
-            return -1;
+            double val1 = 0.5;
+            if (Root.TransformerProperties.HV == EntityLayer.TransformerProperties.ConnectionType.D)
+                val1 = 1.5;
+            double value = evalR1AtStdTemp() * val1;
+            return value == 0 ? double.NaN : value;
         }
         /// <summary>
         /// Пресметка на R2Phase
@@ -800,26 +805,53 @@ namespace DataAccessLayer
         /// <returns></returns>
         private double evalR2Phase()
         {
-            //   f(R2AtStdTemp, HV)
-            return -1;
+            double val1 = 0.5;
+            if (Root.TransformerProperties.LV == EntityLayer.TransformerProperties.ConnectionType.D)
+                val1 = 1.5;
+            double value = evalR2AtStdTemp() * val1;
+            return value == 0 ? double.NaN : value;
         }
         /// <summary>
-        /// Пресметка на R1Cold
+        /// Пресметка на R1Cold. Средна вредност од мерените отпори за првиот канал (се пресметува).
         /// </summary>
         /// <returns></returns>
-        private double evalR1Cold()
+        private double evalR1Cold(int selectedChannel)
         {
-            // Средна вредност од мерените отпори за првиот канал (се пресметува).
-            return -1;
+           double sum = 0;
+           double n = 0;
+           foreach(EntityLayer.RessistanceMeasurenment meas in Root.DcColdMeasurenments.RessistanceTransformerChannels[selectedChannel].RessistanceMeasurenments)
+           {
+               if(meas.ChannelNo == 1)
+               {
+                   sum = meas.Voltage / meas.Current;
+                   n++;
+               }
+           }
+           if (n == 0)
+               return double.NaN;
+           else
+               return sum / n;
         }
         /// <summary>
-        /// Пресметка на R2Cold
+        /// Пресметка на R2Cold. Средна вредност од мерените отпори за вториот канал (се пресметува).
         /// </summary>
         /// <returns></returns>
-        private double evalR2Cold()
+        private double evalR2Cold(int selectedChannel)
         {
-            // Средна вредност од мерените отпори за вториот канал (се пресметува).
-            return -1;
+            double sum = 0;
+            double n = 0;
+            foreach (EntityLayer.RessistanceMeasurenment meas in Root.DcColdMeasurenments.RessistanceTransformerChannels[selectedChannel].RessistanceMeasurenments)
+            {
+                if (meas.ChannelNo == 2)
+                {
+                    sum = meas.Voltage / meas.Current;
+                    n++;
+                }
+            }
+            if (n == 0)
+                return double.NaN;
+            else
+                return sum / n;
         }
 
         private double evalTCold() 
@@ -837,27 +869,33 @@ namespace DataAccessLayer
         /// <returns></returns>
         private double evalStdDevTempR1(int channelIndex)
         {
-            double r1M = 0;
-            double r1StdDev = 0;
+            double mean = 0;
+            double stdDev = 0;
 
-            var r1 = from ress in Root.DcColdMeasurenments.RessistanceTransformerChannels[channelIndex].RessistanceMeasurenments
-                     where ress.ChannelNo == 0
+            var ressistances = from ress in Root.DcColdMeasurenments.RessistanceTransformerChannels[channelIndex].RessistanceMeasurenments
+                     where ress.ChannelNo == 1
                      select new { Ressistance = ress.Voltage / ress.Current };
-
-            foreach (var rIter in r1)
+            if (ressistances.Count() == 0)
+                return double.NaN;
+            else
             {
-                r1M += (double)rIter.Ressistance;
+                //Sum
+                foreach (var rIter in ressistances)
+                {
+                    mean += (double)rIter.Ressistance;
+                }
+                //Mean
+                mean /= ressistances.Count();
+
+                foreach (var rIter in ressistances)
+                {
+                    stdDev += Math.Pow((double)rIter.Ressistance - mean, 2);
+                }
+
+                stdDev = Math.Sqrt(stdDev / ressistances.Count());
+
+                return stdDev;
             }
-            r1M /= r1.Count();
-
-            foreach (var rIter in r1)
-            {
-                r1StdDev += Math.Pow((double)rIter.Ressistance - r1M, 2);
-            }
-
-            r1StdDev = Math.Sqrt(r1StdDev / r1.Count());
-
-            return r1StdDev;
         }
         /// <summary>
         /// Пресметка на стандарна девијација на мерените отпори на вториот канал.
@@ -866,30 +904,33 @@ namespace DataAccessLayer
         /// <returns></returns>
         private double evalStdDevTempR2(int channelIndex)
         {
-            double r2M = 0;
-            double r2StdDev = 0;
+            double mean = 0;
+            double stdDev = 0;
 
-            //Оделување на отпорите во низа
-            var r2 = from ress in Root.DcColdMeasurenments.RessistanceTransformerChannels[channelIndex].RessistanceMeasurenments
-                     where ress.ChannelNo == 1
-                     select new { Ressistance = ress.Voltage / ress.Current };
-
-            //Средна вредност
-            foreach (var rIter in r2)
+            var ressistances = from ress in Root.DcColdMeasurenments.RessistanceTransformerChannels[channelIndex].RessistanceMeasurenments
+                               where ress.ChannelNo == 2
+                               select new { Ressistance = ress.Voltage / ress.Current };
+            if (ressistances.Count() == 0)
+                return double.NaN;
+            else
             {
-                r2M += (double)rIter.Ressistance;
+                //Sum
+                foreach (var rIter in ressistances)
+                {
+                    mean += (double)rIter.Ressistance;
+                }
+                //Mean
+                mean /= ressistances.Count();
+
+                foreach (var rIter in ressistances)
+                {
+                    stdDev += Math.Pow((double)rIter.Ressistance - mean, 2);
+                }
+
+                stdDev = Math.Sqrt(stdDev / ressistances.Count());
+
+                return stdDev;
             }
-            r2M /= r2.Count();
-
-
-            foreach (var rIter in r2)
-            {
-                r2StdDev += Math.Pow((double)rIter.Ressistance - r2M, 2);
-            }
-
-            r2StdDev = Math.Sqrt(r2StdDev / r2.Count());
-
-            return r2StdDev;
         }
 
         private string evalR1AtStdTempHeader() 
@@ -939,10 +980,10 @@ namespace DataAccessLayer
         {
             switch (SelectedChannel)
             {
-                case 0: return "A - B Std Dev";
-                case 1: return "B - C Std Dev";
+                case 0: return "R A - B Std Dev";
+                case 1: return "R B - C Std Dev";
                 case 2: return "C - A Std Dev";
-                default: return "A - B Std Dev"; 
+                default: return "R A - B Std Dev"; 
             }
         }
 
@@ -950,10 +991,10 @@ namespace DataAccessLayer
         {
             switch (SelectedChannel)
             {
-                case 0: return "a - b Std Dev";
-                case 1: return "b - c Std Dev";
-                case 2: return "c - a Std Dev";
-                default: return "a - b Std Dev";
+                case 0: return "R a - b Std Dev";
+                case 1: return "R b - c Std Dev";
+                case 2: return "R c - a Std Dev";
+                default: return "R a - b Std Dev";
             }
         }
         private TableRessHeader evalDCColdRessistanceTableHeader() 
@@ -963,10 +1004,10 @@ namespace DataAccessLayer
 
             switch (SelectedChannel)
             {
-                case 0: r1 = "A - B Std Dev"; r2 = "a - b Std Dev"; break;
-                case 1: r1 = "B - C Std Dev"; r2 = "b - c Std Dev"; break;
-                case 2: r1 = "C - A Std Dev"; r2 = "c - a Std Dev"; break;
-                default: r1 = "A - B Std Dev"; r2 = "a - b Std Dev"; break;
+                case 0: r1 = "R A - B"; r2 = "R a-b"; break;
+                case 1: r1 = "R B - C"; r2 = "R b-c"; break;
+                case 2: r1 = "R C - A"; r2 = "R c-a"; break;
+                default: r1 = "R A - B"; r2 = "R a-b"; break;
             }
             return new TableRessHeader("Date", "Time", r1, r2);
         }

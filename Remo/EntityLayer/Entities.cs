@@ -189,13 +189,13 @@ namespace EntityLayer
     {
         //Отпори
         /// <summary>
-        /// Каналот за кој се врши мерење на ладно негоците конфигурации и мерења
+        /// Каналот за кој се врши мерење на ладно.
         /// </summary>
-        public RessistanceTransformerChannel RessistanceTransformerChannels { get; set; }
+        public RessistanceTransformerChannel RessistanceTransformerChannel { get; set; }
 
         public DcCoolingMeasurenments(RessistanceTransformerChannel ressistanceTransformerChannels)
         {
-            RessistanceTransformerChannels = ressistanceTransformerChannels;
+            RessistanceTransformerChannel = ressistanceTransformerChannels;
         }
         public DcCoolingMeasurenments() : this(new RessistanceTransformerChannel()) { }
     }
@@ -609,22 +609,7 @@ namespace EntityLayer
     public class TempMeasurenementConfiguration : INotifyPropertyChanged
     {
 
-        private DateTime _timeOfReduction;
-        /// <summary>
-        /// Време на извршена редукција
-        /// </summary>
-        public DateTime TimeOfReduction
-        {
-            get { return _timeOfReduction; }
-            set
-            {
-                if (_timeOfReduction != value)
-                {
-                    _timeOfReduction = value;
-                    OnPropertyChanged(new PropertyChangedEventArgs("TimeOfReduction"));
-                }
-            }
-        }
+        
 
         private int _tempSampleRateCurrentState;
         /// <summary>
@@ -798,8 +783,16 @@ namespace EntityLayer
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(PropertyChangedEventArgs e)
         {
+            //Call this method on the Right Thread
             if (PropertyChanged != null)
-                PropertyChanged(this, e);
+            {
+                System.Windows.Threading.DispatcherObject d = PropertyChanged.Target as System.Windows.Threading.DispatcherObject;
+                if (d == null)
+                    PropertyChanged(this, e);
+                else
+                    ((System.Windows.Threading.DispatcherObject)PropertyChanged.Target).Dispatcher.
+                         BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, PropertyChanged, this, e);
+            }
         }
 
         private void TempMeasurenments_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -917,6 +910,16 @@ namespace EntityLayer
             }
         }
 
+        private bool _isSampleReduced;
+        /// <summary>
+        /// Дали се работи за sample кој е редуциран. Се користи при AC Heating мерење.
+        /// Само еден sample може да биде редуциран.
+        /// </summary>
+        public bool IsSampleReduced
+        {
+            get { return _isSampleReduced; }
+            set { _isSampleReduced = value; }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged(PropertyChangedEventArgs e)

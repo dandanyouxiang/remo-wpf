@@ -3,35 +3,15 @@
   <Class Name="DataAccessLayer.DataSource" BaseTypeListCollapsed="true">
     <Position X="0.5" Y="2.5" Width="4.75" />
     <Compartments>
-      <Compartment Name="Methods" Collapsed="true" />
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Properties" Collapsed="true" />
       <Compartment Name="Nested Types" Collapsed="false" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>MgvrQXqQJBYmFyCx4LEAPIqqpDDA7xAmSGEwJCg71JI=</HashCode>
+      <HashCode>MgvrEXoRJBAmFyCy4BEAPIq6rDDQ7xAmSmAwBCgz1II=</HashCode>
       <FileName>DataAccessLayer\ACHeatingMeasurenments.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
-  </Class>
-  <Class Name="DataAccessLayer.RessistanceTransformerChannel">
-    <Position X="10.75" Y="3" Width="2.5" />
-    <TypeIdentifier>
-      <HashCode>AEAAAAAAEAAAAAAAAAAAAEABAAoAEgAAAAAAAAAAAAA=</HashCode>
-      <FileName>DataAccessLayer\DataSource.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="DataAccessLayer.TempMeasurenementConfiguration">
-    <Position X="8" Y="3" Width="2.5" />
-    <TypeIdentifier>
-      <HashCode>ABAAAIAAAAAAABABAAAAAAAAAAQAlgAgAAAAAAAAACg=</HashCode>
-      <FileName>DataAccessLayer\DataSource.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="DataAccessLayer.TransformerProperties">
-    <Position X="6" Y="3" Width="1.75" />
-    <TypeIdentifier>
-      <HashCode>EAAAAAAEAAAABAAAAAAABAAJAAAAAAAAAFMAAAEAAAA=</HashCode>
-      <FileName>DataAccessLayer\DataSource.cs</FileName>
-    </TypeIdentifier>
   </Class>
   <Font Name="Tahoma" Size="8.25" />
 </ClassDiagram>

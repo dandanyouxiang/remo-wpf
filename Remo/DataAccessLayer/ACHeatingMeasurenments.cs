@@ -40,22 +40,23 @@ namespace DataAccessLayer
         #endregion
         #region Results
         #region Private Memebers
-        private ACTableHeader ACHeatingTableHdr;
-        private int MinSampleRate;
-        private int SecSampleRate;
-        private int SamplesDn;
+        private ACTableHeader _acHeatingTableHeader;
+        private int _minSampleRate;
+        private int _secondsSampleRate;
+        private int _samplesDone;
         #endregion
 
         #region Public Memebers
 
         public int MinutesSampleRate 
         {
-            get { return MinSampleRate; }
+            get { return _minSampleRate; }
             set 
             {
-                if (MinSampleRate != value)
+                if (_minSampleRate != value)
                 {
-                    MinSampleRate = value;
+                    _minSampleRate = value;
+                    Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempSampleRateCurrentState = _minSampleRate * 60 + _secondsSampleRate;
                     OnPropertyChanged(new PropertyChangedEventArgs("MinutesSampleRate"));
                 }
             }
@@ -63,12 +64,13 @@ namespace DataAccessLayer
 
         public int SecondesSampleRate 
         {
-            get { return SecSampleRate; }
+            get { return _secondsSampleRate; }
             set 
             {
-                if (SecSampleRate != value) 
+                if (_secondsSampleRate != value) 
                 {
-                    SecSampleRate = value;
+                    _secondsSampleRate = value;
+                    Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempSampleRateCurrentState = _minSampleRate * 60 + _secondsSampleRate;
                     OnPropertyChanged(new PropertyChangedEventArgs("SecondesSampleRate"));
                 }
             }
@@ -76,12 +78,12 @@ namespace DataAccessLayer
 
         public int SamplesDone 
         {
-            get { return SamplesDn; }
+            get { return _samplesDone; }
             set 
             {
-                if (SamplesDn != value)
+                if (_samplesDone != value)
                 {
-                    SamplesDn = value;
+                    _samplesDone = value;
                     OnPropertyChanged(new PropertyChangedEventArgs("SamplesDone"));
                 }
             }
@@ -89,12 +91,12 @@ namespace DataAccessLayer
 
         public ACTableHeader ACHeatingTableHeader 
         {
-            get { return ACHeatingTableHdr; }
+            get { return _acHeatingTableHeader; }
             set 
             {
-                if (ACHeatingTableHdr != value) 
+                if (_acHeatingTableHeader != value) 
                 {
-                    ACHeatingTableHdr = value;
+                    _acHeatingTableHeader = value;
                     OnPropertyChanged(new PropertyChangedEventArgs("ACHeatingTableHeader"));
                 }
             }
@@ -111,7 +113,7 @@ namespace DataAccessLayer
                                    select new
                                    {
                                        Time = ac.Time.ToLongTimeString(),
-                                       No = Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.IndexOf(ac),
+                                       No = Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.IndexOf(ac) + 1,
                                        T1 = ac.T1,
                                        T2 = ac.T2,
                                        T3 = ac.T3,
@@ -150,12 +152,13 @@ namespace DataAccessLayer
 
         private int evalMinutesSampleRate() 
         {
-            return -1;
+            return Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempSampleRateCurrentState / 60;
         }
 
         private int evalSecondesSampleRate() 
         {
-            return -1;
+
+            return Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempSampleRateCurrentState % 60;
         }
 
         private int evalSamplesDone() 
