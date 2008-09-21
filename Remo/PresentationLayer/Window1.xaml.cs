@@ -56,7 +56,7 @@ namespace PresentationLayer
         public Window1()
         {
             InitializeComponent();
-            datasource = new DataSource(@"E:\root.xml");
+            datasource = new DataSource(@"D:\root.xml");
             MainGrid.DataContext = datasource;
             StatusString = statusStrings[2];
             try
@@ -310,5 +310,17 @@ namespace PresentationLayer
         {
 
         }
+
+        private void EndAcTempTextBox_Error(object sender, ValidationErrorEventArgs e)
+        {
+           
+        }
+
+        private void MainGrid_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        
     }
 }
