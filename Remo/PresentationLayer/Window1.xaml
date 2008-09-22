@@ -15,7 +15,8 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <TabControl Name="tabControl1" Grid.Row="0" Grid.Column="1" SelectedIndex="2" FontSize="14">
+
+        <TabControl Name="tabControl1" Grid.Row="0" Grid.Column="0" SelectedIndex="1" FontSize="14">
             <TabItem  Header="DC - Cold Measurenment">
                 <Grid >
                     <Grid.RowDefinitions>
@@ -241,7 +242,7 @@
                         <TabItem Header="Settings">
                             <Grid>
                                 <ToggleButton Height="40.001" Margin="433,62.406,0,0" Name="startAcButton" Style="{StaticResource StartStopStyle}" VerticalAlignment="Top" HorizontalAlignment="Left" Width="85.897" Checked="startAcButton_Checked">Start</ToggleButton>
-                                <ToggleButton Height="40.001" Margin="524,62.406,526,0" Name="reduceButton"  Style="{StaticResource StartStopStyle}" VerticalAlignment="Top" Checked="reduceButton_Checked">Reduce</ToggleButton>
+                                <ToggleButton Height="40.001" Margin="524,62.406,526,0" Name="reduceButton" IsEnabled="{Binding ElementName=startAcButton, Path=IsChecked}"  Style="{StaticResource StartStopStyle}" VerticalAlignment="Top" Checked="reduceButton_Checked">Reduce</ToggleButton>
                                 <GroupBox Header="Sample Rate" Height="195.773" Margin="77,45.907,0,0" Name="groupBox4" VerticalAlignment="Top" HorizontalAlignment="Left" Width="309" >
                                     <StackPanel Height="170.051">
                                         <Grid>
@@ -308,7 +309,7 @@
                                     </ListView.View>
                                 </ListView>
                                 <Label Height="28" HorizontalAlignment="Left" Margin="50,18,0,0" Name="ACTableLabel" VerticalAlignment="Top" Width="120">AC Table</Label>
-                                <graph:WPFScatterGraph x:Name="AcGraph" Grid.Row="1" Margin="50,0,50,0"  MinWidth="200" MinHeight="200" YAxisTitle="R Err" XAxisTitle="R Meas" MinYRange="-0.001" MaxYRange="0.001" IntervalYRange="0.0002" GraphBackground="LightGray"/>
+                                <graph:WPFScatterGraph x:Name="AcGraph" XAxisType="_time" Grid.Row="1" Margin="50,0,50,0"  MinWidth="200" MinHeight="200" YAxisTitle="R Err" XAxisTitle="R Meas" MinYRange="-0.001" MaxYRange="0.001" IntervalYRange="0.0002" GraphBackground="LightGray"/>
                             </Grid>
                         </TabItem>
                     </TabControl>
@@ -328,7 +329,7 @@
                                             <ComboBoxItem>C - A</ComboBoxItem>
                                         </ComboBox>
                                         <ToggleButton Margin="10,20,30,0" Name="TNullButton" Style="{StaticResource StartStopStyle}" Checked="TNullButton_Checked">t=0</ToggleButton>
-                                        <ToggleButton Margin="10,10,30,0" Name="StartDcCoolResButton" Style="{StaticResource StartStopStyle}" Checked="StartDcCoolResButton_Checked" />
+                                        <ToggleButton Margin="10,10,30,0" Name="StartDcCoolResButton" IsEnabled="{Binding ElementName=TNullButton, Path=IsChecked}" Style="{StaticResource StartStopStyle}" Checked="StartDcCoolResButton_Checked" />
                                     </StackPanel>
                                 </GroupBox>
                                 <GroupBox Header="Channel Info" Margin="84.537,288.658,0,98.601" Name="ChannelGroupBox" HorizontalAlignment="Left" Width="271.51" >
@@ -478,4 +479,5 @@
         <TextBlock Margin="0,5,316,0" VerticalAlignment="Top" FontSize="14" Height="19.313" HorizontalAlignment="Right" Width="68.304">Status:</TextBlock>
         <TextBlock Margin="0,5,116,0" Name="statusTextBlock" VerticalAlignment="Top" FontSize="14" Height="19.313" TextAlignment="Center" Text="{Binding Path=StatusString}" HorizontalAlignment="Right" Width="183.304" />
     </Grid>
+            
 </Window>

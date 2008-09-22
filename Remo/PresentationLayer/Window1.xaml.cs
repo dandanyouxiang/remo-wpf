@@ -59,6 +59,7 @@ namespace PresentationLayer
             datasource = new DataSource(@"E:\root.xml");
             MainGrid.DataContext = datasource;
             StatusString = statusStrings[2];
+            this.graphsInit();
             try
             {
                 datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration.PropertyChanged += new PropertyChangedEventHandler(DCColdTemperatureTable_PropertyChanged);
@@ -134,6 +135,7 @@ namespace PresentationLayer
         {
             //Повторно се наведува ItemsSource-от на оваа табела.
             ACTable.ItemsSource = datasource.ACHeatingTable();
+            this.acGraphRefresh();
         }
         /// <summary>
         /// OnPropertyChanged Handler за мерењата на отпор при ладење - DcCooling
@@ -186,6 +188,7 @@ namespace PresentationLayer
             startTempMeasDcColdButton.IsChecked = false;
             startAcButton.IsChecked = false;
             CurrentProcessState = ProcessStatesEnum.Idle;
+           
         }
 
         /// <summary>
@@ -219,6 +222,7 @@ namespace PresentationLayer
             startResMeasDcColdButton.IsChecked = false;
             StartDcCoolResButton.IsChecked = false;
             TNullButton.IsChecked = false;
+            TNullButton.IsEnabled = true;
             CurrentProcessState = ProcessStatesEnum.Idle;
         }
 
@@ -308,7 +312,8 @@ namespace PresentationLayer
 
         private void TNullButton_Checked(object sender, RoutedEventArgs e)
         {
-
+            datasource.Root.DcCoolingMeasurenments.TNullTime = DateTime.Now;
+            TNullButton.IsEnabled = false;
         }
 
         private void EndAcTempTextBox_Error(object sender, ValidationErrorEventArgs e)
