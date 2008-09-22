@@ -20,10 +20,8 @@
         </StackPanel>
         </DataTemplate>
         <Style x:Key="GeneralStyle">
-            <Setter Property="Control.FontFamily" Value="Times New Roman" />
-            <Setter Property="Control.FontSize" Value="18" />
-            <Setter Property="Control.FontWeight" Value="Bold" />
-            <Setter Property="Control.Height"  Value="30" />
+            <Setter Property="Control.FontFamily" Value="Tahoma" />
+            <Setter Property="Control.FontSize" Value="16" />
         </Style>
         <Style TargetType="Button" BasedOn="{StaticResource GeneralStyle}">
         </Style>
