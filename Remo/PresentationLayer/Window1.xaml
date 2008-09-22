@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:graph="clr-namespace:DNBSoft.WPF.WPFGraph;assembly=WPFGraph"
         xmlns:data="clr-namespace:DataAccessLayer"
-        Title="Window1" Height="850" Width="1200">
+        Title="Window1" Height="850" Width="1200" Validation.Error="OnValidationError">
     <Window.Resources>
   
     </Window.Resources>
@@ -16,7 +16,7 @@
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <TabControl Name="tabControl1" Grid.Row="0" Grid.Column="0" SelectedIndex="1" FontSize="14">
+        <TabControl Name="tabControl1" Grid.Row="0" Grid.Column="0" SelectedIndex="0" FontSize="14">
             <TabItem  Header="DC - Cold Measurenment">
                 <Grid >
                     <Grid.RowDefinitions>

@@ -341,7 +341,8 @@ namespace PresentationLayer
         /// </summary>
         private void OnValidationError(object sender, ValidationErrorEventArgs e)
         {
-            ((FrameworkElement)sender).GetBindingExpression(TextBox.TextProperty).UpdateTarget();
+
+            ((FrameworkElement)e.OriginalSource).GetBindingExpression(TextBox.TextProperty).UpdateTarget();
         }
        
 
