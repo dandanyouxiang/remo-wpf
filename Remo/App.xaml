@@ -45,8 +45,8 @@
         <LinearGradientBrush x:Key="NormalBrush" StartPoint="0,0" EndPoint="0,1">
             <GradientBrush.GradientStops>
                 <GradientStopCollection>
-                    <GradientStop Color="#FFAAAA" Offset="0.0"/>
-                    <GradientStop Color="#C22" Offset="1.0"/>
+                    <GradientStop Color="Green"  Offset="0.0"/>
+                    <GradientStop Color="LightGreen"  Offset="1.0"/>
                 </GradientStopCollection>
             </GradientBrush.GradientStops>
         </LinearGradientBrush>
@@ -135,13 +135,32 @@
                     </Trigger.Value>
                 </Trigger>
             </ControlTemplate.Triggers>
+            
         </ControlTemplate>
+
+        <DataTemplate x:Key="IsChackBackground">
+            <StackPanel>
+                <StackPanel.Background>
+                    <LinearGradientBrush  StartPoint="0,0" EndPoint="0,1">
+                        <GradientBrush.GradientStops>
+                            <GradientStopCollection>
+                                <GradientStop Color="Green"  Offset="0.0"/>
+                                <GradientStop Color="LightGreen"  Offset="1.0"/>
+                            </GradientStopCollection>
+                        </GradientBrush.GradientStops>
+                    </LinearGradientBrush>
+                </StackPanel.Background>
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding}"/>
+            </StackPanel>
+        </DataTemplate>
 
         <Style x:Key="StartStopStyle" TargetType="{x:Type ToggleButton}" >
             <Setter Property="Control.Template" Value="{StaticResource ToggleButtonTemplate}"/>
             <Style.Triggers>
                 <Trigger Property="IsChecked" Value="True">
                     <Setter Property="Content" Value="Stop"/>
+
+                    <Setter Property="ContentTemplate" Value="{StaticResource IsChackBackground}"/>
                 </Trigger>
                 <Trigger Property="IsChecked" Value="False">
                     <Setter Property="Content" Value="Start"/>
