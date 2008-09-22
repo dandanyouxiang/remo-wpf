@@ -55,6 +55,9 @@ namespace DataSourceLayer
             this._numberOfSamples = tempMeasurenmentConfiguration.TempNoOfSamplesCurrentState;
             this._tempMeasurenementConfiguration = tempMeasurenmentConfiguration;
 
+            IsTempMeasInterupted = false;
+            IsSampleReduced = false;
+            IsTempMeasStopped = false;
             measurenmentThread = new Thread(tempMeasurenmentDoWork);
             measurenmentThread.Start();
         }
@@ -84,13 +87,17 @@ namespace DataSourceLayer
         private EntityLayer.TempMeasurenementConfiguration _tempMeasurenementConfiguration;
         private EntityLayer.RessistanceTransformerChannel _ressistanceTransformerChannel;
 
+        public bool IsTempMeasInterupted { get; set; }
+        public bool IsSampleReduced { get; set; }
+        public bool IsTempMeasStopped { get; set; }
+
         private void tempMeasurenmentDoWork()
         {
             lock (_tempMeasurenementConfiguration.TempMeasurenments)
             {
                 _tempMeasurenementConfiguration.TempMeasurenments.Clear();
                 Random rand = new Random();
-                for (int i = 0; i < _numberOfSamples; i++)
+                for (int i = 0; i < _numberOfSamples && !IsTempMeasStopped; i++)
                 {
                     _tempMeasurenementConfiguration.TempMeasurenments.Add(new TempMeasurenment(
                         DateTime.Now,
@@ -99,8 +106,15 @@ namespace DataSourceLayer
                         _tempMeasurenementConfiguration.IsChannel3On ? rand.NextDouble() * 10 + 20 : double.NaN,
                         _tempMeasurenementConfiguration.IsChannel4On ? rand.NextDouble() * 10 + 20 : double.NaN
                         ));
-                    Thread.Sleep(_sampleRate * 1000);
+                    _tempMeasurenementConfiguration.TempMeasurenments[i].IsSampleReduced = this.IsSampleReduced;
+                    this.IsSampleReduced = false;
+                    for (int j = 0; j < _sampleRate && !IsTempMeasInterupted && !IsTempMeasStopped && i < _numberOfSamples - 1; j++)
+                        Thread.Sleep(1000);
+                    IsTempMeasInterupted = false;
+                    if (IsTempMeasStopped)
+                        break;
                 }
+                IsTempMeasStopped = false;
             }
             //throw event
             OnTempMeasurenmentFinished();
