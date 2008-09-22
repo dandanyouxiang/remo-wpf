@@ -93,7 +93,7 @@ namespace DataAccessLayer
                 IEnumerable DCValues = from dc in Root.DcCoolingMeasurenments.RessistanceTransformerChannel.RessistanceMeasurenments
                                        select new
                                        {
-                                           Time = (dc.Time - Root.DcCoolingMeasurenments.RessistanceTransformerChannel.RessistanceMeasurenments[0].Time).Seconds,
+                                           Time = (dc.Time - Root.DcCoolingMeasurenments.TNullTime).TotalSeconds,
                                            No = Root.DcCoolingMeasurenments.RessistanceTransformerChannel.RessistanceMeasurenments.IndexOf(dc) + 1,
                                            R1 = (dc.ChannelNo == 1) ? dc.Voltage / dc.Current : double.NaN,
                                            R1Diff = (dc.ChannelNo == 1) ? 

@@ -112,7 +112,7 @@ namespace DataAccessLayer
             IEnumerable ACValues = from ac in Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments
                                    select new
                                    {
-                                       Time = ac.Time.ToLongTimeString(),
+                                       Time = ac.Time.ToString("dd:mm:yyyy hh:mm:ss"),
                                        No = Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.IndexOf(ac) + 1,
                                        T1 = ac.T1,
                                        T2 = ac.T2,

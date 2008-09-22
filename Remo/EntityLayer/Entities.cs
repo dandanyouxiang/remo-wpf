@@ -192,6 +192,10 @@ namespace EntityLayer
         /// Каналот за кој се врши мерење на ладно.
         /// </summary>
         public RessistanceTransformerChannel RessistanceTransformerChannel { get; set; }
+        /// <summary>
+        /// Времето на t=0 
+        /// </summary>
+        public DateTime TNullTime { get; set; }
 
         public DcCoolingMeasurenments(RessistanceTransformerChannel ressistanceTransformerChannels)
         {

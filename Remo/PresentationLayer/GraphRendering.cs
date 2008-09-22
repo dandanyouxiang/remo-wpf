@@ -18,12 +18,11 @@ using DNBSoft.WPF.WPFGraph;
 
 namespace PresentationLayer
 {
-    /*
     public partial class Window1 : Window, INotifyPropertyChanged
     {
         private void graphsInit()
         {
-            
+            acGraphInit();
         }
 
         WPFGraphSeries seriesOilTemp;
@@ -39,9 +38,9 @@ namespace PresentationLayer
             seriesAmbTemp.Name = "TAmb";
             seriesTempRise.Name = "TRise";
 
-            graph.Series.Add(seriesOilTemp);
-            graph.Series.Add(seriesAmbTemp);
-            graph.Series.Add(seriesTempRise);
+            AcGraph.Series.Add(seriesOilTemp);
+            AcGraph.Series.Add(seriesAmbTemp);
+            AcGraph.Series.Add(seriesTempRise);
 
             WPFGraphPointRenderers.RoundPoint series1PointRenderer = new WPFGraphPointRenderers.RoundPoint();
             series1PointRenderer.PointBrush = Brushes.Red;
@@ -74,17 +73,21 @@ namespace PresentationLayer
 
         private void acGraphRefresh()
         {
-            double maxY = graph.MaxYRange;
-            double minY = graph.MinYRange;
-            double maxX = 0;
-            double minX = 1000;
+            double maxY = -1000;
+            double minY = 1000;
+            double maxX = -1000;
+            double minX = (long)DateTime.Now.Ticks;
 
             seriesOilTemp.Points.Clear();
             foreach (EntityLayer.TempMeasurenment t in datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments)
             {
+                EntityLayer.TempMeasurenementConfiguration tempConfig = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration;
+                int numberOfOilTemps = (tempConfig.IsChannel1Oil && tempConfig.IsChannel1On ? 1 : 0) + (tempConfig.IsChannel2Oil && tempConfig.IsChannel2On ? 1 : 0) + (tempConfig.IsChannel3Oil && tempConfig.IsChannel3On ? 1 : 0) + (tempConfig.IsChannel4Oil && tempConfig.IsChannel4On ? 1 : 0);
+                double oilTemps = (tempConfig.IsChannel1Oil && tempConfig.IsChannel1On ? t.T1 : 0) + (tempConfig.IsChannel2Oil && tempConfig.IsChannel2On ? t.T2 : 0) + (tempConfig.IsChannel3Oil && tempConfig.IsChannel3On ? t.T3 : 0) + (tempConfig.IsChannel4Oil && tempConfig.IsChannel4On ? t.T4 : 0);
+                double meanOilTemp = oilTemps / numberOfOilTemps;
                 WPFGraphDataPoint point = new DNBSoft.WPF.WPFGraph.WPFGraphDataPoint();
-                point.X = t.T1;
-                point.Y = t.T1 - t.T1Ref;
+                point.X = (double)t.Time.Ticks;
+                point.Y = meanOilTemp;
                 if (point.Y > maxY)
                     maxY = point.Y;
                 if (point.Y < minY)
@@ -97,28 +100,32 @@ namespace PresentationLayer
             }
 
             seriesAmbTemp.Points.Clear();
-            foreach (EntityLayer.TempCalMeasurenment t in tempCalibrationService.TempCalibrationEntity.TempCalMeasurenments)
+            foreach (EntityLayer.TempMeasurenment t in datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments)
             {
+                EntityLayer.TempMeasurenementConfiguration tempConfig = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration;
+                int numberOfOilTemps = (!tempConfig.IsChannel1Oil && tempConfig.IsChannel1On ? 1 : 0) + (!tempConfig.IsChannel2Oil && tempConfig.IsChannel2On ? 1 : 0) + (!tempConfig.IsChannel3Oil && tempConfig.IsChannel3On ? 1 : 0) + (!tempConfig.IsChannel4Oil && tempConfig.IsChannel4On ? 1 : 0);
+                double oilTemps = (!tempConfig.IsChannel1Oil && tempConfig.IsChannel1On ? t.T1 : 0) + (!tempConfig.IsChannel2Oil && tempConfig.IsChannel2On ? t.T2 : 0) + (!tempConfig.IsChannel3Oil && tempConfig.IsChannel3On ? t.T3 : 0) + (!tempConfig.IsChannel4Oil && tempConfig.IsChannel4On ? t.T4 : 0);
+                double meanOilTemp = oilTemps / numberOfOilTemps;
                 WPFGraphDataPoint point = new DNBSoft.WPF.WPFGraph.WPFGraphDataPoint();
-                point.X = t.T2;
-                point.Y = t.T2 - t.T2Ref;
+                point.X = (double)t.Time.Ticks;
+                point.Y = meanOilTemp;
                 if (point.Y > maxY)
                     maxY = point.Y;
                 if (point.Y < minY)
                     minY = point.Y;
                 if (point.X > maxX)
                     maxX = point.X + 0.1;
-                if (point.X < minX)
+                if (point.X < minX) 
                     minX = point.X - 0.1;
                 seriesAmbTemp.Points.Add(point);
             }
 
             seriesTempRise.Points.Clear();
-            foreach (EntityLayer.TempCalMeasurenment t in tempCalibrationService.TempCalibrationEntity.TempCalMeasurenments)
+            for (int i = 0; i < seriesAmbTemp.Points.Count; i++)
             {
                 WPFGraphDataPoint point = new DNBSoft.WPF.WPFGraph.WPFGraphDataPoint();
-                point.X = t.T3;
-                point.Y = t.T3 - t.T3Ref;
+                point.X = seriesAmbTemp.Points[i].X;
+                point.Y = seriesOilTemp.Points[i].Y - seriesAmbTemp.Points[i].Y;
                 if (point.Y > maxY)
                     maxY = point.Y;
                 if (point.Y < minY)
@@ -130,14 +137,15 @@ namespace PresentationLayer
                 seriesTempRise.Points.Add(point);
             }
 
-            graph.MaxYRange = maxY;
-            graph.MinYRange = minY;
-            graph.MaxXRange = maxX;
-            graph.MinXRange = minX;
-            graph.IntervalYRange = (maxY - minY) / 20;
-            graph.IntervalXRange = (graph.MaxXRange - graph.MinXRange) / 20;
+            AcGraph.MaxYRange = maxY;
+            AcGraph.MinYRange = minY;
+            AcGraph.MaxXRange = maxX;
+            AcGraph.MinXRange = minX;
+            AcGraph.IntervalYRange = (maxY - minY) / 20;
+            AcGraph.IntervalXRange = (AcGraph.MaxXRange - AcGraph.MinXRange) / 10;
 
-            graph.Refresh();
+            AcGraph.Refresh();
+            this.InvalidateVisual();
         }
-    }*/
+    }
 }
