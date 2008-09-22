@@ -324,7 +324,7 @@ namespace DataAccessLayer
         public TableTempHeader evalDCColdTemperatureTableHeader()
         {
             var tempch = Root.DcColdMeasurenments.TempMeasurenementConfiguration;
-            return new TableTempHeader("Date","Time","T1" + ((tempch.IsChannel1Oil) ? "(Oil)" : "(Amb)"),"T2" + ((tempch.IsChannel2Oil) ? "(Oil)" : "(Amb)"),"T3" + ((tempch.IsChannel3Oil) ? "(Oil)" : "(Amb)"),"T4" + ((tempch.IsChannel4Oil) ? "(Oil)" : "(Amb)"),"T Amb","T Oil");
+            return new TableTempHeader("Date","Time","T1" + ((tempch.IsChannel1Oil) ? "(Oil) " : "(Amb) "),"T2" + ((tempch.IsChannel2Oil) ? "(Oil) " : "(Amb) "),"T3" + ((tempch.IsChannel3Oil) ? "(Oil) " : "(Amb) "),"T4" + ((tempch.IsChannel4Oil) ? "(Oil) " : "(Amb) "),"T Amb","T Oil");
         }
         /////////////////////////////////////////
 
