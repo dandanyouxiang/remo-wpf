@@ -51,7 +51,7 @@ namespace PresentationLayer
             if (PropertyChanged != null)
                 PropertyChanged(this, e);
         }
-
+        DataSourceLayer.DataSourceServices ds;
         DataSource datasource;
         public Window1()
         {
@@ -135,7 +135,7 @@ namespace PresentationLayer
         {
             //Повторно се наведува ItemsSource-от на оваа табела.
             ACTable.ItemsSource = datasource.ACHeatingTable();
-            this.acGraphRefresh();
+            
         }
         /// <summary>
         /// OnPropertyChanged Handler за мерењата на отпор при ладење - DcCooling
@@ -188,6 +188,7 @@ namespace PresentationLayer
             startTempMeasDcColdButton.IsChecked = false;
             startAcButton.IsChecked = false;
             CurrentProcessState = ProcessStatesEnum.Idle;
+            this.acGraphRefresh();
            
         }
 
@@ -257,30 +258,37 @@ namespace PresentationLayer
         {
             if (CurrentProcessState == ProcessStatesEnum.Idle)
             {
-                if (((ToggleButton)e.Source).IsChecked == true)
-                {
-                    CurrentProcessState = ProcessStatesEnum.ACHotTemp;
-                    //Кои канали се On или Off
-                    datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel1On = thermometerChannelAC1.IsChannelOn;
-                    datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel2On = thermometerChannelAC2.IsChannelOn;
-                    datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel3On = thermometerChannelAC3.IsChannelOn;
-                    datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel4On = thermometerChannelAC4.IsChannelOn;
-                    //Кои канали се Oil или Amb
-                    datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel1Oil = thermometerChannelAC1.IsOil;
-                    datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel2Oil = thermometerChannelAC2.IsOil;
-                    datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel3Oil = thermometerChannelAC3.IsOil;
-                    datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel4Oil = thermometerChannelAC4.IsOil;
+                reduceButton.IsEnabled = true;
+                reduceButton.IsChecked = false;
+                CurrentProcessState = ProcessStatesEnum.ACHotTemp;
+                //Кои канали се On или Off
+                datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel1On = thermometerChannelAC1.IsChannelOn;
+                datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel2On = thermometerChannelAC2.IsChannelOn;
+                datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel3On = thermometerChannelAC3.IsChannelOn;
+                datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel4On = thermometerChannelAC4.IsChannelOn;
+                //Кои канали се Oil или Amb
+                datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel1Oil = thermometerChannelAC1.IsOil;
+                datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel2Oil = thermometerChannelAC2.IsOil;
+                datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel3Oil = thermometerChannelAC3.IsOil;
+                datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel4Oil = thermometerChannelAC4.IsOil;
 
-                    //Стартувај го мерењето на температура
-                    DataSourceLayer.DataSourceServices ds = new DataSourceLayer.DataSourceServices();
-                    ds.TempMeasurenmentFinished += new DataSourceLayer.DataSourceServices.TempMeasurenmentFinishedEventHandler(ds_TempMeasurenmentFinished);
-                    datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempNoOfSamplesCurrentState = 5;
-                    ds.start_TempMeasurenment(datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration);
-                    //
-                }
+                //Стартувај го мерењето на температура
+                ds = new DataSourceLayer.DataSourceServices();
+                ds.TempMeasurenmentFinished += new DataSourceLayer.DataSourceServices.TempMeasurenmentFinishedEventHandler(ds_TempMeasurenmentFinished);
+                datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempNoOfSamplesCurrentState = 5;
+                ds.start_TempMeasurenment(datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration);
+                //
             }
-            else
+        }
+        /// <summary>
+        /// Стопирање на температурно мерење
+        /// </summary>
+        private void startAcButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (((ToggleButton)e.Source).IsChecked == false && CurrentProcessState != ProcessStatesEnum.Idle)
             {
+
+                ds.IsTempMeasStopped = true;
                 startAcButton.IsChecked = false;
             }
         }
@@ -295,7 +303,7 @@ namespace PresentationLayer
                 datasource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel.IsChannel1On = true;
                 datasource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel.IsChannel2On = true;
                 //Стартувај го мерењето на отпор
-                DataSourceLayer.DataSourceServices ds = new DataSourceLayer.DataSourceServices();
+                ds = new DataSourceLayer.DataSourceServices();
                 ds.RessistanceMeasurenmentFinished += new DataSourceLayer.DataSourceServices.RessistanceMeasurenmentFinishedEventHandler(ds_RessistanceMeasurenmentFinished);
                 ds.start_RessistanceMeasurenment(datasource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel);
             }
@@ -307,7 +315,9 @@ namespace PresentationLayer
 
         private void reduceButton_Checked(object sender, RoutedEventArgs e)
         {
-
+            ds.IsSampleReduced = true;
+            ds.IsTempMeasInterupted = true;
+            reduceButton.IsEnabled = false;
         }
 
         private void TNullButton_Checked(object sender, RoutedEventArgs e)
@@ -325,6 +335,15 @@ namespace PresentationLayer
         {
 
         }
+        /// <summary>
+        /// При Validation Error на FrameworkElement компонента,
+        /// да се врати последната валидна вредност (вредноста во binding source-от)
+        /// </summary>
+        private void OnValidationError(object sender, ValidationErrorEventArgs e)
+        {
+            ((FrameworkElement)sender).GetBindingExpression(TextBox.TextProperty).UpdateTarget();
+        }
+       
 
         
     }
