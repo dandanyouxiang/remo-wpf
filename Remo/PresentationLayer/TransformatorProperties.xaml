@@ -1,0 +1,102 @@
+﻿<Window x:Class="DataAccessLayer.PresentationLayer.TransformatorProperties"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:data="clr-namespace:DataAccessLayer"
+    Title="TransformatorProperties" Height="550" Width="550">
+    <Grid Name="MainGrid" Validation.Error="OnValidationError">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10*"></RowDefinition>
+            <RowDefinition  Height="53*"></RowDefinition>
+            <RowDefinition  Height="27*"></RowDefinition>
+            <RowDefinition  Height="10*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40*"></ColumnDefinition>
+                <ColumnDefinition Width="60*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0">
+                <Label Margin="40,20,0,0" Name="label1">Transf. Series</Label>
+                <TextBox Margin="40,5,30,5" Name="textBox1" >
+                    <Binding Path="TransformatorSeries" Converter="{StaticResource IntegerConvertor}" NotifyOnValidationError="True">
+                        <Binding.ValidationRules>
+                            <data:RegexValidator RegularExpression="^\s*\d*\s*$"></data:RegexValidator>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox>
+                <Label Margin="40,0,30,0" Name="TransfSerialNoLabel">Transf. Serial No.</Label>
+                <TextBox Margin="40,5,30,5" Name="TransfSerialNotextBox" >
+                    <Binding Path="TransformatorSerialNo" Converter="{StaticResource IntegerConvertor}" NotifyOnValidationError="True">
+                        <Binding.ValidationRules>
+                            <data:RegexValidator RegularExpression="^\s*\d*\s*$"></data:RegexValidator>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox>
+                <Label Margin="40,0,30,0" Name="PresentAtTestLabel">Present at Test</Label>
+                <TextBox Margin="40,5,30,5" Name="textBox3" Height="58" AcceptsReturn="True" Text="{Binding Path=PresentAtTest}"/>
+            </StackPanel>
+            <StackPanel Grid.Column="1">
+                <GroupBox Margin="5" Header="Connection Type" Name="ConnectionTypeGroupBox" >
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition ></ColumnDefinition>
+                            <ColumnDefinition ></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <Label Margin="10,0,0,0" Name="HVTypeLabel">HV</Label>
+                            <ComboBox Margin="10,5,5,5" Name="HVTypeTextBox" Text="{Binding Path=HV}">
+                                <ComboBoxItem>D</ComboBoxItem>
+                                <ComboBoxItem>Y</ComboBoxItem>
+                                <ComboBoxItem>Z</ComboBoxItem>
+                            </ComboBox>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <Label Margin="10,0,0,0" Name="LVTypeLabel">LV</Label>
+                            <ComboBox Margin="10,5,5,5" Name="LVTypeTextBox" Text="{Binding Path=LV}">
+                                <ComboBoxItem>D</ComboBoxItem>
+                                <ComboBoxItem>Y</ComboBoxItem>
+                                <ComboBoxItem>Z</ComboBoxItem>
+                            </ComboBox>
+                        </StackPanel>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Margin="5,10,5,5" Header="Temperature Coeficient" Name="TemperatureCoeficientGroupBox" >
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition ></ColumnDefinition>
+                            <ColumnDefinition ></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <Label Margin="10,0,0,0" Name="HVCoefLabel">HV</Label>
+                            <ComboBox Margin="10,5,5,5" Name="comboBox1" Text="{Binding Path=HvMaterial}" SelectionChanged="comboBox1_SelectionChanged">
+                                <ComboBoxItem>Copper</ComboBoxItem>
+                                <ComboBoxItem>Aluminium</ComboBoxItem>
+                                <ComboBoxItem Name="OtherHV">Other</ComboBoxItem>
+                            </ComboBox>
+                            <Label Margin="10,0,0,0" Name="TempCoefValHVLabel" >Value HV</Label>
+                            <TextBox Margin="10,5,5,5" Name="ValueHVtextBox" IsEnabled="{Binding ElementName=OtherHV,Path=IsSelected}" Text="{Binding Path=HvTempCoefficient}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <Label Margin="10,0,0,0" Name="LVCoefLabel">LV</Label>
+                            <ComboBox Margin="10,5,5,5" Name="LVCoefComboBox" Text="{Binding Path=LvMaterial}" SelectionChanged="LVCoefComboBox_SelectionChanged">
+                                
+                                <ComboBoxItem>Copper</ComboBoxItem>
+                                <ComboBoxItem>Aluminium</ComboBoxItem>
+                                <ComboBoxItem Name="OtherLV" >Other</ComboBoxItem>
+                            </ComboBox>
+                            <Label Margin="10,0,0,0" Name="TempCoefValLVLabel">Value LV</Label>
+                            <TextBox Margin="10,5,5,5" Name="ValueLVtextBox" IsEnabled="{Binding ElementName=OtherLV,Path=IsSelected}" Text="{Binding Path=LvTempCoefficient}"/>
+                        </StackPanel>
+                    </Grid>
+                </GroupBox>
+            </StackPanel>
+        </Grid>
+        <Label Margin="120,5,0,0" Name="TransformatorPropertiesLabel" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="20">Transformator Properties</Label>
+        <StackPanel Grid.Row="2">
+            <Label Margin="30,10,0,0" Name="CommentLabel">Comment</Label>
+            <TextBox Height="99" Name="CommentTextBox" Width="457" AcceptsReturn="True" Text="{Binding Path=Comment}"/>
+        </StackPanel>
+        <Button Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="150,10,0,0" Name="OkButton" Width="100">OK</Button>
+        <Button Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,177.21,0" Name="CancelButton" Width="100">Cancel</Button>
+    </Grid>
+</Window>
