@@ -3,9 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:graph="clr-namespace:DNBSoft.WPF.WPFGraph;assembly=WPFGraph"
         xmlns:data="clr-namespace:DataAccessLayer"
+        xmlns:pres="clr-namespace:PresentationLayer"
         Title="Window1" Height="850" Width="1200" Validation.Error="OnValidationError">
     <Window.Resources>
-  
+        <pres:ListViewItemStyleSelector reducedIndex="3" x:Key="myStyleSelector"/>
+
     </Window.Resources>
         <Grid ShowGridLines="true" Name="MainGrid" IsHitTestVisible="True" Loaded="MainGrid_Loaded" >
         <Grid.RowDefinitions>
@@ -16,7 +18,7 @@
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <TabControl Name="tabControl1" Grid.Row="0" Grid.Column="0" SelectedIndex="0" FontSize="14">
+        <TabControl Name="tabControl1" Grid.Row="0" Grid.Column="0" SelectedIndex="2" FontSize="14">
             <TabItem  Header="DC - Cold Measurenment">
                 <Grid >
                     <Grid.RowDefinitions>
@@ -27,7 +29,7 @@
                         <ColumnDefinition Width="411.777*"></ColumnDefinition>
                         <ColumnDefinition Width="411.501*" />
                     </Grid.ColumnDefinitions>
-                    <TabControl Margin="9,11,0,0" Name="tabControl2" SelectedIndex="1" Grid.ColumnSpan="2">
+                    <TabControl Margin="9,11,0,0" Name="tabControl2" SelectedIndex="0" Grid.ColumnSpan="2">
                         <TabItem Header="Ressistance Measurenment" Visibility="Visible">
                             <Grid Margin="9,35,0,0" Name="ACHeatingMeasurmentGrid">
                                 <Grid.RowDefinitions>
@@ -63,25 +65,25 @@
                                             </TextBox.Text>
                                         </TextBox>
                                         <Label Height="28" HorizontalAlignment="Left" Margin="16,24.083,0,0" Name="TestCurrentResLabel" VerticalAlignment="Top" Width="120">Test Current</Label>
-                                        <Label Margin="161,72.083,163,73.917" Name="label10" Content="{Binding Path=R2AtStdTempHeader}"></Label>
+                                        <Label Margin="161,0,163,67" Name="label10" Content="{Binding Path=R2AtStdTempHeader}" Height="30" VerticalAlignment="Bottom"></Label>
                                         <Label Margin="161,24.084,163,0" Name="label11" Height="28" VerticalAlignment="Top" Content="{Binding Path=R1AtStdTempHeader}"></Label>
-                                        <Label Margin="16,72.083,0,71.917" Name="label12" HorizontalAlignment="Left" Width="135.755">No. of Samples</Label>
+                                        <Label Margin="16,0,0,67" Name="label12" HorizontalAlignment="Left" Width="135.755" Height="30" VerticalAlignment="Bottom">No. of Samples</Label>
                                         <ToggleButton Name="startResMeasDcColdButton" Style="{StaticResource StartStopStyle}" Height="31.438" Margin="188.628,0,175.767,0" VerticalAlignment="Bottom" Checked="startResMeasDcColdButton_Checked" />
                                         <TextBox HorizontalAlignment="Right" Margin="0,48.027,20,0" Name="evalStdDevTempR1textBox" Text="{Binding Path=StdDevTempR1,Converter={StaticResource OhmConvertor}}" VerticalAlignment="Top" Width="120" IsEnabled="True" IsReadOnly="True" />
                                         <TextBox HorizontalAlignment="Right" Margin="0,0,20,40.013" Name="evalStdDevTempR2textBox" Width="120" VerticalAlignment="Bottom" Text="{Binding Path=StdDevTempR2,Converter={StaticResource OhmConvertor}}" IsEnabled="True" IsReadOnly="True" Height="25.313" />
-                                        <Label HorizontalAlignment="Right" Margin="0,72.083,20,73.917" Name="label6" Width="120" Content="{Binding Path=StdDevTempR2Header}"></Label>
+                                        <Label HorizontalAlignment="Right" Margin="0,0,20,67" Name="label6" Width="120" Content="{Binding Path=StdDevTempR2Header}" Height="30" VerticalAlignment="Bottom"></Label>
                                         <Label Height="28" HorizontalAlignment="Right" Margin="0,24.083,20,0" Name="label14" VerticalAlignment="Top" Width="120" Content="{Binding Path=StdDevTempR1Header}"></Label>
                                         
                                     </Grid>
                                 </GroupBox>
-                                <ListView Margin="43,0,129,279.661" Name="DCColdRessistanceTable" SelectionMode="Single" Grid.Column="1" Grid.ColumnSpan="2" Height="60.339" VerticalAlignment="Bottom">
+                                <ListView Margin="30,273.166,113,48" Name="DCColdRessistanceTable" SelectionMode="Single" Grid.Column="2">
                                     <ListView.View>
                                         <GridView>
                                             <GridView.Columns>
-                                                <GridViewColumn Header="{Binding Path=DCColdRessistanceTableHeader.Time}" DisplayMemberBinding="{Binding Path=Time}" />
-                                                <GridViewColumn Header="{Binding Path=DCColdRessistanceTableHeader.Date}" DisplayMemberBinding="{Binding Path=Date}" />
-                                                <GridViewColumn Header="{Binding Path=DCColdRessistanceTableHeader.R1}" DisplayMemberBinding="{Binding Path=RCA, Converter={StaticResource OhmConvertor}}" />
-                                                <GridViewColumn Header="{Binding Path=DCColdRessistanceTableHeader.R2}" DisplayMemberBinding="{Binding Path=Rca, Converter={StaticResource OhmConvertor}}" />
+                                                <GridViewColumn Header="{Binding Path=DCColdRessistanceTableHeader.Time}" DisplayMemberBinding="{Binding Path=Time}" Width="150" />
+                                                <GridViewColumn Header="{Binding Path=DCColdRessistanceTableHeader.Date}" DisplayMemberBinding="{Binding Path=Date}" Width="150" />
+                                                <GridViewColumn Header="{Binding Path=DCColdRessistanceTableHeader.R1}" DisplayMemberBinding="{Binding Path=RCA, Converter={StaticResource OhmConvertor}}" Width="150" />
+                                                <GridViewColumn Header="{Binding Path=DCColdRessistanceTableHeader.R2}" DisplayMemberBinding="{Binding Path=Rca, Converter={StaticResource OhmConvertor}}" Width="150" />
                                             </GridView.Columns>
                                         </GridView>
                                     </ListView.View>
@@ -92,7 +94,7 @@
                                     <ListBoxItem Margin="10,3">C - A</ListBoxItem>
                                 </ListBox>
                                 <GroupBox  Header="STD Temp" Margin="36.21,157.639,37.422,48" MinHeight="100" MinWidth="100" Name="groupBox1">
-                                    <StackPanel Width="159.984">
+                                    <StackPanel Width="159.984" Height="351">
                                         <TextBox Margin="10,20,0,0" Name="StdTempRessTextBox" Width="75">
                                             <TextBox.Text>
                                                 <Binding Path="StdTemp" Converter="{StaticResource CelsiusConverter}" NotifyOnValidationError="True">
@@ -156,13 +158,14 @@
                                     </Grid>
                                 </GroupBox>
                                 <ListView Margin="80,200,403,30" Name="DCColdTemperatureTable" SourceUpdated="DCColdTemperatureTable_SourceUpdated" HorizontalContentAlignment="Stretch" VerticalAlignment="Bottom" Height="300">
+                                    <!--
                                     <ListView.Background>
                                         <LinearGradientBrush EndPoint="0.939,0.919" StartPoint="0.041,0.081">
                                             <GradientStop Color="#FFB6D5FA" Offset="0"/>
                                             <GradientStop Color="AliceBlue"  Offset="1"/>
                                         </LinearGradientBrush>
                                     </ListView.Background>
-                                    
+                                    -->
                                     <ListView.Resources>
                                         <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Yellow" />
                                     </ListView.Resources>
@@ -199,14 +202,14 @@
                                         <GridView >
                                             
                                             <GridView.Columns>
-                                                <GridViewColumn Header="Time" DisplayMemberBinding="{Binding Path=Time}" HeaderTemplate="{StaticResource BlueHeader}"/>
-                                                <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Path=Date}" HeaderTemplate="{StaticResource BlueHeader}"/>
-                                                <GridViewColumn Header="{Binding Path=DCColdTemperatureTableHeader.T1}" DisplayMemberBinding="{Binding Path=T1, Converter={StaticResource CelsiusConverter}}" HeaderTemplate="{StaticResource BlueHeader}"/>
-                                                <GridViewColumn Header="{Binding Path=DCColdTemperatureTableHeader.T2}" DisplayMemberBinding="{Binding Path=T2, Converter={StaticResource CelsiusConverter}}" HeaderTemplate="{StaticResource BlueHeader}"/>
-                                                <GridViewColumn Header="{Binding Path=DCColdTemperatureTableHeader.T3}" DisplayMemberBinding="{Binding Path=T3, Converter={StaticResource CelsiusConverter}}" HeaderTemplate="{StaticResource BlueHeader}"/>
-                                                <GridViewColumn Header="{Binding Path=DCColdTemperatureTableHeader.T4}" DisplayMemberBinding="{Binding Path=T4, Converter={StaticResource CelsiusConverter}}" HeaderTemplate="{StaticResource BlueHeader}"/>
-                                                <GridViewColumn Header="TAmb" DisplayMemberBinding="{Binding Path=TAmb, Converter={StaticResource CelsiusConverter}}" HeaderTemplate="{StaticResource BlueHeader}"/>
-                                                <GridViewColumn Header="TOil" DisplayMemberBinding="{Binding Path=TOil, Converter={StaticResource CelsiusConverter}}" HeaderTemplate="{StaticResource BlueHeader}"/>
+                                                <GridViewColumn Header="Time" DisplayMemberBinding="{Binding Path=Time}" />
+                                                <GridViewColumn Header="Date" DisplayMemberBinding="{Binding Path=Date}" />
+                                                <GridViewColumn Header="{Binding Path=DCColdTemperatureTableHeader.T1}" DisplayMemberBinding="{Binding Path=T1, Converter={StaticResource CelsiusConverter}}" />
+                                                <GridViewColumn Header="{Binding Path=DCColdTemperatureTableHeader.T2}" DisplayMemberBinding="{Binding Path=T2, Converter={StaticResource CelsiusConverter}}" />
+                                                <GridViewColumn Header="{Binding Path=DCColdTemperatureTableHeader.T3}" DisplayMemberBinding="{Binding Path=T3, Converter={StaticResource CelsiusConverter}}" />
+                                                <GridViewColumn Header="{Binding Path=DCColdTemperatureTableHeader.T4}" DisplayMemberBinding="{Binding Path=T4, Converter={StaticResource CelsiusConverter}}" />
+                                                <GridViewColumn Header="TAmb" DisplayMemberBinding="{Binding Path=TAmb, Converter={StaticResource CelsiusConverter}}" />
+                                                <GridViewColumn Header="TOil" DisplayMemberBinding="{Binding Path=TOil, Converter={StaticResource CelsiusConverter}}" />
                                             </GridView.Columns>
                                         </GridView>
                                     </ListView.View>
@@ -238,7 +241,7 @@
             <TabItem Header="AC Heating Measurenment">
 
                 <Grid >
-                    <TabControl Margin="0,0,10,10" Name="HeatingTab" SelectedIndex="0">
+                    <TabControl Margin="0,0,10,10" Name="HeatingTab" SelectedIndex="1">
                         <TabItem Header="Settings">
                             <Grid>
                                 <ToggleButton Height="40.001" Margin="433,62.406,0,0" Name="startAcButton" Style="{StaticResource StartStopStyle}" VerticalAlignment="Top" HorizontalAlignment="Left" Width="85.897" Checked="startAcButton_Checked">Start</ToggleButton>
@@ -293,18 +296,18 @@
                                     <RowDefinition Height="50*"/>
                                     <RowDefinition Height="50*"/>
                                 </Grid.RowDefinitions>
-                                <ListView Height="292" Margin="50,50,50,0" Name="ACTable" VerticalAlignment="Top" >
+                                <ListView Height="292" Margin="50,50,50,0" Name="ACTable" VerticalAlignment="Top" ItemContainerStyleSelector="{DynamicResource myStyleSelector}">
                                     <ListView.View>
                                         <GridView>
-                                            <GridViewColumn Header="Time" DisplayMemberBinding="{Binding Path=Time}"/>
-                                            <GridViewColumn Header="No" DisplayMemberBinding="{Binding Path=No}"/>
-                                            <GridViewColumn Header="{Binding Path=ACHeatingTableHeader.T1}" DisplayMemberBinding="{Binding Path=T1, Converter={StaticResource CelsiusConverter}}"/>
-                                            <GridViewColumn Header="{Binding Path=ACHeatingTableHeader.T2}" DisplayMemberBinding="{Binding Path=T2, Converter={StaticResource CelsiusConverter}}"/>
-                                            <GridViewColumn Header="{Binding Path=ACHeatingTableHeader.T3}" DisplayMemberBinding="{Binding Path=T3, Converter={StaticResource CelsiusConverter}}"/>
-                                            <GridViewColumn Header="{Binding Path=ACHeatingTableHeader.T4}" DisplayMemberBinding="{Binding Path=T4, Converter={StaticResource CelsiusConverter}}"/>
-                                            <GridViewColumn Header="T Amb" DisplayMemberBinding="{Binding Path=TAmb, Converter={StaticResource CelsiusConverter}}"/>
-                                            <GridViewColumn Header="T Oil" DisplayMemberBinding="{Binding Path=TOil, Converter={StaticResource CelsiusConverter}}"/>
-                                            <GridViewColumn Header="T Rise" DisplayMemberBinding="{Binding Path=TempRise, Converter={StaticResource CelsiusConverter}}"/>                                           
+                                            <GridViewColumn Header="Time" DisplayMemberBinding="{Binding Path=Time}" Width="180" />
+                                            <GridViewColumn Header="No" DisplayMemberBinding="{Binding Path=No}" Width="80"/>
+                                            <GridViewColumn Header="{Binding Path=ACHeatingTableHeader.T1}" DisplayMemberBinding="{Binding Path=T1, Converter={StaticResource CelsiusConverter}}" Width="100"/>
+                                            <GridViewColumn Header="{Binding Path=ACHeatingTableHeader.T2}" DisplayMemberBinding="{Binding Path=T2, Converter={StaticResource CelsiusConverter}}" Width="100"/>
+                                            <GridViewColumn Header="{Binding Path=ACHeatingTableHeader.T3}" DisplayMemberBinding="{Binding Path=T3, Converter={StaticResource CelsiusConverter}}" Width="100"/>
+                                            <GridViewColumn Header="{Binding Path=ACHeatingTableHeader.T4}" DisplayMemberBinding="{Binding Path=T4, Converter={StaticResource CelsiusConverter}}" Width="100"/>
+                                            <GridViewColumn Header="T Amb" DisplayMemberBinding="{Binding Path=TAmb, Converter={StaticResource CelsiusConverter}}" Width="130"/>
+                                            <GridViewColumn Header="T Oil" DisplayMemberBinding="{Binding Path=TOil, Converter={StaticResource CelsiusConverter}}" Width="130"/>
+                                            <GridViewColumn Header="T Rise" DisplayMemberBinding="{Binding Path=TempRise, Converter={StaticResource CelsiusConverter}}" Width="130"/>                                           
                                         </GridView>
                                     </ListView.View>
                                 </ListView>
@@ -424,12 +427,12 @@
                                 <ListView Margin="450.135,150,40.905,0" Name="DCCoolTable" Height="223" VerticalAlignment="Top">
                                     <ListView.View>
                                         <GridView>
-                                            <GridViewColumn Header="Time" DisplayMemberBinding="{Binding Path=Time, Converter={StaticResource SecondConverter1}}"/>
+                                            <GridViewColumn Header="Time" DisplayMemberBinding="{Binding Path=Time, Converter={StaticResource SecondConverter1}}"  Width="150" />
                                             <GridViewColumn Header="No" DisplayMemberBinding="{Binding Path=No}"/>
-                                            <GridViewColumn Header="R1" DisplayMemberBinding="{Binding Path=R1, Converter={StaticResource OhmConvertor}}"/>
-                                            <GridViewColumn Header="R1DIFF%" DisplayMemberBinding="{Binding Path=R1Diff, Converter={StaticResource PercConverter}}"/>
-                                            <GridViewColumn Header="R2" DisplayMemberBinding="{Binding Path=R2, Converter={StaticResource OhmConvertor}}"/>
-                                            <GridViewColumn Header="R2DIFF%" DisplayMemberBinding="{Binding Path=R2Diff, Converter={StaticResource PercConverter}}"/>
+                                            <GridViewColumn Header="R1" DisplayMemberBinding="{Binding Path=R1, Converter={StaticResource OhmConvertor}}" Width="120"/>
+                                            <GridViewColumn Header="R1DIFF%" DisplayMemberBinding="{Binding Path=R1Diff, Converter={StaticResource PercConverter}}" Width="120"/>
+                                            <GridViewColumn Header="R2" DisplayMemberBinding="{Binding Path=R2, Converter={StaticResource OhmConvertor}}" Width="120"/>
+                                            <GridViewColumn Header="R2DIFF%" DisplayMemberBinding="{Binding Path=R2Diff, Converter={StaticResource PercConverter}}" Width="120"/>
                                         </GridView>
                                     </ListView.View>
                                 </ListView>

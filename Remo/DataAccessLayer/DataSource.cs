@@ -84,6 +84,8 @@ namespace DataAccessLayer
 
                 DCColdTemperatureTableHeader = evalDCColdTemperatureTableHeader();
 
+                if(ACHeatingTableHeader==null)ACHeatingTableHeader = evalACHeatingTableHeader();
+
             }
             /// <summary>
             /// Во AcHotMeasurenments Ако се смени некој прочитан податок, одново да се пресметаат вредностите на полињата што се добиваат преку некако функција.
@@ -93,7 +95,6 @@ namespace DataAccessLayer
             public void AcHotMeasurenments_TempMeasurenementConfiguration_PropertyChanged(object sender, PropertyChangedEventArgs e)
             {
                 ACHeatingTableHeader = evalACHeatingTableHeader();
-
                 //MinutesSampleRate = evalMinutesSampleRate();
                 //SecondesSampleRate = evalSecondesSampleRate();
                 //Todo: Najverojatno ova treba da se trgne.
@@ -167,4 +168,5 @@ namespace DataAccessLayer
             }
 
     }
+    
 }

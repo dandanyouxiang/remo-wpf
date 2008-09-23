@@ -344,8 +344,52 @@ namespace PresentationLayer
 
             ((FrameworkElement)e.OriginalSource).GetBindingExpression(TextBox.TextProperty).UpdateTarget();
         }
-       
+        
 
         
     }
+    /// <summary>
+    /// Поставуванје на стил за табелатата во ACHeating табот
+    /// </summary>
+    public class ListViewItemStyleSelector : StyleSelector
+    {
+        public int reducedIndex{get;set;}
+
+        
+
+        public override Style SelectStyle(object item, DependencyObject container)
+        {
+            Style st = new Style();
+            try
+            {
+                st.TargetType = typeof(ListViewItem);
+                Setter backGroundSetter = new Setter();
+                backGroundSetter.Property = ListViewItem.BackgroundProperty;
+                ListView listView =
+                    ItemsControl.ItemsControlFromItemContainer(container)
+                      as ListView;
+
+                int index =
+                    listView.ItemContainerGenerator.IndexFromContainer(container);
+
+                DataSource datasource = new DataSource(@"E:\root.xml");
+                reducedIndex = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.FindIndex(Utils.isReduced);
+
+                if (index == reducedIndex)
+                {
+                    backGroundSetter.Value = Brushes.LightBlue;
+                }
+                else
+                {
+                    backGroundSetter.Value = Brushes.White;
+                }
+                st.Setters.Add(backGroundSetter);
+            }
+            catch (Exception ex) 
+            {
+                return null;
+            }
+            return st;
+        }
+    } 
 }

@@ -2,20 +2,9 @@
 <ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
   <Class Name="EntityLayer.DcColdMeasurenments">
     <Position X="10.75" Y="3.75" Width="3.25" />
-    <AssociationLine Name="TempMeasurenementConfiguration" Type="EntityLayer.TempMeasurenementConfiguration" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="13.438" Y="4.731" />
-        <Point X="13.438" Y="5.755" />
-        <Point X="15.625" Y="5.755" />
-        <Point X="15.625" Y="6.25" />
-      </Path>
-      <MemberNameLabel ManuallyPlaced="true">
-        <Position X="0.099" Y="0.637" />
-      </MemberNameLabel>
-    </AssociationLine>
     <AssociationLine Name="RessistanceTransformerChannels" Type="EntityLayer.RessistanceTransformerChannel" FixedToPoint="true">
       <Path>
-        <Point X="12.106" Y="4.731" />
+        <Point X="12.106" Y="5.113" />
         <Point X="12.106" Y="6.25" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
@@ -26,27 +15,16 @@
       <HashCode>AAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAA=</HashCode>
       <FileName>EntityLayer\Entities.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="TempMeasurenementConfiguration" />
-    </ShowAsAssociation>
     <ShowAsCollectionAssociation>
       <Property Name="RessistanceTransformerChannels" />
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="EntityLayer.AcHotMeasurenments">
     <Position X="15.5" Y="3.75" Width="3.25" />
-    <AssociationLine Name="TempMeasurenementConfiguration" Type="EntityLayer.TempMeasurenementConfiguration">
-      <MemberNameLabel ManuallyPlaced="true">
-        <Position X="-2.232" Y="0.377" />
-      </MemberNameLabel>
-    </AssociationLine>
     <TypeIdentifier>
       <HashCode>AAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>EntityLayer\Entities.cs</FileName>
     </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="TempMeasurenementConfiguration" />
-    </ShowAsAssociation>
   </Class>
   <Class Name="EntityLayer.DcCoolingMeasurenments">
     <Position X="7.75" Y="3.75" Width="2.75" />
@@ -56,7 +34,7 @@
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAA=</HashCode>
+      <HashCode>AAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAA=</HashCode>
       <FileName>EntityLayer\Entities.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
@@ -93,17 +71,6 @@
     </Compartments>
     <TypeIdentifier>
       <HashCode>IAAAAAAAAAAgAAAAoACAACAAgAgAAAAAAAAABAAAAQA=</HashCode>
-      <FileName>EntityLayer\Entities.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="EntityLayer.TempMeasurenment">
-    <Position X="14" Y="11" Width="2.5" />
-    <Compartments>
-      <Compartment Name="Fields" Collapsed="true" />
-    </Compartments>
-    <TypeIdentifier>
-      <HashCode>AAAAgAAAAAAgAAAAIAAAEAAAggAACAAABAAABAAAAQA=</HashCode>
       <FileName>EntityLayer\Entities.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -191,29 +158,6 @@
       <HashCode>EAAAACAEMAAABgAAIACABAAJgAAAAAACAFEACAEgAYA=</HashCode>
       <FileName>EntityLayer\Entities.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="EntityLayer.TempMeasurenementConfiguration">
-    <Position X="13.75" Y="6.25" Width="3.25" />
-    <Compartments>
-      <Compartment Name="Fields" Collapsed="true" />
-    </Compartments>
-    <AssociationLine Name="TempMeasurenments" Type="EntityLayer.TempMeasurenment" FixedToPoint="true">
-      <Path>
-        <Point X="15.875" Y="10.02" />
-        <Point X="15.875" Y="11" />
-      </Path>
-      <MemberNameLabel ManuallyPlaced="true">
-        <Position X="-4.007" Y="0.343" />
-      </MemberNameLabel>
-    </AssociationLine>
-    <TypeIdentifier>
-      <HashCode>ABACBIAAAAAQAAgBIAQIAQAAgAQglgAgAAAAACAIBAg=</HashCode>
-      <FileName>EntityLayer\Entities.cs</FileName>
-    </TypeIdentifier>
-    <ShowAsCollectionAssociation>
-      <Property Name="TempMeasurenments" />
-    </ShowAsCollectionAssociation>
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="EntityLayer.RessistanceCalibration">
@@ -310,6 +254,40 @@
     <ShowAsAssociation>
       <Field Name="tempCalibrationService" />
     </ShowAsAssociation>
+  </Class>
+  <Class Name="EntityLayer.TempMeasurenementConfiguration">
+    <Position X="13.75" Y="6.25" Width="3.25" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <AssociationLine Name="TempMeasurenments" Type="EntityLayer.TempMeasurenment" FixedToPoint="true">
+      <Path>
+        <Point X="15.875" Y="10.02" />
+        <Point X="15.875" Y="11" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-4.007" Y="0.343" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>ABACBIAAAAAQAAgBIAQIAQAAgAQglgAgAAAAACAIBAg=</HashCode>
+      <FileName>EntityLayer\Entities.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="TempMeasurenments" />
+    </ShowAsCollectionAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="EntityLayer.TempMeasurenment">
+    <Position X="14" Y="11" Width="2.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>CAAAgAAAAAAgAAAAIAAAEAAAggAACAAABAAABAAAAQA=</HashCode>
+      <FileName>EntityLayer\Entities.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Font Name="Tahoma" Size="8.25" />
 </ClassDiagram>

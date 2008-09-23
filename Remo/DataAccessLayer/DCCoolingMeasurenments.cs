@@ -112,7 +112,14 @@ namespace DataAccessLayer
             }
             private double evalKDropInOil() 
             {
-                return -1;
+                EntityLayer.TempMeasurenementConfiguration tempch = Root.DcColdMeasurenments.TempMeasurenementConfiguration;
+                EntityLayer.TempMeasurenment reducedTempMeasurenment=Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Find(Utils.isReduced);
+                EntityLayer.TempMeasurenment lastTempMeasurenment = Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last<EntityLayer.TempMeasurenment>();
+
+                double meanReducedTemp = (((tempch.IsChannel1Oil && tempch.IsChannel1On) ? reducedTempMeasurenment.T1 : 0) + ((tempch.IsChannel2Oil && tempch.IsChannel2On) ? reducedTempMeasurenment.T2 : 0) + ((tempch.IsChannel3Oil && tempch.IsChannel3On) ? reducedTempMeasurenment.T3 : 0) + ((tempch.IsChannel4Oil && tempch.IsChannel4On) ? reducedTempMeasurenment.T4 : 0)) / (((tempch.IsChannel1Oil && tempch.IsChannel1On) ? 1 : 0) + ((tempch.IsChannel2Oil && tempch.IsChannel2On) ? 1 : 0) + ((tempch.IsChannel3Oil && tempch.IsChannel3On) ? 1 : 0) + ((tempch.IsChannel4Oil && tempch.IsChannel4On) ? 1 : 0));
+                double lastReducedTemp = (((tempch.IsChannel1Oil && tempch.IsChannel1On) ? lastTempMeasurenment.T1 : 0) + ((tempch.IsChannel2Oil && tempch.IsChannel2On) ? lastTempMeasurenment.T2 : 0) + ((tempch.IsChannel3Oil && tempch.IsChannel3On) ? lastTempMeasurenment.T3 : 0) + ((tempch.IsChannel4Oil && tempch.IsChannel4On) ? lastTempMeasurenment.T4 : 0)) / (((tempch.IsChannel1Oil && tempch.IsChannel1On) ? 1 : 0) + ((tempch.IsChannel2Oil && tempch.IsChannel2On) ? 1 : 0) + ((tempch.IsChannel3Oil && tempch.IsChannel3On) ? 1 : 0) + ((tempch.IsChannel4Oil && tempch.IsChannel4On) ? 1 : 0));
+                
+                return meanReducedTemp-lastReducedTemp;
             }
             private double evalEndAcTemp() 
             {
