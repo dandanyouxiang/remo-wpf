@@ -4,7 +4,7 @@
             xmlns:data="clr-namespace:DataAccessLayer"
             xmlns:s="clr-namespace:System;assembly=mscorlib"
             xmlns:mwt="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Luna"
-            StartupUri="PresentationLayer\Window1.xaml">
+            StartupUri="PresentationLayer\TransformatorProperties.xaml">
   
     <Application.Resources>
         <DataTemplate x:Key="BlueHeader">
@@ -27,6 +27,8 @@
         </Style>
         <Style TargetType="TextBox" BasedOn="{StaticResource GeneralStyle}">
         </Style>
+        <Style TargetType="ComboBox" BasedOn="{StaticResource GeneralStyle}">
+        </Style>
         <Style TargetType="Label" BasedOn="{StaticResource GeneralStyle}">
         </Style>
         <Style TargetType="ListView" BasedOn="{StaticResource GeneralStyle}">
@@ -38,6 +40,7 @@
         <data:PrePostFixConverter x:Key="SecondConvertor" Postfix="sec"  ConversionType="_int"/>
         <data:PrePostFixConverter x:Key="SecondConverter1" Postfix="s"  ConversionType="_int"/>
         <data:PrePostFixConverter x:Key="MinuteConvertor" Postfix="min" ConversionType="_int"/>
+        <data:PrePostFixConverter x:Key="IntegerConvertor" ConversionType="_int"/>
         <data:PrePostFixConverter x:Key="PrePostFixConvertor"/>
         <data:RegexValidator x:Key="CelsiusValidator" RegularExpression="^\s*[0-5]?\d\s*[C|c]?\s*$"/>
 
