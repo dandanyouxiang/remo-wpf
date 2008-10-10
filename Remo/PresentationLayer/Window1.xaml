@@ -321,7 +321,7 @@
             </TabItem>
             <TabItem Header="DC Cooling Measurenment">
                 <Grid>
-                    <TabControl Name="CoolingTabs" SelectedIndex="0">
+                    <TabControl Name="CoolingTabs" SelectedIndex="1">
                         <TabItem Name="SetingsCoolingTab" Header="Settings">
                             <Grid>
                                 <GroupBox Header="Channel" Height="198.631" HorizontalAlignment="Left" Margin="84.537,61.812,0,0" Name="ChannelGroupBOx" VerticalAlignment="Top" Width="182.709">

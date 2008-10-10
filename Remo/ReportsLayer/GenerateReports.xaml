@@ -1,0 +1,23 @@
+﻿<Window x:Class="ReportsLayer.GenerateReports"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="GenerateReports" Height="800" Width="800" >
+    <Grid Name="MainGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="6*"></RowDefinition>
+        </Grid.RowDefinitions >
+        <Grid Name="ControlGrid" Grid.Row="0" Background="LightGray">
+            <Label Name="typeDocumentLabel">Type of report:</Label>
+            <RadioButton Margin="25,35,5,5" Name="DCCold" VerticalAlignment="Top" GroupName="DocumentTypeButtons" IsChecked="True" Checked="DCCold_Checked">DCCold</RadioButton>
+            <RadioButton Margin="25,60,5,5" Name="ACHot"  VerticalAlignment="Top" GroupName="DocumentTypeButtons" Checked="DCCold_Checked">ACHot</RadioButton>
+            <RadioButton Margin="25,85,5,5" Name="DCCooling" VerticalAlignment="Top"  GroupName="DocumentTypeButtons" Checked="DCCold_Checked">DCCooling</RadioButton>
+            <Button HorizontalAlignment="Left" Margin="194,20.964,0,0" Name="button1" Width="75" VerticalAlignment="Top" Height="27.313" Click="button1_Click">Print</Button>
+        </Grid>
+        <FlowDocumentScrollViewer Name="flowDocumentScrollViewer"  Grid.Row="1">
+            <FlowDocument Name="flowExample">
+                <Paragraph>Hello, world of documents.</Paragraph>
+            </FlowDocument>
+        </FlowDocumentScrollViewer>
+    </Grid>
+</Window>

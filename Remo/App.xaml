@@ -4,7 +4,8 @@
             xmlns:data="clr-namespace:DataAccessLayer"
             xmlns:s="clr-namespace:System;assembly=mscorlib"
             xmlns:mwt="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Luna"
-            StartupUri="PresentationLayer\TransformatorProperties.xaml">
+            StartupUri="ReportsLayer\GenerateReports.xaml">
+            <!--StartupUri="PresentationLayer\Window1.xaml">-->
   
     <Application.Resources>
         <DataTemplate x:Key="BlueHeader">

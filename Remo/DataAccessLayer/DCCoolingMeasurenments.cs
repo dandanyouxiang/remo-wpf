@@ -125,6 +125,14 @@ namespace DataAccessLayer
             {
                 return -1;
             }
+            public double evalR1ColdAtDcCool() 
+            {
+                return -1;
+            }
+            public double evalR2ColdAtDcCool()
+            {
+                return -1;
+            }
             #endregion
         #endregion
         #region Results

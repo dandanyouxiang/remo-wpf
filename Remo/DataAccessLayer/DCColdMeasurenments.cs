@@ -7,6 +7,13 @@ using System.ComponentModel;
 
 namespace DataAccessLayer
 {
+    public enum TempChannelType 
+    {
+        A_C,
+        B_C,
+        C_A
+    }
+
     public class TableTempHeader 
     {
         public string Date{get;set;}
@@ -776,7 +783,6 @@ namespace DataAccessLayer
             double value = R1Cold * (StdTemp + r1TempCoeff) / (TCold + r1TempCoeff);
             return value == 0 ? double.NaN : value;
         }
-
         /// <summary>
         /// Пресметка на R2AtStdTemp
         /// </summary>
@@ -853,12 +859,11 @@ namespace DataAccessLayer
             else
                 return sum / n;
         }
-
         private double evalTCold() 
         {
             return OilDCColdTempTable;
         }
-
+        
         ////////////////////////////
 
 
