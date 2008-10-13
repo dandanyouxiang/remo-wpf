@@ -368,7 +368,7 @@ namespace PresentationLayer
                 ListView listView =
                     ItemsControl.ItemsControlFromItemContainer(container)
                       as ListView;
-
+               
                 int index =
                     listView.ItemContainerGenerator.IndexFromContainer(container);
 
