@@ -20,6 +20,7 @@ namespace ReportsLayer
     {
         private FlowDocumentReport flowDocumentReport;
         private DataAccessLayer.DataSource dataSource;
+        private FlowDocumentReportType flowDocumentReportType = FlowDocumentReportType.DcColdMeasurenments;
 
         public GenerateReports()
         {
@@ -27,18 +28,18 @@ namespace ReportsLayer
             dataSource = new DataAccessLayer.DataSource(@"E:\root.xml");
 
             dataSource.Root.TransformerProperties = new EntityLayer.TransformerProperties("12345", "6789", "Gjore", "Nesto", EntityLayer.TransformerProperties.ConnectionType.D, EntityLayer.TransformerProperties.ConnectionType.Y, EntityLayer.TransformerProperties.Material.Aluminium, EntityLayer.TransformerProperties.Material.Aluminium, 20, 20);
-            
-            flowDocumentReport = new FlowDocumentReport(dataSource);
+
+            flowDocumentReport = FlowDocumentReport.Instance;
 
             //flowExample = flowDocumentReport.createDocument(FlowDocumentReportType.AcHotMeasurenments);
-            flowExample = flowDocumentReport.createDocument(FlowDocumentReportType.DcColdMeasurenments);
-            flowDocumentScrollViewer.Document = flowDocumentReport.createDocument(FlowDocumentReportType.DcColdMeasurenments);
+            //flowExample = flowDocumentReport.createDocument(FlowDocumentReportType.DcColdMeasurenments);
+            flowDocumentScrollViewer.Document = flowDocumentReport.returnDocument(FlowDocumentReportType.DcColdMeasurenments);
         }
 
         private void DCCold_Checked(object sender, RoutedEventArgs e)
         {
             //this.FontFamily = new FontFamily("Courier New");
-            FlowDocumentReportType flowDocumentReportType = FlowDocumentReportType.DcColdMeasurenments;
+            flowDocumentReportType = FlowDocumentReportType.DcColdMeasurenments;
 
             switch (((RadioButton)sender).Name) 
             {
@@ -47,15 +48,16 @@ namespace ReportsLayer
                 case "DCCooling": flowDocumentReportType = FlowDocumentReportType.DcCoolingMeasurenments; break;
             }
             if(flowDocumentScrollViewer!=null)
-            flowDocumentScrollViewer.Document = flowDocumentReport.createDocument(flowDocumentReportType);
+            flowDocumentScrollViewer.Document = flowDocumentReport.returnDocument(flowDocumentReportType);
         }
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
+            FlowDocument doc=new FlowDocument();
             PrintDialog printDialog = new PrintDialog();
             if (printDialog.ShowDialog() == true)
             {
-                FlowDocument doc = flowDocumentScrollViewer.Document;
+                doc = flowDocumentReport.returnDocument(flowDocumentReportType);
                 // Save all the existing settings.
                 double pageHeight = doc.PageHeight;
                 double pageWidth = doc.PageWidth;
@@ -70,7 +72,12 @@ namespace ReportsLayer
                 printDialog.PrintDocument(
                 ((IDocumentPaginatorSource)doc).DocumentPaginator,
                 "A Flow Document");
+                
             }
+            /*
+            if (flowDocumentScrollViewer != null)
+                flowDocumentScrollViewer.Document = flowDocumentReport.returnDocument(flowDocumentReportType);
+             */
         }
     }
 }
