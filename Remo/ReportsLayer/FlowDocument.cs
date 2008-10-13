@@ -30,6 +30,11 @@ namespace ReportsLayer
         private FlowDocument flowDocument;
         private DataSource dataSource;
 
+
+        static private FlowDocument DcColdMeasurenmentsDocument;
+        static private FlowDocument AcHotMeasurenmentsDocument;
+        static private FlowDocument DcCoolingMeasurenmentsDocument;
+        /*
         public FlowDocumentReport() 
         {
             flowDocument = new FlowDocument(); 
@@ -42,6 +47,50 @@ namespace ReportsLayer
             this.dataSource = dataSource;
             flowDocument.DataContext = dataSource;
         }
+        */
+        FlowDocumentReport()
+        {
+            dataSource = new DataAccessLayer.DataSource(@"E:\root.xml");
+            //todo da se trgne
+            dataSource.Root.TransformerProperties = new EntityLayer.TransformerProperties("12345", "6789", "Gjore", "Nesto", EntityLayer.TransformerProperties.ConnectionType.D, EntityLayer.TransformerProperties.ConnectionType.Y, EntityLayer.TransformerProperties.Material.Aluminium, EntityLayer.TransformerProperties.Material.Aluminium, 20, 20);
+
+            DcColdMeasurenmentsDocument = new FlowDocument();
+            AcHotMeasurenmentsDocument = new FlowDocument();
+            DcCoolingMeasurenmentsDocument = new FlowDocument();
+
+            makeDcColdMeasurenmentsDocument(DcColdMeasurenmentsDocument);
+            makeAcHotMeasurenmentsDocument(AcHotMeasurenmentsDocument);
+            makeDcCoolingMeasurenmentsDocument(DcCoolingMeasurenmentsDocument);
+
+            DcColdMeasurenmentsDocument.FontFamily = new FontFamily("Courier New");
+            AcHotMeasurenmentsDocument.FontFamily = new FontFamily("Courier New");
+            DcCoolingMeasurenmentsDocument.FontFamily = new FontFamily("Courier New");
+
+            DcColdMeasurenmentsDocument.DataContext = dataSource;
+            AcHotMeasurenmentsDocument.DataContext = dataSource;
+            DcCoolingMeasurenmentsDocument.DataContext = dataSource;
+        }
+        static FlowDocumentReport() { }
+
+        // private object
+        static readonly FlowDocumentReport uniqueInstance = new FlowDocumentReport();
+
+        public static FlowDocumentReport Instance
+        {
+            get { return uniqueInstance; }
+        }
+        //static documents return tree subtype of flow document.
+        public FlowDocument returnDocument(FlowDocumentReportType flowDocumentReportType)
+        {
+            switch (flowDocumentReportType)
+            {
+                case FlowDocumentReportType.DcColdMeasurenments: return DcColdMeasurenmentsDocument;
+                case FlowDocumentReportType.AcHotMeasurenments: return AcHotMeasurenmentsDocument;
+                case FlowDocumentReportType.DcCoolingMeasurenments: return DcCoolingMeasurenmentsDocument;
+                default: return flowDocument;
+            }
+        }
+
 
         /// <summary>
         /// Информации кои се прикажуваат на почетокот за секој од репортите.
@@ -91,6 +140,51 @@ namespace ReportsLayer
             flowDocument.Blocks.Last().Margin =new Thickness(150,0,0,50);
            
         }
+        private void insertHeader(FlowDocument flowDocument)
+        {
+            Table tempTable = new Table();
+            tempTable.RowGroups.Add(new TableRowGroup());
+            tempTable.RowGroups[0].Rows.Add(new TableRow());
+            tempTable.Columns.Add(new TableColumn());
+            tempTable.Columns.Add(new TableColumn());
+            tempTable.Columns[0].Width = new GridLength(250);
+            tempTable.FontWeight = FontWeights.Bold;
+
+            tempTable.RowGroups[0].Rows.Add(new TableRow());
+            TableRow tempRow = tempTable.RowGroups[0].Rows.Last<TableRow>();
+
+            //Време на мерењето
+            tempRow.Cells.Add(new TableCell(new Paragraph(new Run(("Transformator Series:")))));
+            //Реден број
+            tempRow.Cells.Add(new TableCell(new Paragraph(new Run(dataSource.Root.TransformerProperties.TransformatorSeries.ToString()))));
+
+            tempTable.RowGroups[0].Rows.Add(new TableRow());
+            tempRow = tempTable.RowGroups[0].Rows.Last<TableRow>();
+
+            tempRow.Cells.Add(new TableCell(new Paragraph(new Run("Transformator Serial No:"))));
+            //Реден број
+            tempRow.Cells.Add(new TableCell(new Paragraph(new Run(dataSource.Root.TransformerProperties.TransformatorSerialNo.ToString()))));
+
+            tempTable.RowGroups[0].Rows.Add(new TableRow());
+            tempRow = tempTable.RowGroups[0].Rows.Last<TableRow>();
+
+            tempRow.Cells.Add(new TableCell(new Paragraph(new Run("Present at Test:"))));
+            //Реден број
+            tempRow.Cells.Add(new TableCell(new Paragraph(new Run(dataSource.Root.TransformerProperties.PresentAtTest.ToString()))));
+
+            tempTable.RowGroups[0].Rows.Add(new TableRow());
+            tempRow = tempTable.RowGroups[0].Rows.Last<TableRow>();
+
+            tempRow.Cells.Add(new TableCell(new Paragraph(new Run("Date:"))));
+            //Реден број
+            tempRow.Cells.Add(new TableCell(new Paragraph(new Run(DateTime.Now.Date.ToShortDateString()))));
+
+
+
+            flowDocument.Blocks.Add(tempTable);
+            flowDocument.Blocks.Last().Margin = new Thickness(150, 0, 0, 50);
+
+        }
         /// <summary>
         /// Креирање на извештајот во зависност од типот кој го избрал корисникот. 
         /// </summary>
@@ -111,6 +205,7 @@ namespace ReportsLayer
         /// </summary>
         private void insertSignature() 
         {
+           /*
             Paragraph signatureParagraph = new Paragraph();
             Floater signatureFloater = new Floater();
             signatureFloater.HorizontalAlignment = HorizontalAlignment.Right;
@@ -122,6 +217,26 @@ namespace ReportsLayer
             signatureParagraph.Inlines.Add(signatureFloater);
             flowDocument.Blocks.Add(signatureParagraph);
             flowDocument.Blocks.Last<Block>().Margin = new Thickness(0, 50, 0, 10);
+            */
+
+            Paragraph signatureParagraph = new Paragraph();
+            signatureParagraph.Inlines.Add(new Run("Signature:\n"));
+            signatureParagraph.Inlines.Add(new Run("\n"));
+            signatureParagraph.Inlines.Add(new Run("_______________________\n"));
+            flowDocument.Blocks.Add(signatureParagraph);
+            flowDocument.Blocks.Last<Block>().Margin = new Thickness(400, 100, 0, 10);
+            
+        }
+
+        private void insertSignature(FlowDocument flowDocument)
+        {
+            Paragraph signatureParagraph = new Paragraph();
+            signatureParagraph.Inlines.Add(new Run("Signature:\n"));
+            signatureParagraph.Inlines.Add(new Run("\n"));
+            signatureParagraph.Inlines.Add(new Run("_______________________\n"));
+            flowDocument.Blocks.Add(signatureParagraph);
+            flowDocument.Blocks.Last<Block>().Margin = new Thickness(400, 100, 0, 10);
+
         }
 
         private void insertTitle(FlowDocumentReportType flowDocumentReportType) 
@@ -132,6 +247,16 @@ namespace ReportsLayer
             
             flowDocument.Blocks.Add(titleParagraph);
             Block titleBlock=flowDocument.Blocks.Last<Block>();
+            formatTitle(ref titleBlock);
+        }
+        private void insertTitle(FlowDocumentReportType flowDocumentReportType,FlowDocument flowDocument)
+        {
+            Paragraph titleParagraph = new Paragraph();
+            titleParagraph.Inlines.Add(new Run("REMO 60/50 Low Resistance Measuring System\n"));
+            titleParagraph.Inlines.Add(new Run(flowDocumentReportType.ToString() + "\n"));
+
+            flowDocument.Blocks.Add(titleParagraph);
+            Block titleBlock = flowDocument.Blocks.Last<Block>();
             formatTitle(ref titleBlock);
         }
         private void formatTitle(ref Block titleBlock) 
@@ -157,7 +282,17 @@ namespace ReportsLayer
 
             flowDocument.Blocks.Add(AcHotMeasurenmentsHeaderParagraph);
         }
+        private void insertAcHotMeasurenmentsHeader(FlowDocument flowDocument)
+        {
+            Paragraph AcHotMeasurenmentsHeaderParagraph = new Paragraph();
 
+            //Total Samples
+            AcHotMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Total Samples: " + dataSource.SamplesDone + "\n"));
+            //Sample Rate:
+            AcHotMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Sample Rate: " + dataSource.MinutesSampleRate + " min " + dataSource.SecondesSampleRate + " sec\n"));
+
+            flowDocument.Blocks.Add(AcHotMeasurenmentsHeaderParagraph);
+        }
         /// <summary>
         /// Внесување на табелата со температурните мерења.
         /// </summary>
@@ -180,6 +315,37 @@ namespace ReportsLayer
 
             flowDocument.Blocks.Add(tempTable);
         }
+        private void insertAcHotMeasurenments_TempMeasurenments(FlowDocument flowDocument)
+        {
+            List<TempMeasurenment> tempMeasurenments = dataSource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments;
+            TempMeasurenementConfiguration tc = dataSource.Root.AcHotMeasurenments.TempMeasurenementConfiguration;
+            Table tempTable = new Table();
+            tempTable.RowGroups.Add(new TableRowGroup());
+            tempTable.RowGroups[0].Rows.Add(new TableRow());
+
+
+            tempTable.Columns.Add(new TableColumn());
+            tempTable.Columns.Add(new TableColumn());
+            tempTable.Columns.Add(new TableColumn());
+            tempTable.Columns.Add(new TableColumn());
+            tempTable.Columns.Add(new TableColumn());
+            tempTable.Columns.Add(new TableColumn());
+            tempTable.Columns.Add(new TableColumn());
+            tempTable.Columns.Add(new TableColumn());
+
+
+            tempTable.BorderBrush = System.Windows.Media.Brushes.Black;
+            tempTable.BorderThickness = new Thickness(2);
+
+            //Поставување на хедерот
+            insertTempMeasurenementConfiguration_TempMeasurenments_Header(tc, tempTable);
+
+            //Приказ на сите мерења
+            insertTempMeasurenementConfiguration_TempMeasurenments_TableCell(tc, tempMeasurenments, tempTable);
+            tempTable.Columns[0].Width =new GridLength(30);
+
+            flowDocument.Blocks.Add(tempTable);
+        }
 
         /// <summary>
         /// Поставување на хедерот на табелата за температурните мерења за AcHotMeasurenments.
@@ -194,10 +360,13 @@ namespace ReportsLayer
 
             //Поставување на стилот на фондот на хедерот на тбаелата
             headerRow.FontStyle = FontStyles.Oblique;
-            //Кога е извршено мерењето
-            headerRow.Cells.Add(new TableCell(new Paragraph(new Run("Time"))));
+            
             //Реден број
             headerRow.Cells.Add(new TableCell(new Paragraph(new Run("No."))));
+            headerRow.Cells.Last().TextAlignment = TextAlignment.Center;
+            //Кога е извршено мерењето
+            headerRow.Cells.Add(new TableCell(new Paragraph(new Run("Time"))));
+            headerRow.Cells.Last().TextAlignment = TextAlignment.Center;
             //Т1
             headerRow.Cells.Add(new TableCell(new Paragraph(new Run("T1" + ((tc.IsChannel1Oil) ? "(Oil)" : "(Amb)")))));
             //Т2
@@ -211,7 +380,8 @@ namespace ReportsLayer
             //TOil
             headerRow.Cells.Add(new TableCell(new Paragraph(new Run("T Oil"))));
             //Разлика во температурите во воздух и во масло.
-            headerRow.Cells.Add(new TableCell(new Paragraph(new Run("Temp Rise"))));
+            headerRow.Cells.Add(new TableCell(new Paragraph(new Run("T. Rise"))));
+
         }
 
         /// <summary>
@@ -228,10 +398,10 @@ namespace ReportsLayer
                 tempTable.RowGroups[0].Rows.Add(new TableRow());
                 TableRow tempRow = tempTable.RowGroups[0].Rows.Last<TableRow>();
 
-                //Време на мерењето
-                tempRow.Cells.Add(new TableCell(new Paragraph(new Run(tm.Time.ToString("dd:mm:yyyy hh:mm:ss")))));
                 //Реден број
                 tempRow.Cells.Add(new TableCell(new Paragraph(new Run(tempMeasurenments.IndexOf(tm).ToString()))));
+                //Време на мерењето
+                tempRow.Cells.Add(new TableCell(new Paragraph(new Run(tm.Time.ToString("hh:mm:ss")))));
 
                 if (!tm.IsSampleReduced)
                 {
@@ -272,6 +442,20 @@ namespace ReportsLayer
             meanTempFieldsParagraph.Inlines.Add(new Run("K drop in Oil: " + dataSource.KDropInOil+"\n"));
             flowDocument.Blocks.Add(meanTempFieldsParagraph);
         }
+        private void insertMeanTempFields(FlowDocument flowDocument)
+        {
+            Paragraph meanTempFieldsParagraph = new Paragraph();
+
+            meanTempFieldsParagraph.Inlines.Add(new Run("End Amb Temp: " + dataSource.EndAcTemp.ToString() + "\n"));
+            meanTempFieldsParagraph.Inlines.Add(new Run("Avg Oil Temp (AOT): neznam sto treba\n"));
+            meanTempFieldsParagraph.Inlines.Add(new Run("K drop in Oil: " + dataSource.KDropInOil + "\n"));
+            flowDocument.Blocks.Add(meanTempFieldsParagraph);
+        }
+
+        private void insertBlanckBlock() 
+        {
+            flowDocument.Blocks.Add(new Paragraph(new Run("")));
+        }
 
         private void insertGraph() 
         {
@@ -299,6 +483,7 @@ namespace ReportsLayer
             acGraphRefresh(ref ACHotGraph, ref seriesOilTemp, ref seriesAmbTemp, ref seriesTempRise);
 
             stackPanel.Width = 900;
+            //stackPanel.Height = 500;
             stackPanel.Children.Add(ACHotGraph);
 
 
@@ -319,9 +504,47 @@ namespace ReportsLayer
             
         
         }
+        private void insertGraph(FlowDocument flowDocument)
+        {
+            Paragraph graphParagraph = new Paragraph();
 
+            InlineUIContainer myInlineUIContainer = new InlineUIContainer();
+
+            // Set the BaselineAlignment property to "Bottom" so that the 
+            // Button aligns properly with the text.
+
+            StackPanel stackPanel = new StackPanel();
+
+            // Asign the button as the UI container's child.
+            WPFScatterGraph ACHotGraph = new WPFScatterGraph() {XAxisTitle = "R Err",
+            MinYRange = -0.001,
+            MaxYRange = 0.001,FontSize=5,
+            YAxisTitle = "R Meas",AxisFontSize=12 };
+            WPFGraphSeries seriesOilTemp = new WPFGraphSeries();
+            WPFGraphSeries seriesAmbTemp = new WPFGraphSeries();
+            WPFGraphSeries seriesTempRise = new WPFGraphSeries();
+
+            // GraphBackground="LightGray"/>
+
+            //ACHotGraph.MinWidth = 500;
+
+
+            acGraphInit(ref ACHotGraph, ref seriesOilTemp, ref seriesAmbTemp, ref seriesTempRise);
+            acGraphRefresh(ref ACHotGraph, ref seriesOilTemp, ref seriesAmbTemp, ref seriesTempRise);
+
+            stackPanel.Width = 700;
+            stackPanel.Children.Add(ACHotGraph);
+
+            myInlineUIContainer.Child = stackPanel;
+            graphParagraph.Inlines.Add(myInlineUIContainer);
+
+            flowDocument.Blocks.Add(graphParagraph);
+
+
+        }
         private void acGraphInit(ref WPFScatterGraph AcGraph,ref WPFGraphSeries seriesOilTemp,ref WPFGraphSeries seriesAmbTemp,ref WPFGraphSeries seriesTempRise)
         {
+            
             //AcGraph.MinHeight = 200;
             //AcGraph.MinWidth = 200;
             AcGraph.Margin = new Thickness(50);
@@ -336,6 +559,8 @@ namespace ReportsLayer
             seriesAmbTemp.Name = "TAmb";
             seriesTempRise.Name = "TRise";
 
+            AcGraph.Refresh();
+            AcGraph.InitializeComponent();
             AcGraph.Series.Add(seriesOilTemp);
             AcGraph.Series.Add(seriesAmbTemp);
             AcGraph.Series.Add(seriesTempRise);
@@ -456,11 +681,35 @@ namespace ReportsLayer
             insertMeanTempFields();
 
             insertGraph();
-
+            insertBlanckBlock();
             flowDocument.Blocks.Add(new Paragraph(new Run("")));
 
             //Потпис
             insertSignature();
+
+            return flowDocument;
+        }
+
+        private FlowDocument makeAcHotMeasurenmentsDocument(FlowDocument flowDocument)
+        {
+            flowDocument.Blocks.Clear();
+            //Поставување на насловот
+            insertTitle(FlowDocumentReportType.AcHotMeasurenments,flowDocument);
+            //Поставување на стандардните почетни информации за секој извештај.
+            insertHeader(flowDocument);
+            //Поставување на стандардните почетни информации за секој AcHotMeasurenments извештај.
+            insertAcHotMeasurenmentsHeader(flowDocument);
+            //Табелата со температурните мерења
+            insertAcHotMeasurenments_TempMeasurenments(flowDocument);
+            //Пресметаните вредности
+            insertMeanTempFields(flowDocument);
+
+            insertGraph(flowDocument);
+            //insertBlanckBlock(flowDocument);
+            flowDocument.Blocks.Add(new Paragraph(new Run("")));
+
+            //Потпис
+            insertSignature(flowDocument);
 
             return flowDocument;
         }
@@ -492,6 +741,29 @@ namespace ReportsLayer
             flowDocument.Blocks.Add(DcColdMeasurenmentsHeaderParagraph);
         }
 
+        private void insertDcColdMeasurenmentsHeader(FlowDocument flowDocument)
+        {
+            Paragraph DcColdMeasurenmentsHeaderParagraph = new Paragraph();
+
+            //
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("HV: " + dataSource.Root.TransformerProperties.HV + "\n"));
+            //
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("LV: " + dataSource.Root.TransformerProperties.LV + "\n"));
+
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Temp Coeff HV: " + dataSource.Root.TransformerProperties.HvTempCoefficient + " (" + dataSource.Root.TransformerProperties.HvMaterial + ")\n"));
+            //
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Temp Coeff LV: " + dataSource.Root.TransformerProperties.LvTempCoefficient + " (" + dataSource.Root.TransformerProperties.LvMaterial + ")\n"));
+
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("\n"));
+            //Температура
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("T Cold:       " + Math.Round(dataSource.retTCold(), 1) + " C\n"));
+            //Струја со која се тестира.
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Test Current: " + Math.Round(dataSource.Root.DcColdMeasurenments.RessistanceTransformerChannels[0].TestCurrent, 1) + " A\n"));
+
+
+            flowDocument.Blocks.Add(DcColdMeasurenmentsHeaderParagraph);
+        }
+
         /// <summary>
         /// Внесување на делот од документот во кој се опфатени сите информации за еден канал.
         /// </summary>
@@ -500,6 +772,11 @@ namespace ReportsLayer
         {
            // RessistanceTransformerChannel ressistanceTransformerChannel
             insertDcColdMeasurenmentsChannelHeader(tempChannelType);
+        }
+        private void insertDcColdChannel(TempChannelType tempChannelType,FlowDocument flowDocument)
+        {
+            // RessistanceTransformerChannel ressistanceTransformerChannel
+            insertDcColdMeasurenmentsChannelHeader(tempChannelType,flowDocument);
         }
 
         /// <summary>
@@ -542,6 +819,26 @@ namespace ReportsLayer
             
             flowDocument.Blocks.Add(DcColdMeasurenmentsHeaderParagraph);
         }
+        private void insertDcColdMeasurenmentsChannelHeader(TempChannelType tempChannelType,FlowDocument flowDocument)
+        {
+            Paragraph DcColdMeasurenmentsHeaderParagraph = new Paragraph();
+
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Bold(new Run("Channel " + evalChannelName(tempChannelType) + "\n")));
+
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Bold(new Run("\n")));
+
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("STD Temp:            " + Math.Round(dataSource.StdTemp, 1) + " C\n"));
+
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("R " + evalChannelName(tempChannelType) + " at STD Temp: " + Math.Round(dataSource.retR1AtStdTemp(Convert.ToInt32(tempChannelType)), 7) + " Ohm\n"));
+
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("R " + evalChannelName(tempChannelType).ToLower() + " at STD Temp: " + Math.Round(dataSource.retR2AtStdTemp(Convert.ToInt32(tempChannelType)), 7) + " Ohm\n"));
+
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("R " + evalChannelName(tempChannelType)[0] + " at STD Temp:     " + Math.Round(dataSource.retR1Phase(Convert.ToInt32(tempChannelType)), 7) + " Ohm\n"));
+
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("R " + evalChannelName(tempChannelType).ToLower()[0] + " at STD Temp:     " + Math.Round(dataSource.retR2Phase(Convert.ToInt32(tempChannelType)), 7) + " Ohm\n"));
+
+            flowDocument.Blocks.Add(DcColdMeasurenmentsHeaderParagraph);
+        }
 
         #region DaSeIzbrishe
         /*
@@ -576,13 +873,32 @@ namespace ReportsLayer
             //Поставување на хедерот
             //insertDcColdMeasurenmentsTableHeader(tempChannelType, tempTable);
         }
+        private FlowDocument makeDcColdMeasurenmentsDocument(FlowDocument flowDocument)
+        {
+            flowDocument.Blocks.Clear();
+            //Поставување на насловот
+            insertTitle(FlowDocumentReportType.AcHotMeasurenments,flowDocument);
+            //Поставување на стандардните почетни информации за секој извештај.
+            insertHeader(flowDocument);
+
+            insertDcColdMeasurenmentsHeader(flowDocument);
+
+            insertDcColdChannel(TempChannelType.A_C,flowDocument);
+            insertDcColdChannel(TempChannelType.B_C,flowDocument);
+            insertDcColdChannel(TempChannelType.C_A,flowDocument);
+
+            //Потпис
+            insertSignature(flowDocument);
+
+            return flowDocument;
+        }
         /// <summary>
         /// Креирање на документот за DcColdMeasurenments мерењата.
         /// </summary>
         /// <returns></returns>
         private FlowDocument makeDcColdMeasurenmentsDocument()
         {
-            flowDocument.Blocks.Clear();
+            //flowDocument.Blocks.Clear();
             //Поставување на насловот
             insertTitle(FlowDocumentReportType.AcHotMeasurenments);
             //Поставување на стандардните почетни информации за секој извештај.
@@ -628,6 +944,34 @@ namespace ReportsLayer
             DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Total Samples:      " + dataSource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel.RessistanceNoOfSamplesCurrentState + " C\n"));
             //Струја со која се тестира.
             DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Sample Rate:        " + Math.Round(Convert.ToDouble(dataSource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel.RessistanceSampleRateCurrentState),1) + " S\n"));
+
+
+            flowDocument.Blocks.Add(DcColdMeasurenmentsHeaderParagraph);
+        }
+        private void insertDcCoolingMeasurenmentsHeader(FlowDocument flowDocument)
+        {
+            Paragraph DcColdMeasurenmentsHeaderParagraph = new Paragraph();
+
+            //
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Amb Temp - Cold:    " + dataSource.retTCold() + " C\n"));
+            //
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("End AC Temp:        " + dataSource.retEndAcTemp() + " C\n"));
+
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("\n"));
+
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("R1 Cold Resistance: " + dataSource.retR1ColdAtDcCool() + " Ohm\n"));
+            //
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("R2 Cold Resistance: " + dataSource.retR2ColdAtDcCool() + " Ohm\n"));
+
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Temp Coeff HV:      " + dataSource.Root.TransformerProperties.HvTempCoefficient + "\n"));
+            //
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Temp Coeff LV:      " + dataSource.Root.TransformerProperties.LvTempCoefficient + "\n"));
+
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("\n"));
+            //Температура
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Total Samples:      " + dataSource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel.RessistanceNoOfSamplesCurrentState + " C\n"));
+            //Струја со која се тестира.
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Sample Rate:        " + Math.Round(Convert.ToDouble(dataSource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel.RessistanceSampleRateCurrentState), 1) + " S\n"));
 
 
             flowDocument.Blocks.Add(DcColdMeasurenmentsHeaderParagraph);
@@ -708,8 +1052,41 @@ namespace ReportsLayer
 
             flowDocument.Blocks.Add(tempTable);
         }
+        private void insertDcCoolingMeasurenmentsTable(FlowDocument flowDocument)
+        {
+            List<TempMeasurenment> tempMeasurenments = dataSource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments;
+            TempMeasurenementConfiguration tc = dataSource.Root.AcHotMeasurenments.TempMeasurenementConfiguration;
+            Table tempTable = new Table();
+            tempTable.RowGroups.Add(new TableRowGroup());
+            tempTable.RowGroups[0].Rows.Add(new TableRow());
+
+            tempTable.BorderBrush = System.Windows.Media.Brushes.Black;
+            tempTable.BorderThickness = new Thickness(2);
+
+            //Поставување на хедерот
+            insertDcCoolingMeasurenmentsTableHeader(tempTable);
+
+            //Приказ на сите мерења
+            insertDcCoolingMeasurenmentsTableCell(tempTable);
+
+            flowDocument.Blocks.Add(tempTable);
+        }
 
         public void insertResistanceChn1() 
+        {
+            Paragraph ResistanceChn1Paragraph = new Paragraph();
+
+            ResistanceChn1Paragraph.Inlines.Add(new Bold(new Run("R1 - Resistance at Channel 1\n")));
+            //Exponential Curve
+            ResistanceChn1Paragraph.Inlines.Add(new Run("Exponential Curve f(t):    " + dataSource.retFT1() + " C\n"));
+            //R1 at time t=0
+            ResistanceChn1Paragraph.Inlines.Add(new Run("R1 at time t=0:            " + dataSource.retT1Rise() + " C\n"));
+            //Temp Rise at time t=0
+            ResistanceChn1Paragraph.Inlines.Add(new Run("Temp Rise at time t=0:     " + dataSource.retT1T0() + " C\n"));
+
+            flowDocument.Blocks.Add(ResistanceChn1Paragraph);
+        }
+        public void insertResistanceChn1(FlowDocument flowDocument)
         {
             Paragraph ResistanceChn1Paragraph = new Paragraph();
 
@@ -738,7 +1115,20 @@ namespace ReportsLayer
 
             flowDocument.Blocks.Add(ResistanceChn2Paragraph);
         }
+        public void insertResistanceChn2(FlowDocument flowDocument)
+        {
+            Paragraph ResistanceChn2Paragraph = new Paragraph();
 
+            ResistanceChn2Paragraph.Inlines.Add(new Bold(new Run("R2 - Resistance at Channel 1\n")));
+            //Exponential Curve
+            ResistanceChn2Paragraph.Inlines.Add(new Run("Exponential Curve f(t):    " + dataSource.retFT2() + " C\n"));
+            //R1 at time t=0
+            ResistanceChn2Paragraph.Inlines.Add(new Run("R2 at time t=0:            " + dataSource.retT2Rise() + " C\n"));
+            //Temp Rise at time t=0
+            ResistanceChn2Paragraph.Inlines.Add(new Run("Temp Rise at time t=0:     " + dataSource.retT2T0() + " C\n"));
+
+            flowDocument.Blocks.Add(ResistanceChn2Paragraph);
+        }
         private void insertGraphR1()
         {
             Paragraph graphParagraph = new Paragraph();
@@ -780,6 +1170,41 @@ namespace ReportsLayer
             graphFloater.Blocks.Add(inlineParagraph);
 
             graphParagraph.Inlines.Add(graphFloater);
+
+            flowDocument.Blocks.Add(graphParagraph);
+
+        }
+
+        private void insertGraphR1(FlowDocument flowDocument)
+        {
+            Paragraph graphParagraph = new Paragraph();
+
+            InlineUIContainer myInlineUIContainer = new InlineUIContainer();
+
+            // Set the BaselineAlignment property to "Bottom" so that the 
+            // Button aligns properly with the text.
+
+            StackPanel stackPanel = new StackPanel();
+
+            // Asign the button as the UI container's child.
+            WPFScatterGraph DCCoolingGraph = new WPFScatterGraph();
+            WPFGraphSeries seriesOilTemp = new WPFGraphSeries();
+            WPFGraphSeries seriesAmbTemp = new WPFGraphSeries();
+            WPFGraphSeries seriesTempRise = new WPFGraphSeries();
+
+            // GraphBackground="LightGray"/>
+
+            //ACHotGraph.MinWidth = 500;
+
+
+            //acGraphInit(ref ACHotGraph, ref seriesOilTemp, ref seriesAmbTemp, ref seriesTempRise);
+            //acGraphRefresh(ref ACHotGraph, ref seriesOilTemp, ref seriesAmbTemp, ref seriesTempRise);
+
+            stackPanel.Width = 700;
+            stackPanel.Children.Add(DCCoolingGraph);
+            myInlineUIContainer.Child = stackPanel;
+
+            graphParagraph.Inlines.Add(myInlineUIContainer);
 
             flowDocument.Blocks.Add(graphParagraph);
 
@@ -831,6 +1256,42 @@ namespace ReportsLayer
 
         }
 
+        private void insertGraphR2(FlowDocument flowDocument)
+        {
+            Paragraph graphParagraph = new Paragraph();
+
+            InlineUIContainer myInlineUIContainer = new InlineUIContainer();
+
+            // Set the BaselineAlignment property to "Bottom" so that the 
+            // Button aligns properly with the text.
+
+            StackPanel stackPanel = new StackPanel();
+
+            // Asign the button as the UI container's child.
+            WPFScatterGraph DCCoolingGraph = new WPFScatterGraph();
+            WPFGraphSeries seriesOilTemp = new WPFGraphSeries();
+            WPFGraphSeries seriesAmbTemp = new WPFGraphSeries();
+            WPFGraphSeries seriesTempRise = new WPFGraphSeries();
+
+            // GraphBackground="LightGray"/>
+
+            //ACHotGraph.MinWidth = 500;
+
+            //acGraphInit(ref ACHotGraph, ref seriesOilTemp, ref seriesAmbTemp, ref seriesTempRise);
+            //acGraphRefresh(ref ACHotGraph, ref seriesOilTemp, ref seriesAmbTemp, ref seriesTempRise);
+
+            stackPanel.Width = 700;
+            stackPanel.Height = 400;
+            stackPanel.Children.Add(DCCoolingGraph);
+
+            myInlineUIContainer.Child = stackPanel;
+
+            graphParagraph.Inlines.Add(myInlineUIContainer);
+
+            flowDocument.Blocks.Add(graphParagraph);
+
+        }
+
         private FlowDocument makeDcCoolingMeasurenmentsDocument()
         {
             flowDocument.Blocks.Clear();
@@ -853,6 +1314,32 @@ namespace ReportsLayer
 
             //Потпис
             insertSignature();
+
+            return flowDocument;
+        }
+
+        private FlowDocument makeDcCoolingMeasurenmentsDocument(FlowDocument flowDocument)
+        {
+            flowDocument.Blocks.Clear();
+            //Поставување на насловот
+            insertTitle(FlowDocumentReportType.AcHotMeasurenments,flowDocument);
+            //Поставување на стандардните почетни информации за секој извештај.
+            insertHeader(flowDocument);
+
+            insertDcCoolingMeasurenmentsHeader(flowDocument);
+
+            insertDcCoolingMeasurenmentsTable(flowDocument);
+
+            insertResistanceChn1(flowDocument);
+
+            insertGraphR1(flowDocument);
+
+            insertResistanceChn2(flowDocument);
+
+            insertGraphR2(flowDocument);
+
+            //Потпис
+            insertSignature(flowDocument);
 
             return flowDocument;
         }
