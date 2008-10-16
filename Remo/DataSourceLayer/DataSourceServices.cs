@@ -5,6 +5,8 @@ using System.Text;
 using EntityLayer;
 using System.Threading;
 using FlukeClient;
+using PlcProcess;
+
 namespace DataSourceLayer
 {
 
@@ -17,13 +19,22 @@ namespace DataSourceLayer
         private double _current;
         private EntityLayer.TempMeasurenementConfiguration _tempMeasurenementConfiguration;
         private EntityLayer.RessistanceTransformerChannel _ressistanceTransformerChannel;
+        //Instruments conf
         private RessistanceDataSource rds;
         private string IP_ADDRESS_VOLTAGE = "192.168.1.1";
         private string IP_ADDRESS_CURRENT = "192.168.1.2";
         private int PORT_VOLTAGE = 3490;
         private int PORT_CURRENT = 3490;
+        //PLC conf
+        private int PLC_PORT_NUMBER = 8;
+        private short NO_OF_TRIGGERS_ADDRESS = 1;
+        private short START_MEAS_ADDRESS = 2;
+
+        private ProcessManager pm;
+
         private int channelNo = 1;
         private bool isFirstMeasurenment = true;
+        
         #endregion
 
         #region Properties
@@ -50,6 +61,11 @@ namespace DataSourceLayer
         /// EventHandler кој дава Notification за завршено мерење на отпори
         /// </summary>
         public event RessistanceMeasurenmentFinishedEventHandler RessistanceMeasurenmentFinished;
+
+        public DataSourceServices()
+        {
+           
+        }
 
         private void OnTempMeasurenmentFinished()
         {
@@ -91,14 +107,23 @@ namespace DataSourceLayer
             _sampleRate = ressistanceTransformerChannel.RessistanceSampleRateCurrentState;
             _numberOfSamples = ressistanceTransformerChannel.RessistanceNoOfSamplesCurrentState;
             _current = ressistanceTransformerChannel.TestCurrent;
-
             _ressistanceTransformerChannel = ressistanceTransformerChannel;
+
             if (!isTest)
             {
+                pm = new ProcessManager((PLCP.enPortNumber)PLC_PORT_NUMBER);
+                
+                SetMemBitTask startMeasTask = new SetMemBitTask("start meas task", START_MEAS_ADDRESS);
+                WriteMemIntTask writeNoOfTriggersTask = new WriteMemIntTask("writeNoOfTriggersTask", NO_OF_TRIGGERS_ADDRESS, (short)(_numberOfSamples + 1));
+                writeNoOfTriggersTask.TaskExecutedEvent+=new PlcRWTask.TaskExecutedEventHandler(writeNoOfTriggersTask_TaskExecutedEvent);
+                pm.addPlcTask(startMeasTask);
+                pm.addPlcTask(writeNoOfTriggersTask);
+                
                 rds = new RessistanceDataSource(_sampleRate, _numberOfSamples, _current, IP_ADDRESS_VOLTAGE, IP_ADDRESS_CURRENT, PORT_VOLTAGE, PORT_CURRENT);
-                rds.MeasurenmentDone+=new RessistanceDataSource.MeasurenmentDoneEvent(rsd_MeasurenmentDone);
+                rds.MeasurenmentDone += new RessistanceDataSource.MeasurenmentDoneEvent(rsd_MeasurenmentDone);
                 _ressistanceTransformerChannel.RessistanceMeasurenments.Clear();
                 rds.start_RessistanceMeasurenments();
+                pm.start();
             }
             else
             {
@@ -106,7 +131,12 @@ namespace DataSourceLayer
                 measurenmentThread.Start();
             }
         }
-        public void rsd_MeasurenmentDone(double voltage, double current)
+        public void writeNoOfTriggersTask_TaskExecutedEvent(PlcRWTask task, EventArgs e)
+        {
+            if (pm != null)
+                pm.stop();
+        }
+        public void rsd_MeasurenmentDone(double voltage, double current, int measNumber)
         {
             if (!isFirstMeasurenment)
             {
@@ -121,6 +151,9 @@ namespace DataSourceLayer
                     channelNo = 1;
             }
             isFirstMeasurenment = !isFirstMeasurenment;
+            //throw event
+            if (measNumber == 2 * _numberOfSamples - 1)
+                OnRessistanceMeasurenmentFinished();
         }
 
         public void stopRessistanceMeasurenments()

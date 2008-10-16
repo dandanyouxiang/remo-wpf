@@ -53,7 +53,7 @@ namespace FlukeClient
                 setSampleCount(stream, SAMPLE_COUNT);
                 setTriggerDelay(stream);
                 setTriggerSource(stream, TriggerSource.EXTERNAL);
-                System.Threading.Thread.Sleep(500);
+                System.Threading.Thread.Sleep(100);
                 //Изведување на мерења
                 for (int i = 0; i < _numberOfMeasurenments; i++)
                 {
@@ -83,7 +83,7 @@ namespace FlukeClient
             }
             finally
             {
-                closeSocket(client);
+                closeSocket();
             }          
         }
 
@@ -143,9 +143,10 @@ namespace FlukeClient
             return client.GetStream();
 
         }
-        public void closeSocket(TcpClient client)
+        public void closeSocket()
         {
-            client.Client.Close();
+            if (client != null)
+                client.Client.Close();
         }
         #endregion
 

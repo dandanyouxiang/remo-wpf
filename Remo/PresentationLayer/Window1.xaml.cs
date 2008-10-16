@@ -207,7 +207,7 @@ namespace PresentationLayer
                     //Стартувај го мерењето на отпор
                     DataSourceLayer.DataSourceServices ds = new DataSourceLayer.DataSourceServices();
                     ds.RessistanceMeasurenmentFinished += new DataSourceLayer.DataSourceServices.RessistanceMeasurenmentFinishedEventHandler(ds_RessistanceMeasurenmentFinished);
-                    ds.start_RessistanceMeasurenment(datasource.Root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel], true);
+                    ds.start_RessistanceMeasurenment(datasource.Root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel], false);
                 }
             }
             else

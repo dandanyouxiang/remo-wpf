@@ -12,7 +12,7 @@ namespace FlukeClient
         private int PORT_VOLTAGE = 3490;
         private int PORT_CURRENT = 3490;
         private int _sampleRate = 2;
-        private int _numberOfSamples = 2;
+        private int _numberOfSamples = 10;
         private double _current = 1;
 
         public RessistanceDataSourceTest()
@@ -24,9 +24,9 @@ namespace FlukeClient
             rds.MeasurenmentDone += new RessistanceDataSource.MeasurenmentDoneEvent(rsd_MeasurenmentDone);
             rds.start_RessistanceMeasurenments();
         }
-        public void rsd_MeasurenmentDone(double voltage, double current)
+        public void rsd_MeasurenmentDone(double voltage, double current, int measNumber)
         {
-            Console.WriteLine("DateTime.Now:" + DateTime.Now + " Voltage:" + voltage + " Current:" + current);
+            Console.WriteLine("DateTime.Now:" + DateTime.Now + "no:" + measNumber + " Voltage:" + voltage + " Current:" + current);
         }
     }
 }

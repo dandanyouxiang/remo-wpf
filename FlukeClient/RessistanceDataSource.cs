@@ -21,8 +21,10 @@ namespace FlukeClient
         private int measNumber;
         private List<double> voltageMeas;
         private List<double> currentMeas;
+        FlukeMeasurenmentClient meas1;
+        FlukeMeasurenmentClient meas2;
 
-        public delegate void MeasurenmentDoneEvent(double voltage, double current);
+        public delegate void MeasurenmentDoneEvent(double voltage, double current, int measNumber);
 
         /// <summary>
         /// Завршено е едно мерење на отпор.
@@ -39,7 +41,6 @@ namespace FlukeClient
             _port1 = port1;
             _port2 = port2;
             measNumber = 0;
-
         }
 
         public void start_RessistanceMeasurenments()
@@ -47,25 +48,26 @@ namespace FlukeClient
             voltageMeas = new List<double>();
             currentMeas = new List<double>();
 
-           
-            meas2Thread = new Thread(meas2);
-            meas2Thread.Start();
-            meas1Thread = new Thread(meas1);
+            meas1Thread = new Thread(measure1);
+            meas2Thread = new Thread(measure2);
             meas1Thread.Start();
+            meas2Thread.Start();
         }
         public void stopRessistanceMeasurenments()
         {
+            meas1.closeSocket();
+            meas2.closeSocket();
             meas1Thread.Abort();
             meas2Thread.Abort();
         }
 
-        private void meas1()
+        private void measure1()
         {
-            FlukeMeasurenmentClient meas1 = new FlukeMeasurenmentClient(_ipAddress1, _port1, 2 * _numberOfSamples);
+            meas1 = new FlukeMeasurenmentClient(_ipAddress1, _port1, 2 * _numberOfSamples);
             meas1.MeasFinished += new FlukeMeasurenmentClient.MeasFinishedEvent(meas1_MeasFinished);
             meas1.startMeasurenment();
         }
-        private void meas2()
+        private void measure2()
         {
             FlukeMeasurenmentClient meas2 = new FlukeMeasurenmentClient(_ipAddress2, _port2, 2 * _numberOfSamples);
             meas2.MeasFinished += new FlukeMeasurenmentClient.MeasFinishedEvent(meas2_MeasFinished);
@@ -91,7 +93,9 @@ namespace FlukeClient
         private void OnMeasurenmentDone()
         {
             if (MeasurenmentDone != null)
-                MeasurenmentDone(voltageMeas[measNumber], currentMeas[measNumber]);
+            {
+                MeasurenmentDone.BeginInvoke(voltageMeas[measNumber], currentMeas[measNumber], measNumber,null,null);
+            }
             measNumber++;
         }
     }
