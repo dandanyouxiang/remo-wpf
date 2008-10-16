@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{484FA257-4FD6-4AC3-9D4E-0F52F2322E4C}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -199,6 +199,12 @@
     <Content Include="Ref\ColorPicker.dll" />
     <Content Include="Ref\Generics.dll" />
     <Content Include="Ref\WPFGraph.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FlukeClient\FlukeClient.csproj">
+      <Project>{2C5759A2-D2BC-4D2D-8CAE-F592B6F93BD4}</Project>
+      <Name>FlukeClient</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

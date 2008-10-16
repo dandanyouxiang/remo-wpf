@@ -4,8 +4,8 @@
             xmlns:data="clr-namespace:DataAccessLayer"
             xmlns:s="clr-namespace:System;assembly=mscorlib"
             xmlns:mwt="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Luna"
-            StartupUri="ReportsLayer\GenerateReports.xaml">
-            <!--StartupUri="PresentationLayer\Window1.xaml">-->
+            StartupUri="PresentationLayer\Window1.xaml">
+            <!--StartupUri="ReportsLayer\GenerateReports.xaml">-->
   
     <Application.Resources>
         <DataTemplate x:Key="BlueHeader">
@@ -163,7 +163,6 @@
             <Style.Triggers>
                 <Trigger Property="IsChecked" Value="True">
                     <Setter Property="Content" Value="Stop"/>
-
                     <Setter Property="ContentTemplate" Value="{StaticResource IsChackBackground}"/>
                 </Trigger>
                 <Trigger Property="IsChecked" Value="False">

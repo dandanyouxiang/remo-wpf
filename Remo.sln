@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Remo", "Remo\Remo.csproj", "{484FA257-4FD6-4AC3-9D4E-0F52F2322E4C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlukeClient", "FlukeClient\FlukeClient.csproj", "{2C5759A2-D2BC-4D2D-8CAE-F592B6F93BD4}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -17,6 +19,10 @@ Global
 		{484FA257-4FD6-4AC3-9D4E-0F52F2322E4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{484FA257-4FD6-4AC3-9D4E-0F52F2322E4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{484FA257-4FD6-4AC3-9D4E-0F52F2322E4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C5759A2-D2BC-4D2D-8CAE-F592B6F93BD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C5759A2-D2BC-4D2D-8CAE-F592B6F93BD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C5759A2-D2BC-4D2D-8CAE-F592B6F93BD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C5759A2-D2BC-4D2D-8CAE-F592B6F93BD4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

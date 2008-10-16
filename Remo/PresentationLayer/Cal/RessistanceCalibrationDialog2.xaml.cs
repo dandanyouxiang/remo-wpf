@@ -51,7 +51,7 @@ namespace PresentationLayer
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             //Започни го мерењто на отпор
-            s.start_RessistanceMeasurenment(ch);
+            s.start_RessistanceMeasurenment(ch, true);
         }
 
     }

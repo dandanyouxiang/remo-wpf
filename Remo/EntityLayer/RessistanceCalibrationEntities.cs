@@ -34,6 +34,7 @@ namespace EntityLayer
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                throw ex;
             }
         }
 
@@ -53,6 +54,7 @@ namespace EntityLayer
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                throw ex;
             }
         }
         #endregion

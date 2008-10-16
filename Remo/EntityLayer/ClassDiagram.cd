@@ -161,7 +161,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="EntityLayer.RessistanceCalibration">
-    <Position X="29.25" Y="9" Width="1.75" />
+    <Position X="29.25" Y="9" Width="2.5" />
     <AssociationLine Name="RessistanceCalMeasurenments" Type="EntityLayer.RessistanceCalMeasurenment">
       <MemberNameLabel ManuallyPlaced="true" ManuallySized="true">
         <Position X="-2.19" Y="0.126" Height="0.16" Width="2.01" />
@@ -179,15 +179,15 @@
     <Position X="22" Y="10.25" Width="1.5" />
     <AssociationLine Name="TempCalMeasurenments" Type="EntityLayer.TempCalMeasurenment" FixedFromPoint="true">
       <Path>
-        <Point X="22.812" Y="11.038" />
-        <Point X="22.812" Y="11.75" />
+        <Point X="22.812" Y="11.778" />
+        <Point X="22.812" Y="13.25" />
       </Path>
       <MemberNameLabel ManuallyPlaced="true">
         <Position X="-4.369" Y="0.258" />
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAgAAAAAAAAAAIAAAAAAAAAgAAAAAAAAIAAAA=</HashCode>
       <FileName>EntityLayer\TempCalibrationEntities.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
@@ -195,7 +195,7 @@
     </ShowAsCollectionAssociation>
   </Class>
   <Class Name="EntityLayer.TempCalMeasurenment">
-    <Position X="21" Y="11.75" Width="3.25" />
+    <Position X="21" Y="13.25" Width="3.25" />
     <Compartments>
       <Compartment Name="Fields" Collapsed="true" />
     </Compartments>
@@ -208,7 +208,7 @@
   <Class Name="DataAccessLayer.TempCalibrationService">
     <Position X="21.75" Y="7" Width="3.25" />
     <NestedTypes>
-      <Class Name="DataAccessLayer.TempCalibrationService.TempCalMeasurenmentsView" Collapsed="true">
+      <Class Name="DataAccessLayer.TempCalibrationService.TempCalMeasurenmentsView">
         <TypeIdentifier>
           <NewMemberFileName>DataAccessLayer\CalibrationServices.cs</NewMemberFileName>
         </TypeIdentifier>

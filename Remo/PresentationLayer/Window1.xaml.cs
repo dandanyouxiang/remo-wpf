@@ -56,7 +56,7 @@ namespace PresentationLayer
         public Window1()
         {
             InitializeComponent();
-            datasource = new DataSource(@"E:\root.xml");
+            datasource = new DataSource(@"D:\root.xml");
             MainGrid.DataContext = datasource;
             StatusString = statusStrings[2];
             this.graphsInit();
@@ -102,6 +102,7 @@ namespace PresentationLayer
             catch (Exception ex) 
             {
                 ex.ToString();
+                throw ex;
             }
         }
         public void  datasource_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -189,7 +190,6 @@ namespace PresentationLayer
             startAcButton.IsChecked = false;
             CurrentProcessState = ProcessStatesEnum.Idle;
             this.acGraphRefresh();
-           
         }
 
         /// <summary>
@@ -207,7 +207,7 @@ namespace PresentationLayer
                     //Стартувај го мерењето на отпор
                     DataSourceLayer.DataSourceServices ds = new DataSourceLayer.DataSourceServices();
                     ds.RessistanceMeasurenmentFinished += new DataSourceLayer.DataSourceServices.RessistanceMeasurenmentFinishedEventHandler(ds_RessistanceMeasurenmentFinished);
-                    ds.start_RessistanceMeasurenment(datasource.Root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel]);
+                    ds.start_RessistanceMeasurenment(datasource.Root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel], true);
                 }
             }
             else
@@ -305,7 +305,7 @@ namespace PresentationLayer
                 //Стартувај го мерењето на отпор
                 ds = new DataSourceLayer.DataSourceServices();
                 ds.RessistanceMeasurenmentFinished += new DataSourceLayer.DataSourceServices.RessistanceMeasurenmentFinishedEventHandler(ds_RessistanceMeasurenmentFinished);
-                ds.start_RessistanceMeasurenment(datasource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel);
+                ds.start_RessistanceMeasurenment(datasource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel, true);
             }
             else
             {
@@ -341,13 +341,10 @@ namespace PresentationLayer
         /// </summary>
         private void OnValidationError(object sender, ValidationErrorEventArgs e)
         {
-
             ((FrameworkElement)e.OriginalSource).GetBindingExpression(TextBox.TextProperty).UpdateTarget();
         }
-        
-
-        
     }
+    //Todo zema mnogu procesorsko vreme
     /// <summary>
     /// Поставуванје на стил за табелатата во ACHeating табот
     /// </summary>
@@ -355,10 +352,11 @@ namespace PresentationLayer
     {
         public int reducedIndex{get;set;}
 
-        
-
+        //Todo zema mnogu procesorsko vreme
         public override Style SelectStyle(object item, DependencyObject container)
         {
+            DateTime start = DateTime.Now;
+            Console.WriteLine("start SelectStyle");
             Style st = new Style();
             try
             {
@@ -371,8 +369,8 @@ namespace PresentationLayer
                
                 int index =
                     listView.ItemContainerGenerator.IndexFromContainer(container);
-
-                DataSource datasource = new DataSource(@"E:\root.xml");
+                //Todo ??? zasto se cita pak
+                DataSource datasource = new DataSource(@"D:\root.xml");
                 reducedIndex = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.FindIndex(Utils.isReduced);
 
                 if (index == reducedIndex)
@@ -387,8 +385,12 @@ namespace PresentationLayer
             }
             catch (Exception ex) 
             {
+                DateTime end = DateTime.Now;
+                Console.WriteLine("end SelectStyle - Time:" + (end - start).TotalMilliseconds + " ms");
                 return null;
             }
+            DateTime end1 = DateTime.Now;
+            Console.WriteLine("end SelectStyle - Time:"+(end1-start).TotalMilliseconds+" ms");
             return st;
         }
     } 

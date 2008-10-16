@@ -6,7 +6,8 @@
         xmlns:pres="clr-namespace:PresentationLayer"
         Title="Window1" Height="850" Width="1200" Validation.Error="OnValidationError">
     <Window.Resources>
-        <pres:ListViewItemStyleSelector reducedIndex="3" x:Key="myStyleSelector"/>
+        <!-- Todo zema mnogu procesorsko vreme
+        <pres:ListViewItemStyleSelector reducedIndex="3" x:Key="myStyleSelector"/>-->
 
     </Window.Resources>
         <Grid ShowGridLines="true" Name="MainGrid" IsHitTestVisible="True" Loaded="MainGrid_Loaded" >
@@ -20,7 +21,7 @@
 
         <TabControl Name="tabControl1" Grid.Row="0" Grid.Column="0" SelectedIndex="2" FontSize="14">
             <TabItem  Header="DC - Cold Measurenment">
-                <Grid >
+                <Grid>
                     <Grid.RowDefinitions>
                     <RowDefinition >
                     </RowDefinition>
@@ -42,41 +43,73 @@
                                     <ColumnDefinition Width="530.195*" />
                                 </Grid.ColumnDefinitions>
 
-                                <GroupBox Header="Ressistance Measurenment" Margin="30,10,241.501,0" Name="groupBox3" Grid.Column="2" Height="233.564" VerticalAlignment="Top">
+                                <GroupBox Header="Ressistance Measurenments" Margin="55.606,20.343,241.901,0" Name="groupBox3" Grid.Column="1" Height="233.564" VerticalAlignment="Top" Grid.ColumnSpan="2">
                                     <Grid>
-                                        <TextBox Margin="16,0,0,40.012" Name="NoOfSamplesRessTextBox" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="120">
-                                            <TextBox.Text>
-                                                <Binding Path="RessistanceNoOfSamplesCurrentState" NotifyOnValidationError="True">
-                                                    <Binding.ValidationRules>
-                                                        <data:RegexValidator RegularExpression="^\s*\d*\s*$"></data:RegexValidator>
-                                                    </Binding.ValidationRules>
-                                                </Binding>
-                                            </TextBox.Text>
-                                        </TextBox>
-                                        <TextBox Margin="161,0,0,40.013" Name="textBox11" VerticalAlignment="Bottom" Text="{Binding Path=R2Cold,Converter={StaticResource OhmConvertor}}" IsEnabled="True" IsReadOnly="True" Height="25.313" HorizontalAlignment="Left" Width="133.552" />
-                                        <TextBox Margin="161,48.027,163,0" Name="textBox12" Text="{Binding Path=R1Cold,Converter={StaticResource OhmConvertor}}" VerticalAlignment="Top" IsEnabled="True" IsReadOnly="True" />
-                                        <TextBox HorizontalAlignment="Left" Margin="16,48.027,0,0" Name="TestCurrentTempTextBox" VerticalAlignment="Top" Width="120" >
-                                            <TextBox.Text>
-                                                <Binding Path="TestCurrent" Converter="{StaticResource AmperConvertor}" NotifyOnValidationError="True">
-                                                    <Binding.ValidationRules>
-                                                        <data:RegexValidator RegularExpression="^\s*\d*[.|,]?\d+\s*[A|a]?\s*$"></data:RegexValidator>
-                                                    </Binding.ValidationRules>
-                                                </Binding>
-                                            </TextBox.Text>
-                                        </TextBox>
-                                        <Label Height="28" HorizontalAlignment="Left" Margin="16,24.083,0,0" Name="TestCurrentResLabel" VerticalAlignment="Top" Width="120">Test Current</Label>
-                                        <Label Margin="161,0,163,67" Name="label10" Content="{Binding Path=R2AtStdTempHeader}" Height="30" VerticalAlignment="Bottom"></Label>
-                                        <Label Margin="161,24.084,163,0" Name="label11" Height="28" VerticalAlignment="Top" Content="{Binding Path=R1AtStdTempHeader}"></Label>
-                                        <Label Margin="16,0,0,67" Name="label12" HorizontalAlignment="Left" Width="135.755" Height="30" VerticalAlignment="Bottom">No. of Samples</Label>
-                                        <ToggleButton Name="startResMeasDcColdButton" Style="{StaticResource StartStopStyle}" Height="31.438" Margin="188.628,0,175.767,0" VerticalAlignment="Bottom" Checked="startResMeasDcColdButton_Checked" />
-                                        <TextBox HorizontalAlignment="Right" Margin="0,48.027,20,0" Name="evalStdDevTempR1textBox" Text="{Binding Path=StdDevTempR1,Converter={StaticResource OhmConvertor}}" VerticalAlignment="Top" Width="120" IsEnabled="True" IsReadOnly="True" />
-                                        <TextBox HorizontalAlignment="Right" Margin="0,0,20,40.013" Name="evalStdDevTempR2textBox" Width="120" VerticalAlignment="Bottom" Text="{Binding Path=StdDevTempR2,Converter={StaticResource OhmConvertor}}" IsEnabled="True" IsReadOnly="True" Height="25.313" />
-                                        <Label HorizontalAlignment="Right" Margin="0,0,20,67" Name="label6" Width="120" Content="{Binding Path=StdDevTempR2Header}" Height="30" VerticalAlignment="Bottom"></Label>
-                                        <Label Height="28" HorizontalAlignment="Right" Margin="0,24.083,20,0" Name="label14" VerticalAlignment="Top" Width="120" Content="{Binding Path=StdDevTempR1Header}"></Label>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition Height="50"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel Margin="5">
+                                                <Label Name="TestCurrentResLabel" >Test Current</Label>
+                                                <TextBox Name="TestCurrentTempTextBox" >
+                                                    <TextBox.Text>
+                                                        <Binding Path="TestCurrent" Converter="{StaticResource AmperConvertor}" NotifyOnValidationError="True">
+                                                            <Binding.ValidationRules>
+                                                                <data:RegexValidator RegularExpression="^\s*\d*[.|,]?\d+\s*[A|a]?\s*$"></data:RegexValidator>
+                                                            </Binding.ValidationRules>
+                                                        </Binding>
+                                                    </TextBox.Text>
+                                                </TextBox>
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="1" Margin="5">
+                                                <Label Name="label11" MinHeight="28" Content="{Binding Path=R1AtStdTempHeader}"></Label>
+                                                <TextBox Name="textBox12" Text="{Binding Path=R1Cold,Converter={StaticResource OhmConvertor}}" IsEnabled="True" IsReadOnly="True" />
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="2" Margin="5">
+                                                <Label Name="label14" MinHeight="28"  Content="{Binding Path=StdDevTempR1Header}"></Label>
+                                                <TextBox Name="evalStdDevTempR1textBox" Text="{Binding Path=StdDevTempR1,Converter={StaticResource OhmConvertor}}" IsEnabled="True" IsReadOnly="True" />
+                                            </StackPanel>
+                                        </Grid>
                                         
+                                        <Grid Grid.Row="1">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel Margin="5">
+                                                <Label Name="label12">No. of Samples</Label>
+                                                <TextBox  Name="NoOfSamplesRessTextBox">
+                                                    <TextBox.Text>
+                                                        <Binding Path="RessistanceNoOfSamplesCurrentState" NotifyOnValidationError="True">
+                                                            <Binding.ValidationRules>
+                                                                <data:RegexValidator RegularExpression="^\s*\d*\s*$"></data:RegexValidator>
+                                                            </Binding.ValidationRules>
+                                                        </Binding>
+                                                    </TextBox.Text>
+                                                </TextBox>
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="1" Margin="5">
+                                                <Label Name="label10" MinHeight="25"  Content="{Binding Path=R2AtStdTempHeader}"></Label>
+                                                <TextBox Name="textBox11"  Text="{Binding Path=R2Cold,Converter={StaticResource OhmConvertor}}" IsEnabled="True" IsReadOnly="True" />
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="2" Margin="5">
+                                                <Label Name="label6" MinHeight="25" Content="{Binding Path=StdDevTempR2Header}"/>
+                                                <TextBox Name="evalStdDevTempR2textBox" Text="{Binding Path=StdDevTempR2,Converter={StaticResource OhmConvertor}}" IsEnabled="True" IsReadOnly="True"/>
+                                            </StackPanel>
+                                        </Grid>
+                                        <ToggleButton Grid.Row="2" Width="100" Height="35" Name="startResMeasDcColdButton" Style="{StaticResource StartStopStyle}" Checked="startResMeasDcColdButton_Checked" />
+                                    
                                     </Grid>
                                 </GroupBox>
-                                <ListView Margin="30,273.166,113,48" Name="DCColdRessistanceTable" SelectionMode="Single" Grid.Column="2">
+                                <ListView Margin="0,273.166,32,48" Name="DCColdRessistanceTable" SelectionMode="Single" Grid.Column="2">
                                     <ListView.View>
                                         <GridView>
                                             <GridView.Columns>
@@ -88,14 +121,15 @@
                                         </GridView>
                                     </ListView.View>
                                 </ListView>
-                                <ListBox  Margin="40,55.389,37.422,0" VerticalAlignment="Top" Name="ChannelsListBox" MinHeight="70" SelectedIndex="{Binding Path=SelectedChannel}" SelectionChanged="ChannelsListBox_SelectionChanged" Height="90.926">
-                                    <ListBoxItem Margin="10,3">A - B</ListBoxItem>
-                                    <ListBoxItem Margin="10,3">B - C</ListBoxItem>
-                                    <ListBoxItem Margin="10,3">C - A</ListBoxItem>
+                                <ListBox  Margin="60,55.389,81.638,0" MinWidth="150" VerticalAlignment="Top" Name="ChannelsListBox" MinHeight="70" SelectedIndex="{Binding Path=SelectedChannel}" SelectionChanged="ChannelsListBox_SelectionChanged" Height="86.665" FontSize="16">
+                                    <ListBoxItem Margin="5 5 10 0">A - B</ListBoxItem>
+                                    <ListBoxItem Margin="5,0">B - C</ListBoxItem>
+                                    <ListBoxItem Margin="5,0">C - A</ListBoxItem>
                                 </ListBox>
-                                <GroupBox  Header="STD Temp" Margin="36.21,157.639,37.422,48" MinHeight="100" MinWidth="100" Name="groupBox1">
-                                    <StackPanel Width="159.984" Height="351">
-                                        <TextBox Margin="10,20,0,0" Name="StdTempRessTextBox" Width="75">
+                                <GroupBox Margin="60 150 0 0" FontSize="16"  Header="STD Temp" Width="200" Height="350" Name="groupBox1" HorizontalAlignment="Left" VerticalAlignment="Top">
+                                    <StackPanel Margin="5">
+                                        <Label Margin="2" >STD Temp</Label>
+                                        <TextBox Name="StdTempRessTextBox" Margin="10,0,30,0" >
                                             <TextBox.Text>
                                                 <Binding Path="StdTemp" Converter="{StaticResource CelsiusConverter}" NotifyOnValidationError="True">
                                                     <Binding.ValidationRules>
@@ -106,22 +140,23 @@
                                         </TextBox>
                                         <Label Margin="2" Name="label1" Content="{Binding Path=R1AtStdTempHeader}"></Label>
                                         <TextBox Margin="10,0,30,0" Name="R1AtStdTempTextBox" Text="{Binding Path=R1AtStdTemp,Converter={StaticResource OhmConvertor}}" IsEnabled="True" IsReadOnly="True" />
-                                        <Label Margin="2" Name="label4" FontSize="14" Content="{Binding Path=R2AtStdTempHeader}"></Label>
+                                        <Label Margin="2" Name="label4" Content="{Binding Path=R2AtStdTempHeader}"></Label>
                                         <TextBox Margin="10,0,30,0" Name="R2AtStdTempTextBox" Text="{Binding Path=R2AtStdTemp,Converter={StaticResource OhmConvertor}}" IsEnabled="True" IsReadOnly="True" />
-                                        <Label Margin="2" Name="label3"  FontSize="14" Content="{Binding Path=R1PhaseHeader}"></Label>
+                                        <Label Margin="2" Name="label3"  Content="{Binding Path=R1PhaseHeader}"></Label>
                                         <TextBox Margin="10,0,30,0" Name="R1PhaseTextBox" Text="{Binding Path=R1Phase,Converter={StaticResource OhmConvertor}}" IsEnabled="True" IsReadOnly="True" />
-                                        <Label Margin="2" Name="label2" FontSize="14" Content="{Binding Path=R2PhaseHeader}"></Label>
+                                        <Label Margin="2" Name="label2" Content="{Binding Path=R2PhaseHeader}"></Label>
                                         <TextBox Margin="10,0,30,0" Name="R2PhaseTextBox" Text="{Binding Path=R2Phase,Converter={StaticResource OhmConvertor}}" IsEnabled="True" IsReadOnly="True" />
                                     </StackPanel>
                                 </GroupBox>
-                                <Label Height="28" Margin="40,28.639,91.134,0" Name="label13" VerticalAlignment="Top">Channels</Label>
+                                <Label Height="28" Margin="55,28.639,91.134,0" Name="label13" VerticalAlignment="Top" FontSize="16">Channels</Label>
                             </Grid>
                         </TabItem>
                         <TabItem Header="Temperature Measurenment">
                             <Grid>
-                                <GroupBox Header="Tempetare measurenment" HorizontalAlignment="Left" Margin="80,44,0,357.2" Name="groupBox2" Width="192" VerticalAlignment="Top">
-                                    <Grid Height="320">
-                                        <TextBox Margin="22,205,37,181" Name="TColdRessTextBox" IsEnabled="True" IsReadOnly="True">
+                                <GroupBox Header="Temperature measurenment" HorizontalAlignment="Left" Margin="54,21,0,0" Name="groupBox2" Width="192" VerticalAlignment="Top" Height="284.5">
+                                    <StackPanel >
+                                        <Label Name="label7" Margin="20 20 20 0" >T Cold</Label>
+                                        <TextBox Name="TColdRessTextBox" IsEnabled="True" IsReadOnly="True" Margin="20 0" > 
                                             <TextBox.Text>
                                                 <Binding Path="TCold" Converter="{StaticResource CelsiusConverter}" NotifyOnValidationError="True">
                                                     <Binding.ValidationRules>
@@ -130,7 +165,8 @@
                                                 </Binding>
                                             </TextBox.Text>
                                         </TextBox>
-                                        <TextBox Margin="22,45,27,0" Name="SampleRateTempTextBox" VerticalAlignment="Top">
+                                        <Label Name="label5" VerticalAlignment="Top" Margin="20 0" >Sample Rate</Label>
+                                        <TextBox Name="SampleRateTempTextBox" Margin="20 0" >
                                             <TextBox.Text>
                                                 <Binding Path="TempSampleRateCurrentState" Converter="{StaticResource SecondConvertor}" NotifyOnValidationError="True">
                                                     <Binding.ValidationRules>
@@ -141,11 +177,8 @@
                                                 </Binding>
                                             </TextBox.Text>
                                         </TextBox>
-
-                                        <Label Height="28" Margin="22,12,38,0" Name="label5" VerticalAlignment="Top">Sample Rate</Label>
-                                        <Label Margin="23,172,26,0" Name="label7" Height="28" VerticalAlignment="Top">T Cold</Label>
-                                        <ToggleButton Margin="53,0,52,36" Name="startTempMeasDcColdButton" Style="{StaticResource StartStopStyle}" VerticalAlignment="Bottom" Checked="startTempMeasDcColdButton_Checked" Height="24.9" />
-                                        <TextBox Margin="22,125,27,0"  Name="NoOFSamplesTempTextBox" VerticalAlignment="Top">
+                                        <Label Margin="20 0" Name="label16">No. of Samples</Label>
+                                        <TextBox Margin="20 0" Name="NoOFSamplesTempTextBox" >
                                             <TextBox.Text>
                                                 <Binding Path="TempNoOfSamplesCurrentState" NotifyOnValidationError="True">
                                                     <Binding.ValidationRules>
@@ -154,10 +187,10 @@
                                                 </Binding>
                                             </TextBox.Text>
                                         </TextBox>
-                                        <Label Height="28" Margin="22,92,27,0" Name="label16" VerticalAlignment="Top">No. of Samples</Label>
-                                    </Grid>
+                                       <ToggleButton Margin="0 20" Height="35" Width="100"  Name="startTempMeasDcColdButton" Style="{StaticResource StartStopStyle}" VerticalAlignment="Bottom" Checked="startTempMeasDcColdButton_Checked" />
+                                    </StackPanel>
                                 </GroupBox>
-                                <ListView Margin="80,200,403,30" Name="DCColdTemperatureTable" SourceUpdated="DCColdTemperatureTable_SourceUpdated" HorizontalContentAlignment="Stretch" VerticalAlignment="Bottom" Height="300">
+                                <ListView Margin="54,0,392,44" Name="DCColdTemperatureTable" SourceUpdated="DCColdTemperatureTable_SourceUpdated" HorizontalContentAlignment="Stretch" VerticalAlignment="Bottom" Height="300">
                                     <!--
                                     <ListView.Background>
                                         <LinearGradientBrush EndPoint="0.939,0.919" StartPoint="0.041,0.081">
@@ -227,11 +260,11 @@
                                 <TextBox Margin="0,0,200,55" Name="T4MeanDCColdTextBox" Text="{Binding Path=T4MeanDCColdTempTable,Converter={StaticResource CelsiusConverter}}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="150.05" IsEnabled="True" IsReadOnly="True" />
                                 <Label Margin="0,0,200,90" Name="T4MeanDCColdLabel" Content="{Binding Path=T4MeanDCColdTempTableHeader}" HorizontalAlignment="Right" Width="150" VerticalAlignment="Bottom" Height="30"></Label>
                                 
-                                <my:ThermometerChannel Margin="0,44,70,0" Name="thermometerChannel4" xmlns:my="clr-namespace:WpfCustomControlLibrary;assembly=WpfCustomControlLibrary" VerticalAlignment="Top" HorizontalAlignment="Right" Width="180" Header="Channel 4" Value="{Binding Path=T4MeanDCColdTempTable}"/>
-                                <my:ThermometerChannel Margin="0,44,670,0" Name="thermometerChannel1" xmlns:my="clr-namespace:WpfCustomControlLibrary;assembly=WpfCustomControlLibrary" HorizontalAlignment="Right" Width="178" MinHeight="0" Value="{Binding Path=T1MeanDCColdTempTable}" VerticalAlignment="Top" >
+                                <my:ThermometerChannel Margin="0,21,96,0" Name="thermometerChannel4" xmlns:my="clr-namespace:WpfCustomControlLibrary;assembly=WpfCustomControlLibrary" VerticalAlignment="Top" HorizontalAlignment="Right" Width="180" Header="Channel 4" Value="{Binding Path=T4MeanDCColdTempTable}" Height="330" />
+                                <my:ThermometerChannel Margin="275,21,0,0" Name="thermometerChannel1" xmlns:my="clr-namespace:WpfCustomControlLibrary;assembly=WpfCustomControlLibrary" HorizontalAlignment="Left" Width="178" MinHeight="0" Value="{Binding Path=T1MeanDCColdTempTable}" VerticalAlignment="Top" Height="330">
                                 </my:ThermometerChannel>
-                                <my:ThermometerChannel Margin="0,44,470,0" Name="thermometerChannel2" xmlns:my="clr-namespace:WpfCustomControlLibrary;assembly=WpfCustomControlLibrary" Header="Channel 2" Value="{Binding Path=T2MeanDCColdTempTable}" VerticalAlignment="Top" HorizontalAlignment="Right"/>
-                                <my:ThermometerChannel Margin="0,44,270,0" Name="thermometerChannel3" xmlns:my="clr-namespace:WpfCustomControlLibrary;assembly=WpfCustomControlLibrary" Header="Channel 3" Value="{Binding Path=T3MeanDCColdTempTable}" VerticalAlignment="Top" HorizontalAlignment="Right" Width="178" />
+                                <my:ThermometerChannel Margin="475,21,496,0" Name="thermometerChannel2" xmlns:my="clr-namespace:WpfCustomControlLibrary;assembly=WpfCustomControlLibrary" Header="Channel 2" Value="{Binding Path=T2MeanDCColdTempTable}" VerticalAlignment="Top" Height="330" />
+                                <my:ThermometerChannel Margin="0,21,296,0" Name="thermometerChannel3" xmlns:my="clr-namespace:WpfCustomControlLibrary;assembly=WpfCustomControlLibrary" Header="Channel 3" Value="{Binding Path=T3MeanDCColdTempTable}" VerticalAlignment="Top" HorizontalAlignment="Right" Width="178" Height="330" />
                             </Grid>
                         </TabItem>
                     </TabControl>
@@ -448,24 +481,24 @@
                                     <RowDefinition Height="50*"/>
                                     <RowDefinition Height="50*"/>
                                 </Grid.RowDefinitions>
-                                <GroupBox Header="R1 Data" Name="R1GroupData" Margin="44.299,31.32,44.299,104.78">
-                                    <StackPanel>
-                                        <Label Name="R1TNullLabel">R1 t=0</Label>
-                                        <TextBox Name="R1TNullTextBox" Text="{Binding Path=T1_T0,Converter={StaticResource OhmConvertor}}" IsEnabled="True" IsReadOnly="True"></TextBox>
-                                        <Label Name="R1TempRiseLabel">Temp. rise t=0</Label>
-                                        <TextBox Name="R1TempRiseTextBox" Text="{Binding Path=T1_Rise,Converter={StaticResource CelsiusConverter}}" IsEnabled="True" IsReadOnly="True"></TextBox>
-                                        <Label Name="FT1Label">f(t)</Label>
-                                        <TextBox Name="FT1TextBox" Text="{Binding Path=F_T1}" IsEnabled="True" IsReadOnly="True"></TextBox>
+                                <GroupBox Header="R1 Data" Name="R1GroupData" Width="200" Height="220" FontSize="16"  Margin="40 30 0 0" HorizontalAlignment="Left" VerticalAlignment="Top">
+                                    <StackPanel >
+                                        <Label Margin="5 0"  Name="R1TNullLabel">R1 t=0</Label>
+                                        <TextBox Margin="10 0" Name="R1TNullTextBox" Text="{Binding Path=T1_T0,Converter={StaticResource OhmConvertor}}" IsEnabled="True" IsReadOnly="True"></TextBox>
+                                        <Label Margin="5 0" Name="R1TempRiseLabel">Temp. rise t=0</Label>
+                                        <TextBox Margin="10 0" Name="R1TempRiseTextBox" Text="{Binding Path=T1_Rise,Converter={StaticResource CelsiusConverter}}" IsEnabled="True" IsReadOnly="True"></TextBox>
+                                        <Label Margin="5 0" Name="FT1Label">f(t)</Label>
+                                        <TextBox Margin="10 0" Name="FT1TextBox" Text="{Binding Path=F_T1}" IsEnabled="True" IsReadOnly="True"></TextBox>
                                     </StackPanel>
                                 </GroupBox>
-                                <GroupBox Header="R2 Data" Grid.Row="1" Name="R2GroupData" Margin="44.299,31.32,44.299,104.78">
+                                <GroupBox Header="R2 Data" Grid.Row="1" Name="R2GroupData" FontSize="16" Width="200" Height="220" Margin="40 30 0 0" HorizontalAlignment="Left" VerticalAlignment="Top">
                                     <StackPanel>
-                                        <Label Name="R2TNullLabel">R2 t=0</Label>
-                                        <TextBox Name="R2TNullTextBox" Text="{Binding Path=T2_T0,Converter={StaticResource OhmConvertor}}" IsEnabled="True" IsReadOnly="True" />
-                                        <Label Name="R2TempRiseLabel">Temp. rise t=0</Label>
-                                        <TextBox Name="R2TempRiseTextBox" Text="{Binding Path=T2_Rise,Converter={StaticResource CelsiusConverter}}" IsEnabled="True" IsReadOnly="True" />
-                                        <Label Name="FT2Label">f(t)</Label>
-                                        <TextBox Name="FT2TextBox" Text="{Binding Path=F_T2}" IsEnabled="True" IsReadOnly="True" />
+                                        <Label Margin="5 0" Name="R2TNullLabel">R2 t=0</Label>
+                                        <TextBox Margin="10 0" Name="R2TNullTextBox" Text="{Binding Path=T2_T0,Converter={StaticResource OhmConvertor}}" IsEnabled="True" IsReadOnly="True" />
+                                        <Label Margin="5 0" Name="R2TempRiseLabel">Temp. rise t=0</Label>
+                                        <TextBox Margin="10 0" Name="R2TempRiseTextBox" Text="{Binding Path=T2_Rise,Converter={StaticResource CelsiusConverter}}" IsEnabled="True" IsReadOnly="True" />
+                                        <Label Margin="5 0" Name="FT2Label">f(t)</Label>
+                                        <TextBox Margin="10 0" Name="FT2TextBox" Text="{Binding Path=F_T2}" IsEnabled="True" IsReadOnly="True" />
                                     </StackPanel>
                                 </GroupBox>
                                 <Label Height="28" Margin="327.24,64.539,409.05,0" Name="T1Label" VerticalAlignment="Top">T1</Label>
