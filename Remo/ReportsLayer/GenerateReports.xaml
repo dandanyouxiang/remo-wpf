@@ -24,7 +24,7 @@
         </Grid>
         <FlowDocumentScrollViewer Name="flowDocumentScrollViewer"  Grid.Row="1" BorderThickness="5" BorderBrush="Gray">
             <FlowDocument Name="flowExample">
-                <Paragraph>Hello, world of documents.</Paragraph>
+                <Paragraph>Text.</Paragraph>
             </FlowDocument>
         </FlowDocumentScrollViewer>
     </Grid>

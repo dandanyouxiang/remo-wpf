@@ -976,10 +976,6 @@ namespace ReportsLayer
 
             flowDocument.Blocks.Add(DcColdMeasurenmentsHeaderParagraph);
         }
-        /// <summary>
-        /// Хедер на табелата во која се прикажани отпорите.
-        /// </summary>
-        /// <param name="tempTable"></param>
         private void insertDcCoolingMeasurenmentsTableHeader(Table tempTable)
         {
             TableRow headerRow = tempTable.RowGroups[0].Rows[0];
@@ -1000,7 +996,6 @@ namespace ReportsLayer
             //Порцентуална разлика од првото мерење на R2.
             headerRow.Cells.Add(new TableCell(new Paragraph(new Run("R2 DIFF%"))));
         }
-
         private void insertDcCoolingMeasurenmentsTableCell(Table tempTable)
         {
             EntityLayer.ListWithChangeEvents<EntityLayer.RessistanceMeasurenment> meas = dataSource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel.RessistanceMeasurenments;
@@ -1030,28 +1025,6 @@ namespace ReportsLayer
                                                 : double.NaN).ToString()))));
             }
         }
-        /// <summary>
-        /// Табелата со отпорите
-        /// </summary>
-        private void insertDcCoolingMeasurenmentsTable()
-        {
-            List<TempMeasurenment> tempMeasurenments = dataSource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments;
-            TempMeasurenementConfiguration tc = dataSource.Root.AcHotMeasurenments.TempMeasurenementConfiguration;
-            Table tempTable = new Table();
-            tempTable.RowGroups.Add(new TableRowGroup());
-            tempTable.RowGroups[0].Rows.Add(new TableRow());
-
-            tempTable.BorderBrush = System.Windows.Media.Brushes.Black;
-            tempTable.BorderThickness = new Thickness(2);
-
-            //Поставување на хедерот
-            insertDcCoolingMeasurenmentsTableHeader(tempTable);
-
-            //Приказ на сите мерења
-            insertDcCoolingMeasurenmentsTableCell(tempTable);
-
-            flowDocument.Blocks.Add(tempTable);
-        }
         private void insertDcCoolingMeasurenmentsTable(FlowDocument flowDocument)
         {
             List<TempMeasurenment> tempMeasurenments = dataSource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments;
@@ -1071,21 +1044,6 @@ namespace ReportsLayer
 
             flowDocument.Blocks.Add(tempTable);
         }
-
-        public void insertResistanceChn1() 
-        {
-            Paragraph ResistanceChn1Paragraph = new Paragraph();
-
-            ResistanceChn1Paragraph.Inlines.Add(new Bold(new Run("R1 - Resistance at Channel 1\n")));
-            //Exponential Curve
-            ResistanceChn1Paragraph.Inlines.Add(new Run("Exponential Curve f(t):    " + dataSource.retFT1() + " C\n"));
-            //R1 at time t=0
-            ResistanceChn1Paragraph.Inlines.Add(new Run("R1 at time t=0:            " + dataSource.retT1Rise() + " C\n"));
-            //Temp Rise at time t=0
-            ResistanceChn1Paragraph.Inlines.Add(new Run("Temp Rise at time t=0:     " + dataSource.retT1T0() + " C\n"));
-
-            flowDocument.Blocks.Add(ResistanceChn1Paragraph);
-        }
         public void insertResistanceChn1(FlowDocument flowDocument)
         {
             Paragraph ResistanceChn1Paragraph = new Paragraph();
@@ -1100,12 +1058,11 @@ namespace ReportsLayer
 
             flowDocument.Blocks.Add(ResistanceChn1Paragraph);
         }
-
-        public void insertResistanceChn2()
+        public void insertResistanceChn2(FlowDocument flowDocument)
         {
             Paragraph ResistanceChn2Paragraph = new Paragraph();
 
-            ResistanceChn2Paragraph.Inlines.Add(new Bold( new Run("R2 - Resistance at Channel 1\n")));
+            ResistanceChn2Paragraph.Inlines.Add(new Bold(new Run("R2 - Resistance at Channel 1\n")));
             //Exponential Curve
             ResistanceChn2Paragraph.Inlines.Add(new Run("Exponential Curve f(t):    " + dataSource.retFT2() + " C\n"));
             //R1 at time t=0
@@ -1115,7 +1072,136 @@ namespace ReportsLayer
 
             flowDocument.Blocks.Add(ResistanceChn2Paragraph);
         }
-        public void insertResistanceChn2(FlowDocument flowDocument)
+        private void insertGraphR1(FlowDocument flowDocument)
+        {
+            Paragraph graphParagraph = new Paragraph();
+
+            InlineUIContainer myInlineUIContainer = new InlineUIContainer();
+
+            // Set the BaselineAlignment property to "Bottom" so that the 
+            // Button aligns properly with the text.
+
+            StackPanel stackPanel = new StackPanel();
+
+            // Asign the button as the UI container's child.
+            WPFScatterGraph DCCoolingGraph = new WPFScatterGraph();
+            WPFGraphSeries seriesOilTemp = new WPFGraphSeries();
+            WPFGraphSeries seriesAmbTemp = new WPFGraphSeries();
+            WPFGraphSeries seriesTempRise = new WPFGraphSeries();
+
+            // GraphBackground="LightGray"/>
+
+            //ACHotGraph.MinWidth = 500;
+
+
+            //acGraphInit(ref ACHotGraph, ref seriesOilTemp, ref seriesAmbTemp, ref seriesTempRise);
+            //acGraphRefresh(ref ACHotGraph, ref seriesOilTemp, ref seriesAmbTemp, ref seriesTempRise);
+
+            stackPanel.Width = 700;
+            stackPanel.Children.Add(DCCoolingGraph);
+            myInlineUIContainer.Child = stackPanel;
+
+            graphParagraph.Inlines.Add(myInlineUIContainer);
+
+            flowDocument.Blocks.Add(graphParagraph);
+
+        }
+        private void insertGraphR2(FlowDocument flowDocument)
+        {
+            Paragraph graphParagraph = new Paragraph();
+
+            InlineUIContainer myInlineUIContainer = new InlineUIContainer();
+
+            // Set the BaselineAlignment property to "Bottom" so that the 
+            // Button aligns properly with the text.
+
+            StackPanel stackPanel = new StackPanel();
+
+            // Asign the button as the UI container's child.
+            WPFScatterGraph DCCoolingGraph = new WPFScatterGraph();
+            WPFGraphSeries seriesOilTemp = new WPFGraphSeries();
+            WPFGraphSeries seriesAmbTemp = new WPFGraphSeries();
+            WPFGraphSeries seriesTempRise = new WPFGraphSeries();
+
+            // GraphBackground="LightGray"/>
+
+            //ACHotGraph.MinWidth = 500;
+
+            //acGraphInit(ref ACHotGraph, ref seriesOilTemp, ref seriesAmbTemp, ref seriesTempRise);
+            //acGraphRefresh(ref ACHotGraph, ref seriesOilTemp, ref seriesAmbTemp, ref seriesTempRise);
+
+            stackPanel.Width = 700;
+            stackPanel.Height = 400;
+            stackPanel.Children.Add(DCCoolingGraph);
+
+            myInlineUIContainer.Child = stackPanel;
+
+            graphParagraph.Inlines.Add(myInlineUIContainer);
+
+            flowDocument.Blocks.Add(graphParagraph);
+
+        }
+        private FlowDocument makeDcCoolingMeasurenmentsDocument(FlowDocument flowDocument)
+        {
+            flowDocument.Blocks.Clear();
+            //Поставување на насловот
+            insertTitle(FlowDocumentReportType.AcHotMeasurenments,flowDocument);
+            //Поставување на стандардните почетни информации за секој извештај.
+            insertHeader(flowDocument);
+
+            insertDcCoolingMeasurenmentsHeader(flowDocument);
+
+            insertDcCoolingMeasurenmentsTable(flowDocument);
+
+            insertResistanceChn1(flowDocument);
+
+            insertGraphR1(flowDocument);
+
+            insertResistanceChn2(flowDocument);
+
+            insertGraphR2(flowDocument);
+
+            //Потпис
+            insertSignature(flowDocument);
+
+            return flowDocument;
+        }
+
+        #region Prethodni
+        private void insertDcCoolingMeasurenmentsTable()
+        {
+            List<TempMeasurenment> tempMeasurenments = dataSource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments;
+            TempMeasurenementConfiguration tc = dataSource.Root.AcHotMeasurenments.TempMeasurenementConfiguration;
+            Table tempTable = new Table();
+            tempTable.RowGroups.Add(new TableRowGroup());
+            tempTable.RowGroups[0].Rows.Add(new TableRow());
+
+            tempTable.BorderBrush = System.Windows.Media.Brushes.Black;
+            tempTable.BorderThickness = new Thickness(2);
+
+            //Поставување на хедерот
+            insertDcCoolingMeasurenmentsTableHeader(tempTable);
+
+            //Приказ на сите мерења
+            insertDcCoolingMeasurenmentsTableCell(tempTable);
+
+            flowDocument.Blocks.Add(tempTable);
+        }
+        public void insertResistanceChn1()
+        {
+            Paragraph ResistanceChn1Paragraph = new Paragraph();
+
+            ResistanceChn1Paragraph.Inlines.Add(new Bold(new Run("R1 - Resistance at Channel 1\n")));
+            //Exponential Curve
+            ResistanceChn1Paragraph.Inlines.Add(new Run("Exponential Curve f(t):    " + dataSource.retFT1() + " C\n"));
+            //R1 at time t=0
+            ResistanceChn1Paragraph.Inlines.Add(new Run("R1 at time t=0:            " + dataSource.retT1Rise() + " C\n"));
+            //Temp Rise at time t=0
+            ResistanceChn1Paragraph.Inlines.Add(new Run("Temp Rise at time t=0:     " + dataSource.retT1T0() + " C\n"));
+
+            flowDocument.Blocks.Add(ResistanceChn1Paragraph);
+        }
+        public void insertResistanceChn2()
         {
             Paragraph ResistanceChn2Paragraph = new Paragraph();
 
@@ -1174,42 +1260,6 @@ namespace ReportsLayer
             flowDocument.Blocks.Add(graphParagraph);
 
         }
-
-        private void insertGraphR1(FlowDocument flowDocument)
-        {
-            Paragraph graphParagraph = new Paragraph();
-
-            InlineUIContainer myInlineUIContainer = new InlineUIContainer();
-
-            // Set the BaselineAlignment property to "Bottom" so that the 
-            // Button aligns properly with the text.
-
-            StackPanel stackPanel = new StackPanel();
-
-            // Asign the button as the UI container's child.
-            WPFScatterGraph DCCoolingGraph = new WPFScatterGraph();
-            WPFGraphSeries seriesOilTemp = new WPFGraphSeries();
-            WPFGraphSeries seriesAmbTemp = new WPFGraphSeries();
-            WPFGraphSeries seriesTempRise = new WPFGraphSeries();
-
-            // GraphBackground="LightGray"/>
-
-            //ACHotGraph.MinWidth = 500;
-
-
-            //acGraphInit(ref ACHotGraph, ref seriesOilTemp, ref seriesAmbTemp, ref seriesTempRise);
-            //acGraphRefresh(ref ACHotGraph, ref seriesOilTemp, ref seriesAmbTemp, ref seriesTempRise);
-
-            stackPanel.Width = 700;
-            stackPanel.Children.Add(DCCoolingGraph);
-            myInlineUIContainer.Child = stackPanel;
-
-            graphParagraph.Inlines.Add(myInlineUIContainer);
-
-            flowDocument.Blocks.Add(graphParagraph);
-
-        }
-
         private void insertGraphR2()
         {
             Paragraph graphParagraph = new Paragraph();
@@ -1255,43 +1305,6 @@ namespace ReportsLayer
             flowDocument.Blocks.Add(graphParagraph);
 
         }
-
-        private void insertGraphR2(FlowDocument flowDocument)
-        {
-            Paragraph graphParagraph = new Paragraph();
-
-            InlineUIContainer myInlineUIContainer = new InlineUIContainer();
-
-            // Set the BaselineAlignment property to "Bottom" so that the 
-            // Button aligns properly with the text.
-
-            StackPanel stackPanel = new StackPanel();
-
-            // Asign the button as the UI container's child.
-            WPFScatterGraph DCCoolingGraph = new WPFScatterGraph();
-            WPFGraphSeries seriesOilTemp = new WPFGraphSeries();
-            WPFGraphSeries seriesAmbTemp = new WPFGraphSeries();
-            WPFGraphSeries seriesTempRise = new WPFGraphSeries();
-
-            // GraphBackground="LightGray"/>
-
-            //ACHotGraph.MinWidth = 500;
-
-            //acGraphInit(ref ACHotGraph, ref seriesOilTemp, ref seriesAmbTemp, ref seriesTempRise);
-            //acGraphRefresh(ref ACHotGraph, ref seriesOilTemp, ref seriesAmbTemp, ref seriesTempRise);
-
-            stackPanel.Width = 700;
-            stackPanel.Height = 400;
-            stackPanel.Children.Add(DCCoolingGraph);
-
-            myInlineUIContainer.Child = stackPanel;
-
-            graphParagraph.Inlines.Add(myInlineUIContainer);
-
-            flowDocument.Blocks.Add(graphParagraph);
-
-        }
-
         private FlowDocument makeDcCoolingMeasurenmentsDocument()
         {
             flowDocument.Blocks.Clear();
@@ -1317,32 +1330,7 @@ namespace ReportsLayer
 
             return flowDocument;
         }
-
-        private FlowDocument makeDcCoolingMeasurenmentsDocument(FlowDocument flowDocument)
-        {
-            flowDocument.Blocks.Clear();
-            //Поставување на насловот
-            insertTitle(FlowDocumentReportType.AcHotMeasurenments,flowDocument);
-            //Поставување на стандардните почетни информации за секој извештај.
-            insertHeader(flowDocument);
-
-            insertDcCoolingMeasurenmentsHeader(flowDocument);
-
-            insertDcCoolingMeasurenmentsTable(flowDocument);
-
-            insertResistanceChn1(flowDocument);
-
-            insertGraphR1(flowDocument);
-
-            insertResistanceChn2(flowDocument);
-
-            insertGraphR2(flowDocument);
-
-            //Потпис
-            insertSignature(flowDocument);
-
-            return flowDocument;
-        }
+        #endregion Prethodni
 
         #endregion
     }
