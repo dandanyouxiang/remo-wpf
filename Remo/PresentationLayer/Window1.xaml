@@ -13,6 +13,9 @@
     <!--Definiranje na komandite za aplikacijat-->
     <Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.New"  Executed="Command_New_Executed" />
+        <CommandBinding Command="ApplicationCommands.Open"  Executed="Command_Open_Executed" />
+        <CommandBinding Command="ApplicationCommands.Save" Executed="Command_Save_Executed"/>
+        <CommandBinding Command="ApplicationCommands.Close" Executed="Command_Close_Executed"/>
     </Window.CommandBindings>
     
     <Grid ShowGridLines="true" Name="MainGrid" IsHitTestVisible="True" Loaded="MainGrid_Loaded" >
@@ -28,9 +31,15 @@
             <Menu DockPanel.Dock="Top" >
                 <MenuItem Header="_File" >
                     <MenuItem Command="New" Header="New Measurenment"></MenuItem>
-                    <MenuItem Header="_Open" />
-                    <MenuItem Header="Save As…" />
-                    <MenuItem Header="E_xit" Click="MenuItem_Click" />
+                    <MenuItem Command="Open" Header="Open Measurenment" />
+                    <MenuItem Command="Save" Header="Save Measurenment" />
+                    <Separator></Separator>
+                    <MenuItem Header="Print" />
+                    <MenuItem Header="Export in Excel" />
+                    <Separator></Separator>
+                    <MenuItem Header="Set WorkPlace Path"/>
+                    <Separator></Separator>
+                    <MenuItem Command="Close" Header="Exit" />
                 </MenuItem>
                 <MenuItem Header="_Calibration">
                     <MenuItem Header="_Resistance" />

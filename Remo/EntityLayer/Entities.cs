@@ -112,6 +112,15 @@ namespace EntityLayer
                 
             writeToXml(path, root);
         }
+        public void writeToXmlNew(string path)
+        {
+            
+
+            Root root = new Root();
+            
+
+            writeToXml(path, root);
+        }
     }
     #endregion
 
@@ -159,7 +168,7 @@ namespace EntityLayer
             this.RessistanceTransformerChannels = ressistanceTransformerChannels;
         }
         public DcColdMeasurenments()
-            : this(new TempMeasurenementConfiguration(), new ListWithChangeEvents<RessistanceTransformerChannel>())
+            : this(new TempMeasurenementConfiguration(), new ListWithChangeEvents<RessistanceTransformerChannel>() { new RessistanceTransformerChannel(), new RessistanceTransformerChannel() , new RessistanceTransformerChannel()})
         {
         }
        

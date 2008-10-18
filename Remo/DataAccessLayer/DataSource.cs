@@ -7,6 +7,13 @@ using System.ComponentModel;
 
 namespace DataAccessLayer
 {
+    public enum FileCommand 
+        {
+            New,
+            Open,
+            Save
+        }
+
     public partial class DataSource : INotifyPropertyChanged
     {
         /// <summary>
@@ -143,15 +150,45 @@ namespace DataAccessLayer
                 T2_Rise = evalT2Rise();
                 F_T2 = evalFT2();
             }
-            public DataSource(string path) 
+            public DataSource(string path,FileCommand fileCommand) 
             {
                 //Citanje na podatocite
                 EntityLayer.XmlServices serv = new EntityLayer.XmlServices();
 
 
-                serv.writeToXmlTest(path);
+                switch (fileCommand) 
+                {
+                    case FileCommand.New: new EntityLayer.XmlServices().writeToXmlNew(path); break;
+                    case FileCommand.Open: break;
+                    case FileCommand.Save: break;
+                }
 
-                new EntityLayer.XmlServices().writeToXmlTest(path);
+                //new EntityLayer.XmlServices().writeToXmlTest(path);
+                //new EntityLayer.XmlServices().writeToXml(path, new EntityLayer.Root());
+    
+                Root = serv.readXml(path);
+
+                Root = new EntityLayer.XmlServices().readXml(path);
+
+
+                //DCCold
+                Root.DcColdMeasurenments.RessistanceTransformerChannels.PropertyChanged += new PropertyChangedEventHandler(DcColdMeasurenments_RessistanceTransformerChannels_PropertyChanged);
+                Root.DcColdMeasurenments.TempMeasurenementConfiguration.PropertyChanged += new PropertyChangedEventHandler(DcColdMeasurenments_TempMeasurenementConfiguration_PropertyChanged);
+                //ACHeating
+                Root.AcHotMeasurenments.TempMeasurenementConfiguration.PropertyChanged += new PropertyChangedEventHandler(AcHotMeasurenments_TempMeasurenementConfiguration_PropertyChanged);
+                //DCCooling
+                Root.DcCoolingMeasurenments.RessistanceTransformerChannel.PropertyChanged += new PropertyChangedEventHandler(DcCoolingMeasurenments_RessistanceTransformerChannels_PropertyChanged);
+                //TransformatorProperties
+                Root.TransformerProperties.PropertyChanged += new PropertyChangedEventHandler(TransformerProperties_PropertyChanged);
+
+                Root.DcColdMeasurenments.TempMeasurenementConfiguration.OnPropertyChanged(new PropertyChangedEventArgs(null));
+            }
+            public DataSource(string path,bool newSource)
+            {
+                //Citanje na podatocite
+                EntityLayer.XmlServices serv = new EntityLayer.XmlServices();
+
+                new EntityLayer.XmlServices().writeToXmlNew(path);
 
                 Root = serv.readXml(path);
 
@@ -170,7 +207,11 @@ namespace DataAccessLayer
 
                 Root.DcColdMeasurenments.TempMeasurenementConfiguration.OnPropertyChanged(new PropertyChangedEventArgs(null));
             }
-
+            
+            public void saveData(string path)
+            {
+                new EntityLayer.XmlServices().writeToXml(path, this.Root);
+            }
     }
     
 }

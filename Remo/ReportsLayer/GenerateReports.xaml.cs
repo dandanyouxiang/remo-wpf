@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using DataAccessLayer;
 
 namespace ReportsLayer
 {
@@ -19,20 +20,26 @@ namespace ReportsLayer
     public partial class GenerateReports : Window
     {
         private FlowDocumentReport flowDocumentReport;
-        private DataAccessLayer.DataSource dataSource;
+        private DataSource dataSource;
         private FlowDocumentReportType flowDocumentReportType = FlowDocumentReportType.DcColdMeasurenments;
+
+        public GenerateReports(DataSource dataSource)
+        {
+            InitializeComponent();
+            this.dataSource = dataSource;
+
+            dataSource.Root.TransformerProperties = new EntityLayer.TransformerProperties("12345", "6789", "Gjore", "Nesto", EntityLayer.TransformerProperties.ConnectionType.D, EntityLayer.TransformerProperties.ConnectionType.Y, EntityLayer.TransformerProperties.Material.Aluminium, EntityLayer.TransformerProperties.Material.Aluminium, 20, 20);
+            flowDocumentReport = new FlowDocumentReport(dataSource);
+            flowDocumentScrollViewer.Document = flowDocumentReport.returnDocument(FlowDocumentReportType.DcColdMeasurenments);
+        }
 
         public GenerateReports()
         {
             InitializeComponent();
-            dataSource = new DataAccessLayer.DataSource(@"E:\root.xml");
+            this.dataSource = new DataSource("E:\\root.xml", FileCommand.New);
 
             dataSource.Root.TransformerProperties = new EntityLayer.TransformerProperties("12345", "6789", "Gjore", "Nesto", EntityLayer.TransformerProperties.ConnectionType.D, EntityLayer.TransformerProperties.ConnectionType.Y, EntityLayer.TransformerProperties.Material.Aluminium, EntityLayer.TransformerProperties.Material.Aluminium, 20, 20);
-
-            flowDocumentReport = FlowDocumentReport.Instance;
-
-            //flowExample = flowDocumentReport.createDocument(FlowDocumentReportType.AcHotMeasurenments);
-            //flowExample = flowDocumentReport.createDocument(FlowDocumentReportType.DcColdMeasurenments);
+            flowDocumentReport = new FlowDocumentReport(dataSource);
             flowDocumentScrollViewer.Document = flowDocumentReport.returnDocument(FlowDocumentReportType.DcColdMeasurenments);
         }
 

@@ -31,26 +31,24 @@ namespace ReportsLayer
         private DataSource dataSource;
 
 
-        static private FlowDocument DcColdMeasurenmentsDocument;
-        static private FlowDocument AcHotMeasurenmentsDocument;
-        static private FlowDocument DcCoolingMeasurenmentsDocument;
-        /*
+        private FlowDocument DcColdMeasurenmentsDocument;
+        private FlowDocument AcHotMeasurenmentsDocument;
+        private FlowDocument DcCoolingMeasurenmentsDocument;
+        
         public FlowDocumentReport() 
         {
             flowDocument = new FlowDocument(); 
         }
 
+        public DataSource dataSourceValue 
+        {
+            get { return dataSource; }
+            set { dataSource = value; }
+        }
+
         public FlowDocumentReport(DataSource dataSource)
         {
-            flowDocument = new FlowDocument();
-            flowDocument.FontFamily = new FontFamily("Courier New");
             this.dataSource = dataSource;
-            flowDocument.DataContext = dataSource;
-        }
-        */
-        FlowDocumentReport()
-        {
-            dataSource = new DataAccessLayer.DataSource(@"E:\root.xml");
             //todo da se trgne
             dataSource.Root.TransformerProperties = new EntityLayer.TransformerProperties("12345", "6789", "Gjore", "Nesto", EntityLayer.TransformerProperties.ConnectionType.D, EntityLayer.TransformerProperties.ConnectionType.Y, EntityLayer.TransformerProperties.Material.Aluminium, EntityLayer.TransformerProperties.Material.Aluminium, 20, 20);
 
@@ -70,16 +68,7 @@ namespace ReportsLayer
             AcHotMeasurenmentsDocument.DataContext = dataSource;
             DcCoolingMeasurenmentsDocument.DataContext = dataSource;
         }
-        static FlowDocumentReport() { }
-
-        // private object
-        static readonly FlowDocumentReport uniqueInstance = new FlowDocumentReport();
-
-        public static FlowDocumentReport Instance
-        {
-            get { return uniqueInstance; }
-        }
-        //static documents return tree subtype of flow document.
+       
         public FlowDocument returnDocument(FlowDocumentReportType flowDocumentReportType)
         {
             switch (flowDocumentReportType)

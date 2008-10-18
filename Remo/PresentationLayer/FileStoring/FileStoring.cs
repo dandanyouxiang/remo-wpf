@@ -2,13 +2,34 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 using System.IO;
 
 namespace PresentationLayer
 {
-    class FileStoring
+    [Serializable]
+    public class FileStoring
     {
+        public string FileExtension { get; set; }
+        public string FileDescription { get; set; }
+        public string FileName { get; set; }
+        public string WorkplacePath { get; set; }
+
         private DirectoryInfo workplace;
+
+
+        public FileStoring(string fileExtension,string fileDescription,string fileName, string workplacePath)
+        {
+            this.FileExtension = fileExtension;
+            this.FileDescription = fileDescription;
+            this.FileName = fileName;
+            this.WorkplacePath = workplacePath;
+            workplace = new DirectoryInfo(workplacePath);
+        }
+
+        public FileStoring()
+        {
+        }
 
         public FileStoring(string workplacePath) 
         {
@@ -21,7 +42,7 @@ namespace PresentationLayer
         public string getFirstFile() 
         {
             string retValue = "";
-            FileInfo[] files=workplace.GetFiles();
+            FileInfo[] files=workplace.GetFiles("*.remo");
 
             if (files.Length > 0) 
             {
@@ -51,9 +72,22 @@ namespace PresentationLayer
         public string sugestFileName(DateTime dateTime) 
         {
             //Ако нема со име дата да предлози
-            string retValue = "Data_"+dateTime.Hour+"_"+dateTime.TimeOfDay+"_"+dateTime.Day+"."+dateTime.Month+"."+dateTime.Year;
+            string retValue = "Data_" + dateTime.Minute +"_"+ dateTime.Hour + "_" + dateTime.Day + "_" + dateTime.Month + "_" + dateTime.Year + "." + FileExtension;
 
             return retValue;
         }
+        /*
+        public bool isValidFileName(string fileName) 
+        {
+            Regex fileRegex = new Regex(@"[A-Z,a-z,0-9,_]*\.[A-Z,a-z,0-9]*");
+            //throw new Exception(String.Format( "File with name \"{0} \" allredy is created! Choose another name.",fileName));
+
+            //Дали постои фајл со такво име.
+            if (workplace.GetFiles("fileName").Count() > 0) return false;
+            //Дали добро внесен стрингот
+            if (!fileRegex.Match(fileName).Success) return false;
+            return true;
+        } 
+         */
     }
 }

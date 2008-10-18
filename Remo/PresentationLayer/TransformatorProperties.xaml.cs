@@ -20,16 +20,24 @@ namespace DataAccessLayer.PresentationLayer
     public partial class TransformatorProperties : Window
     {
         DataSource dataSource;
+        string fileName;
 
         private string[] CoefValue=new string[3]{"235","225","0"};
-
+        /*
         public TransformatorProperties()
         {
             InitializeComponent();
-            dataSource = new DataSource(@"E:\root.xml");
+            dataSource = new DataSource(@"E:\root.xml",FileCommand.New);
             MainGrid.DataContext = dataSource.Root.TransformerProperties;
         }
-
+         */
+        public TransformatorProperties(DataSource dataSource)
+        {
+            InitializeComponent();
+            this.dataSource = dataSource;
+            this.dataSource = dataSource;
+            MainGrid.DataContext = dataSource.Root.TransformerProperties;
+        }
         private void comboBox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if(ValueHVtextBox!=null)

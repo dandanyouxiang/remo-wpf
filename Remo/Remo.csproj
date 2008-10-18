@@ -106,6 +106,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="PresentationLayer\Commands\WorkPlacePath.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="PresentationLayer\TransformatorProperties.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -167,6 +171,10 @@
       <DependentUpon>TempCalibrationDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="PresentationLayer\Commands\NewCommand.cs" />
+    <Compile Include="PresentationLayer\Commands\WorkPlacePath.xaml.cs">
+      <DependentUpon>WorkPlacePath.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PresentationLayer\FileStoring\FileInfoSerilisation.cs" />
     <Compile Include="PresentationLayer\FileStoring\FileStoring.cs" />
     <Compile Include="PresentationLayer\GraphRendering.cs" />
     <Compile Include="PresentationLayer\TransformatorProperties.xaml.cs">

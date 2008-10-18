@@ -58,14 +58,33 @@ namespace PresentationLayer
                 PropertyChanged(this, e);
         }
         DataSourceLayer.DataSourceServices ds;
+        
+        /// <summary>
+        /// Изворот на податоци.
+        /// </summary>
         DataSource datasource;
+
+        /// <summary>
+        /// РАбота со фајлови.
+        /// </summary>
+        FileStoring fileStoring;
+
         public Window1()
         {
             InitializeComponent();
-            //Todo da se izbrishe posle
-            WorkPlacePath=@"E:\";
+            //Todo da se izbrishe posle - DA SE PAMTI nekade
 
-            datasource = new DataSource(@"E:\root.xml");
+            fileStoring = XmlFileServices.readXml(@"E:\file.info");
+            
+            //WorkPlacePath=@"E:\";
+            WorkPlacePath = fileStoring.WorkplacePath;
+            FileName = fileStoring.FileName;
+
+
+            this.Title = "Remo - " + FileName;
+            
+            //Todo Da se vidi dali e vo red na ovoj nacin da se cita prethodno zacuvanata programa.
+            datasource = new DataSource(FileName, FileCommand.Open);
             MainGrid.DataContext = datasource;
             StatusString = statusStrings[2];
             this.graphsInit();
@@ -126,6 +145,20 @@ namespace PresentationLayer
                     thermometerChannelAC3.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T3;
                     thermometerChannelAC4.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T4;
                 }
+
+                //Todo Rabota so fajlovi
+                #region File Manipulation
+
+                //XmlFileServices.writeToXml(@"E:\file.info",new FileStoring(".remo","Remo file","Data.remo",@"E:\"));
+
+                //fileStoring = new FileStoring(WorkPlacePath);
+                //fileStoring.FileExtension = "remo";
+                //fileStoring.FileDescription = "Remo documents";
+                
+
+                #endregion File Manipulation
+
+
             }
             catch (Exception ex) 
             {
@@ -423,7 +456,7 @@ namespace PresentationLayer
                     listView.ItemContainerGenerator.IndexFromContainer(container);
                 //Todo ??? zasto se cita pak
                 
-                DataSource datasource = new DataSource(@"D:\root.xml");
+                DataSource datasource = new DataSource(@"D:\root.xml",FileCommand.New);
                 reducedIndex = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.FindIndex(Utils.isReduced);
 
                 if (index == reducedIndex)
