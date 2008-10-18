@@ -49,6 +49,8 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -71,7 +73,7 @@
     </Reference>
     <Reference Include="WpfCustomControlLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Custom Controls\WpfCustomControlLibrary.dll</HintPath>
+      <HintPath>Ref\WpfCustomControlLibrary.dll</HintPath>
     </Reference>
     <Reference Include="WPFGraph, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
   </ItemGroup>
@@ -148,6 +150,7 @@
     <Compile Include="EntityLayer\ListWithChangeEvents.cs" />
     <Compile Include="EntityLayer\RessistanceCalibrationEntities.cs" />
     <Compile Include="EntityLayer\TempCalibrationEntities.cs" />
+    <Compile Include="PresentationLayer\AppCommands.cs" />
     <Compile Include="PresentationLayer\Cal\RessistanceCalibration.xaml.cs">
       <DependentUpon>RessistanceCalibration.xaml</DependentUpon>
     </Compile>
@@ -163,6 +166,8 @@
     <Compile Include="PresentationLayer\Cal\TempCalibrationDialog.xaml.cs">
       <DependentUpon>TempCalibrationDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PresentationLayer\Commands\NewCommand.cs" />
+    <Compile Include="PresentationLayer\FileStoring\FileStoring.cs" />
     <Compile Include="PresentationLayer\GraphRendering.cs" />
     <Compile Include="PresentationLayer\TransformatorProperties.xaml.cs">
       <DependentUpon>TransformatorProperties.xaml</DependentUpon>

@@ -14,6 +14,10 @@ namespace DataAccessLayer
         /// </summary>
         public EntityLayer.Root Root { get; set; }
 
+        public bool IsDirty { get; set; }
+
+
+
         public event PropertyChangedEventHandler PropertyChanged;
             /// <summary>
             /// За промена на пропертијата.

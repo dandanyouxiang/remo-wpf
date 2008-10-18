@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows;
+using System.Windows.Media;
 using System.Windows.Data;
 using System.Globalization;
 
@@ -404,6 +406,29 @@ namespace DataAccessLayer
             }
 
             return number;
+
+        }
+    }
+    /// <summary>
+    /// Приказ во целзиусови
+    /// </summary>
+    [ValueConversion(typeof(bool), typeof(Brush))]
+    public class ColorConvertor : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            bool reduced = System.Convert.ToBoolean(value);
+            if (reduced)
+            {
+                return Brushes.Green;
+            }
+            else return Brushes.White;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            
+            return true;
 
         }
     }

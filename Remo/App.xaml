@@ -34,6 +34,7 @@
         </Style>
         <Style TargetType="ListView" BasedOn="{StaticResource GeneralStyle}">
         </Style>
+        <Style TargetType="Menu" BasedOn="{StaticResource GeneralStyle}"/>
         <data:PrePostFixConverter x:Key="OhmConvertor" Postfix="Ohm" Decimals="6" ConversionType="_double"/>
         <data:PrePostFixConverter x:Key="AmperConvertor" Postfix="A" Decimals="1" ConversionType="_double"/>
         <data:PrePostFixConverter x:Key="CelsiusConverter" Postfix="C" Decimals="1" ConversionType="_double"/>
@@ -43,6 +44,7 @@
         <data:PrePostFixConverter x:Key="MinuteConvertor" Postfix="min" ConversionType="_int"/>
         <data:PrePostFixConverter x:Key="IntegerConvertor" ConversionType="_int"/>
         <data:PrePostFixConverter x:Key="PrePostFixConvertor"/>
+        <data:ColorConvertor x:Key="ColorConvertor"/>
         <data:RegexValidator x:Key="CelsiusValidator" RegularExpression="^\s*[0-5]?\d\s*[C|c]?\s*$"/>
 
         <!--Brushes for the Toggle Buttons -->
@@ -64,7 +66,7 @@
             </GradientBrush.GradientStops>
         </LinearGradientBrush>
 
-        <LinearGradientBrush x:Key="DarkBrush" StartPoint="0,0" EndPoint="0,1">
+        <LinearGradientBrush x:Key="StopBrush" StartPoint="0,0" EndPoint="0,1">
             <GradientBrush.GradientStops>
                 <GradientStopCollection>
                     <GradientStop Color="#FF9999" Offset="0.0"/>
@@ -73,7 +75,7 @@
             </GradientBrush.GradientStops>
         </LinearGradientBrush>
 
-        <LinearGradientBrush x:Key="OffBrush" StartPoint="0,0" EndPoint="0,1">
+        <LinearGradientBrush x:Key="OverBrush" StartPoint="0,0" EndPoint="0,1">
             <GradientBrush.GradientStops>
                 <GradientStopCollection>
                     <GradientStop Color="#AAFFAA" Offset="0.0"/>
@@ -82,7 +84,7 @@
             </GradientBrush.GradientStops>
         </LinearGradientBrush>
 
-        <LinearGradientBrush x:Key="OffBorderBrush" StartPoint="0,0" EndPoint="0,1">
+        <LinearGradientBrush x:Key="OverBorderBrush" StartPoint="0,0" EndPoint="0,1">
             <GradientBrush.GradientStops>
                 <GradientStopCollection>
                     <GradientStop Color="#444" Offset="0.0"/>
@@ -102,7 +104,7 @@
                 </GradientStopCollection>
             </GradientBrush.GradientStops>
         </LinearGradientBrush>
-        
+        <!--
         <ControlTemplate x:Key="ToggleButtonTemplate" TargetType="ToggleButton"  >
             <mwt:ButtonChrome ThemeColor="NormalColor" Fill="{TemplateBinding Panel.Background}" BorderBrush="{TemplateBinding Border.BorderBrush}" RenderDefaulted="{TemplateBinding Button.IsDefaulted}" RenderMouseOver="{TemplateBinding UIElement.IsMouseOver}" RenderPressed="{TemplateBinding ButtonBase.IsPressed}" Name="Chrome" SnapsToDevicePixels="True">
                 <ContentPresenter RecognizesAccessKey="True" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" Margin="{TemplateBinding Control.Padding}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
@@ -141,7 +143,7 @@
             </ControlTemplate.Triggers>
             
         </ControlTemplate>
-
+-->
         <DataTemplate x:Key="IsChackBackground">
             <StackPanel>
                 <StackPanel.Background>
@@ -157,7 +159,7 @@
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding}"/>
             </StackPanel>
         </DataTemplate>
-
+        <!--
         <Style x:Key="StartStopStyle" TargetType="{x:Type ToggleButton}" >
             <Setter Property="Control.Template" Value="{StaticResource ToggleButtonTemplate}"/>
             <Style.Triggers>
@@ -170,5 +172,58 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+-->
+        <ControlTemplate x:Key="OnOffTemplate" TargetType="{x:Type ToggleButton}">
+            <Border 
+                x:Name="Border"  
+                CornerRadius="2" 
+                BorderThickness="1"
+                Background="{StaticResource NormalBrush}"
+                BorderBrush="{StaticResource NormalBorderBrush}">
+                <ContentPresenter 
+                    Name="ContentPresenter"
+                    Margin="{TemplateBinding Button.Padding}"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    RecognizesAccessKey="True"/>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsKeyboardFocused" Value="True">
+                    <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource DefaultedBorderBrush}" />
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter TargetName="Border" Property="Background" Value="{StaticResource OverBrush}" />
+                    <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource OverBorderBrush}" />
+                </Trigger>
+                <Trigger Property="IsChecked" Value="true">
+                    <Setter TargetName="Border" Property="Background" Value="{StaticResource StopBrush}" />
+                    <Setter TargetName="ContentPresenter" Property="Content" Value="Stop"/>
+                </Trigger>
+                <Trigger Property="IsChecked" Value="False">
+                    <Setter TargetName="ContentPresenter" Property="Content" Value="Start"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="false">
+                    <Setter TargetName="Border" Property="Background" Value="{StaticResource DisabledBackgroundBrush}" />
+                    <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource DisabledBorderBrush}" />
+                    <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <DataTemplate x:Key="dtHeader">
+            <Grid>
+                <StackPanel Orientation="Horizontal" Background="Gray">
+                    <TextBlock Width="245" FontWeight="Bold" Text="Time"></TextBlock>
+                    <TextBlock Width="100" FontWeight="Bold" Text="No"></TextBlock>
+                    <TextBlock Width="100" FontWeight="Bold" Text="{Binding Path=ACHeatingTableHeader.T1}"></TextBlock>
+                    <TextBlock Width="100" FontWeight="Bold" Text="{Binding Path=ACHeatingTableHeader.T2}"></TextBlock>
+                    <TextBlock Width="100" FontWeight="Bold" Text="{Binding Path=ACHeatingTableHeader.T3}"></TextBlock>
+                    <TextBlock Width="100" FontWeight="Bold" Text="{Binding Path=ACHeatingTableHeader.T4}"></TextBlock>
+                    <TextBlock Width="100" FontWeight="Bold" Text="TAmb"></TextBlock>
+                    <TextBlock Width="100" FontWeight="Bold" Text="TOil"></TextBlock>
+                    <TextBlock Width="100" FontWeight="Bold" Text="TempRise"></TextBlock>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+        
     </Application.Resources>
 </Application>
