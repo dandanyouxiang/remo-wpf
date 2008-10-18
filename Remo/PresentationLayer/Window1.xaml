@@ -3,14 +3,19 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:graph="clr-namespace:DNBSoft.WPF.WPFGraph;assembly=WPFGraph"
         xmlns:data="clr-namespace:DataAccessLayer"
-        xmlns:pres="clr-namespace:PresentationLayer"
+        xmlns:pres="clr-namespace:DataAccessLayer.PresentationLayer"
         Title="Window1" Height="850" Width="1200" Validation.Error="OnValidationError">
     <Window.Resources>
         <!-- Todo zema mnogu procesorsko vreme
         <pres:ListViewItemStyleSelector reducedIndex="3" x:Key="myStyleSelector"/>-->
-
+        
     </Window.Resources>
-        <Grid ShowGridLines="true" Name="MainGrid" IsHitTestVisible="True" Loaded="MainGrid_Loaded" >
+    <!--Definiranje na komandite za aplikacijat-->
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.New"  Executed="Command_New_Executed" />
+    </Window.CommandBindings>
+    
+    <Grid ShowGridLines="true" Name="MainGrid" IsHitTestVisible="True" Loaded="MainGrid_Loaded" >
         <Grid.RowDefinitions>
             <RowDefinition >
             </RowDefinition>
@@ -18,8 +23,28 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
+        <!--Glavnoto meni.-->
+        <DockPanel Grid.Row="0">
+            <Menu DockPanel.Dock="Top" >
+                <MenuItem Header="_File" >
+                    <MenuItem Command="New" Header="New Measurenment"></MenuItem>
+                    <MenuItem Header="_Open" />
+                    <MenuItem Header="Save As…" />
+                    <MenuItem Header="E_xit" Click="MenuItem_Click" />
+                </MenuItem>
+                <MenuItem Header="_Calibration">
+                    <MenuItem Header="_Resistance" />
+                    <MenuItem Header="_Temperature" />
+                </MenuItem>
+                <MenuItem Header="_Help">
+                    <MenuItem Header="_About" />
+                    <MenuItem Header="_Contents" />
+                    <MenuItem Header="_Help" />
+                </MenuItem>
+            </Menu>
 
-        <TabControl Name="tabControl1" Grid.Row="0" Grid.Column="0" SelectedIndex="2" FontSize="14">
+        </DockPanel>
+        <TabControl Name="tabControl1" SelectedIndex="1" FontSize="14" Margin="0,46,0,0">
             <TabItem  Header="DC - Cold Measurenment">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -105,7 +130,7 @@
                                                 <TextBox Name="evalStdDevTempR2textBox" Text="{Binding Path=StdDevTempR2,Converter={StaticResource OhmConvertor}}" IsEnabled="True" IsReadOnly="True"/>
                                             </StackPanel>
                                         </Grid>
-                                        <ToggleButton Grid.Row="2" Width="100" Height="35" Name="startResMeasDcColdButton" Style="{StaticResource StartStopStyle}" Checked="startResMeasDcColdButton_Checked" />
+                                        <ToggleButton Grid.Row="2" Width="100" Height="35" Name="startResMeasDcColdButton" Template="{StaticResource OnOffTemplate}" Checked="startResMeasDcColdButton_Checked" />
                                     
                                     </Grid>
                                 </GroupBox>
@@ -187,10 +212,10 @@
                                                 </Binding>
                                             </TextBox.Text>
                                         </TextBox>
-                                       <ToggleButton Margin="0 20" Height="35" Width="100"  Name="startTempMeasDcColdButton" Style="{StaticResource StartStopStyle}" VerticalAlignment="Bottom" Checked="startTempMeasDcColdButton_Checked" />
+                                       <ToggleButton Margin="0 20" Height="35" Width="100"  Name="startTempMeasDcColdButton" Template="{StaticResource OnOffTemplate}" VerticalAlignment="Bottom" Checked="startTempMeasDcColdButton_Checked" />
                                     </StackPanel>
                                 </GroupBox>
-                                <ListView Margin="54,0,392,44" Name="DCColdTemperatureTable" SourceUpdated="DCColdTemperatureTable_SourceUpdated" HorizontalContentAlignment="Stretch" VerticalAlignment="Bottom" Height="300">
+                                <ListView Margin="54,0,392,44" Name="DCColdTemperatureTable" SourceUpdated="DCColdTemperatureTable_SourceUpdated" HorizontalContentAlignment="Stretch" VerticalAlignment="Bottom" Height="300" >
                                     <!--
                                     <ListView.Background>
                                         <LinearGradientBrush EndPoint="0.939,0.919" StartPoint="0.041,0.081">
@@ -248,16 +273,16 @@
                                     </ListView.View>
                                 </ListView>
                                 <Label Height="28" Margin="0,0,30,305" Name="label18" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="120">T Amb</Label>
-                                <TextBox Margin="0,0,199.95,270" Name="T1MeanDCColdTextBox" Text="{Binding Path=T1MeanDCColdTempTable,Converter={StaticResource CelsiusConverter}}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="150.05" IsEnabled="True" IsReadOnly="True" />
-                                <TextBox Margin="0,0,200,200" Name="T2MeanDCColdTextBox" VerticalAlignment="Bottom" Text="{Binding Path=T2MeanDCColdTempTable,Converter={StaticResource CelsiusConverter}}" HorizontalAlignment="Right" Width="150.05" IsEnabled="True" IsReadOnly="True" />
+                                <TextBox Margin="0,0,199.95,270" Name="T1MeanDCColdTextBox" Text="{Binding Path=T1MeanDCColdTempTable,Converter={StaticResource CelsiusConverter}}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="150.05" IsEnabled="True" IsReadOnly="True" TextChanged="MeanDCColdTextBox_TextChanged" />
+                                <TextBox Margin="0,0,200,200" Name="T2MeanDCColdTextBox" VerticalAlignment="Bottom" Text="{Binding Path=T2MeanDCColdTempTable,Converter={StaticResource CelsiusConverter}}" HorizontalAlignment="Right" Width="150.05" IsEnabled="True" IsReadOnly="True" TextChanged="MeanDCColdTextBox_TextChanged" />
                                 <Label Margin="0,0,200.05,235" Name="T2MeanDCColdLabel" VerticalAlignment="Bottom"  Content="{Binding Path=T2MeanDCColdTempTableHeader}" HorizontalAlignment="Right" Width="150" Height="30"></Label>
-                                <TextBox Margin="0,0,200,122" Name="T3MeanDCColdTextBox" Text="{Binding Path=T3MeanDCColdTempTable,Converter={StaticResource CelsiusConverter}}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="150.05" IsEnabled="True" IsReadOnly="True" />
+                                <TextBox Margin="0,0,200,122" Name="T3MeanDCColdTextBox" Text="{Binding Path=T3MeanDCColdTempTable,Converter={StaticResource CelsiusConverter}}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="150.05" IsEnabled="True" IsReadOnly="True" TextChanged="MeanDCColdTextBox_TextChanged" />
                                 <Label Margin="0,0,200,158" Name="T3MeanDCColdLabel" VerticalAlignment="Bottom" Content="{Binding Path=T3MeanDCColdTempTableHeader}" HorizontalAlignment="Right" Width="150" Height="30"></Label>
                                 <TextBox Margin="0,0,30,200" Name="AmbDCColdTempTableTextBox" Text="{Binding Path=AmbDCColdTempTable,Converter={StaticResource CelsiusConverter}}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="120" IsEnabled="True" IsReadOnly="True" />
                                 <Label Margin="0,0,30,235" Name="label17" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="120">T Oil</Label>
                                 <TextBox Margin="0,0,30,270" Name="OilDCColdTempTableTextBox" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="120" Text="{Binding Path=OilDCColdTempTable,Converter={StaticResource CelsiusConverter}}" IsEnabled="True" IsReadOnly="True" />
                                 <Label Margin="0,0,199.95,303" Name="T1TempLabel" Content="{Binding Path=T1MeanDCColdTempTableHeader}" HorizontalAlignment="Right" Width="150" VerticalAlignment="Bottom" Height="30"></Label>
-                                <TextBox Margin="0,0,200,55" Name="T4MeanDCColdTextBox" Text="{Binding Path=T4MeanDCColdTempTable,Converter={StaticResource CelsiusConverter}}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="150.05" IsEnabled="True" IsReadOnly="True" />
+                                <TextBox Margin="0,0,200,55" Name="T4MeanDCColdTextBox" Text="{Binding Path=T4MeanDCColdTempTable,Converter={StaticResource CelsiusConverter}}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="150.05" IsEnabled="True" IsReadOnly="True" TextChanged="MeanDCColdTextBox_TextChanged" />
                                 <Label Margin="0,0,200,90" Name="T4MeanDCColdLabel" Content="{Binding Path=T4MeanDCColdTempTableHeader}" HorizontalAlignment="Right" Width="150" VerticalAlignment="Bottom" Height="30"></Label>
                                 
                                 <my:ThermometerChannel Margin="0,21,96,0" Name="thermometerChannel4" xmlns:my="clr-namespace:WpfCustomControlLibrary;assembly=WpfCustomControlLibrary" VerticalAlignment="Top" HorizontalAlignment="Right" Width="180" Header="Channel 4" Value="{Binding Path=T4MeanDCColdTempTable}" Height="330" />
@@ -277,8 +302,8 @@
                     <TabControl Margin="0,0,10,10" Name="HeatingTab" SelectedIndex="1">
                         <TabItem Header="Settings">
                             <Grid>
-                                <ToggleButton Height="40.001" Margin="433,62.406,0,0" Name="startAcButton" Style="{StaticResource StartStopStyle}" VerticalAlignment="Top" HorizontalAlignment="Left" Width="85.897" Checked="startAcButton_Checked">Start</ToggleButton>
-                                <ToggleButton Height="40.001" Margin="524,62.406,526,0" Name="reduceButton" IsEnabled="{Binding ElementName=startAcButton, Path=IsChecked}"  Style="{StaticResource StartStopStyle}" VerticalAlignment="Top" Checked="reduceButton_Checked">Reduce</ToggleButton>
+                                <ToggleButton Height="40.001" Margin="433,62.406,0,0" Name="startAcButton" Template="{StaticResource OnOffTemplate}" VerticalAlignment="Top" HorizontalAlignment="Left" Width="85.897" Checked="startAcButton_Checked">Start</ToggleButton>
+                                <ToggleButton Height="40.001" Margin="0,62.406,526,0" Name="reduceButton" IsEnabled="{Binding ElementName=startAcButton, Path=IsChecked}"   VerticalAlignment="Top" Checked="reduceButton_Checked" HorizontalAlignment="Right" Width="96">Reduce</ToggleButton>
                                 <GroupBox Header="Sample Rate" Height="195.773" Margin="77,45.907,0,0" Name="groupBox4" VerticalAlignment="Top" HorizontalAlignment="Left" Width="309" >
                                     <StackPanel Height="170.051">
                                         <Grid>
@@ -329,9 +354,66 @@
                                     <RowDefinition Height="50*"/>
                                     <RowDefinition Height="50*"/>
                                 </Grid.RowDefinitions>
-                                <ListView Height="292" Margin="50,50,50,0" Name="ACTable" VerticalAlignment="Top" ItemContainerStyleSelector="{DynamicResource myStyleSelector}">
+                                <ListView Height="292" Margin="50,50,50,0" Name="ACTable"  VerticalAlignment="Top"   >
+                                    <!--
+                                    <ListView.GroupStyle>
+                                        <GroupStyle HeaderTemplate="{StaticResource dtHeader}"/>
+                                    </ListView.GroupStyle>
+                                    
+                                    <GridViewColumnHeader>
+                                        <DataTemplate>
+                                            <Grid>
+                                            <StackPanel Orientation="Horizontal" Background="Gray">
+                                                <TextBlock Width="245" FontWeight="Bold" Text="Time"></TextBlock>
+                                                <TextBlock Width="100" FontWeight="Bold" Text="No"></TextBlock>
+                                                <TextBlock Width="100" FontWeight="Bold" Text="{Binding Path=ACHeatingTableHeader.T1}"></TextBlock>
+                                                <TextBlock Width="100" FontWeight="Bold" Text="{Binding Path=ACHeatingTableHeader.T2}"></TextBlock>
+                                                <TextBlock Width="100" FontWeight="Bold" Text="{Binding Path=ACHeatingTableHeader.T3}"></TextBlock>
+                                                <TextBlock Width="100" FontWeight="Bold" Text="{Binding Path=ACHeatingTableHeader.T4}"></TextBlock>
+                                                <TextBlock Width="100" FontWeight="Bold" Text="TAmb"></TextBlock>
+                                                <TextBlock Width="100" FontWeight="Bold" Text="TOil"></TextBlock>
+                                                <TextBlock Width="100" FontWeight="Bold" Text="TempRise"></TextBlock>
+                                               
+
+                                            </StackPanel>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </GridViewColumnHeader>
+                                    
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                                <Grid >
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition></RowDefinition>
+                                                        <RowDefinition></RowDefinition>
+                                                    </Grid.RowDefinitions>
+                                                    <StackPanel Grid.Row="0" Orientation="Horizontal" Background="{Binding Path=Reduced, Converter={StaticResource ColorConvertor}}">
+                                                        <TextBlock Width="245" FontWeight="Bold" Text="{Binding Path=Time}"></TextBlock>
+                                                        <TextBlock Width="100" FontWeight="Bold" Text="{Binding Path=No}"></TextBlock>
+                                                        <TextBlock Width="100" FontWeight="Bold" Text="{Binding Path=T1, Converter={StaticResource CelsiusConverter}}"></TextBlock>
+                                                        <TextBlock Width="100" FontWeight="Bold" Text="{Binding Path=T2, Converter={StaticResource CelsiusConverter}}"></TextBlock>
+                                                        <TextBlock Width="100" FontWeight="Bold" Text="{Binding Path=T3, Converter={StaticResource CelsiusConverter}}"></TextBlock>
+                                                        <TextBlock Width="100" FontWeight="Bold" Text="{Binding Path=T4, Converter={StaticResource CelsiusConverter}}"></TextBlock>
+                                                        <TextBlock Width="100" FontWeight="Bold" Text="{Binding Path=TAmb, Converter={StaticResource CelsiusConverter}}"></TextBlock>
+                                                        <TextBlock Width="100" FontWeight="Bold" Text="{Binding Path=TOil, Converter={StaticResource CelsiusConverter}}"></TextBlock>
+                                                        <TextBlock Width="100" FontWeight="Bold" Text="{Binding Path=TempRise, Converter={StaticResource CelsiusConverter}}"></TextBlock>
+
+                                                    </StackPanel>
+                                                    <Grid.Background >
+                                                        <SolidColorBrush Color="">
+                                                            
+                                                        </SolidColorBrush>
+                                                    </Grid.Background>
+                                                </Grid>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                    -->
+                                    
+                                    
                                     <ListView.View>
-                                        <GridView>
+                                        
+                                        <GridView >
+                                                    
                                             <GridViewColumn Header="Time" DisplayMemberBinding="{Binding Path=Time}" Width="180" />
                                             <GridViewColumn Header="No" DisplayMemberBinding="{Binding Path=No}" Width="80"/>
                                             <GridViewColumn Header="{Binding Path=ACHeatingTableHeader.T1}" DisplayMemberBinding="{Binding Path=T1, Converter={StaticResource CelsiusConverter}}" Width="100"/>
@@ -341,7 +423,9 @@
                                             <GridViewColumn Header="T Amb" DisplayMemberBinding="{Binding Path=TAmb, Converter={StaticResource CelsiusConverter}}" Width="130"/>
                                             <GridViewColumn Header="T Oil" DisplayMemberBinding="{Binding Path=TOil, Converter={StaticResource CelsiusConverter}}" Width="130"/>
                                             <GridViewColumn Header="T Rise" DisplayMemberBinding="{Binding Path=TempRise, Converter={StaticResource CelsiusConverter}}" Width="130"/>                                           
-                                        </GridView>
+                                       
+                                            </GridView>
+                                        
                                     </ListView.View>
                                 </ListView>
                                 <Label Height="28" HorizontalAlignment="Left" Margin="50,18,0,0" Name="ACTableLabel" VerticalAlignment="Top" Width="120">AC Table</Label>
@@ -364,8 +448,8 @@
                                             <ComboBoxItem>B - C</ComboBoxItem>
                                             <ComboBoxItem>C - A</ComboBoxItem>
                                         </ComboBox>
-                                        <ToggleButton Margin="10,20,30,0" Name="TNullButton" Style="{StaticResource StartStopStyle}" Checked="TNullButton_Checked">t=0</ToggleButton>
-                                        <ToggleButton Margin="10,10,30,0" Name="StartDcCoolResButton" IsEnabled="{Binding ElementName=TNullButton, Path=IsChecked}" Style="{StaticResource StartStopStyle}" Checked="StartDcCoolResButton_Checked" />
+                                        <ToggleButton Margin="10,20,30,0" Name="TNullButton" Checked="TNullButton_Checked">t=0</ToggleButton>
+                                        <ToggleButton Margin="10,10,30,0" Name="StartDcCoolResButton" IsEnabled="{Binding ElementName=TNullButton, Path=IsChecked}" Template="{StaticResource OnOffTemplate}" Checked="StartDcCoolResButton_Checked" />
                                     </StackPanel>
                                 </GroupBox>
                                 <GroupBox Header="Channel Info" Margin="84.537,288.658,0,98.601" Name="ChannelGroupBox" HorizontalAlignment="Left" Width="271.51" >

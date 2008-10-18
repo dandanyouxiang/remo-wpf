@@ -24,6 +24,12 @@ namespace PresentationLayer
     public partial class Window1 : Window, INotifyPropertyChanged
     {
         /// <summary>
+        /// Поле кое чува кој е работниот директориум.
+        /// </summary>
+        public string WorkPlacePath {get;set; }
+        public string FileName { get; set; }
+
+        /// <summary>
         /// Состојбите во кои апликацијата се наоѓа, во однос на мерењата.
         /// </summary>
         public enum ProcessStatesEnum { DcColdRes = 0, DcCoolRes, DcColdTemp, ACHotTemp, Idle };
@@ -56,7 +62,10 @@ namespace PresentationLayer
         public Window1()
         {
             InitializeComponent();
-            datasource = new DataSource(@"D:\root.xml");
+            //Todo da se izbrishe posle
+            WorkPlacePath=@"E:\";
+
+            datasource = new DataSource(@"E:\root.xml");
             MainGrid.DataContext = datasource;
             StatusString = statusStrings[2];
             this.graphsInit();
@@ -91,13 +100,32 @@ namespace PresentationLayer
                 NoOfSamplesTextBox.DataContext = datasource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel;
 
                 //postavuvanje na datakontest na kanalite vo vtoriot tab
-
+                /*
                 thermometerChannelAC1.DataContext = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last<EntityLayer.TempMeasurenment>();
                 thermometerChannelAC2.DataContext = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last<EntityLayer.TempMeasurenment>();
                 thermometerChannelAC3.DataContext = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last<EntityLayer.TempMeasurenment>();
                 thermometerChannelAC4.DataContext = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last<EntityLayer.TempMeasurenment>();
-
+                */
                 statusTextBlock.DataContext = this;
+
+                if (datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Count>0)
+                {
+                    thermometerChannelAC1.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T1;
+                    thermometerChannelAC2.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T2;
+                    thermometerChannelAC3.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T3;
+                    thermometerChannelAC4.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T4;
+                }
+
+
+
+                //Todo termometrite vo vtoriot tab
+                if (datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Count > 0)
+                {
+                    thermometerChannelAC1.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T1;
+                    thermometerChannelAC2.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T2;
+                    thermometerChannelAC3.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T3;
+                    thermometerChannelAC4.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T4;
+                }
             }
             catch (Exception ex) 
             {
@@ -114,7 +142,6 @@ namespace PresentationLayer
         public void DCColdTemperatureTable_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             DCColdTemperatureTable.ItemsSource = datasource.DCColdTemperatureTable();
-
             //Promena na vrednostite na termometrite
             //thermometerChannel1.Value = datasource.T1MeanDCColdTempTable;
             //thermometerChannel2.Value = datasource.T2MeanDCColdTempTable;
@@ -136,7 +163,11 @@ namespace PresentationLayer
         {
             //Повторно се наведува ItemsSource-от на оваа табела.
             ACTable.ItemsSource = datasource.ACHeatingTable();
-            
+
+            thermometerChannelAC1.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T1;
+            thermometerChannelAC2.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T2;
+            thermometerChannelAC3.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T3;
+            thermometerChannelAC4.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T4;
         }
         /// <summary>
         /// OnPropertyChanged Handler за мерењата на отпор при ладење - DcCooling
@@ -343,6 +374,27 @@ namespace PresentationLayer
         {
             ((FrameworkElement)e.OriginalSource).GetBindingExpression(TextBox.TextProperty).UpdateTarget();
         }
+
+        private void MeanDCColdTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox textBox =(TextBox)sender;
+            switch (textBox.Name) 
+            {
+                case "T1MeanDCColdTextBox": thermometerChannel1.Value = datasource.T1MeanDCColdTempTable; break;
+                case "T2MeanDCColdTextBox": thermometerChannel2.Value = datasource.T2MeanDCColdTempTable; break;
+                case "T3MeanDCColdTextBox": thermometerChannel3.Value = datasource.T3MeanDCColdTempTable; break;
+                case "T4MeanDCColdTextBox": thermometerChannel4.Value = datasource.T4MeanDCColdTempTable; break;
+            }
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        
+
+        
     }
     //Todo zema mnogu procesorsko vreme
     /// <summary>
@@ -370,6 +422,7 @@ namespace PresentationLayer
                 int index =
                     listView.ItemContainerGenerator.IndexFromContainer(container);
                 //Todo ??? zasto se cita pak
+                
                 DataSource datasource = new DataSource(@"D:\root.xml");
                 reducedIndex = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.FindIndex(Utils.isReduced);
 
