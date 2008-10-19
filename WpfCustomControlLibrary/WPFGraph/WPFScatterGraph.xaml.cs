@@ -35,6 +35,10 @@ namespace DNBSoft.WPF.WPFGraph
 
         private ListenableList<WPFGraphSeries> series = new ListenableList<WPFGraphSeries>();
 
+        public enum XAxisTypeEnum { _double, _time }
+        private XAxisTypeEnum  _xAxisTypeEnum = XAxisTypeEnum._double;
+        public XAxisTypeEnum XAxisType { get { return _xAxisTypeEnum; } set { _xAxisTypeEnum = value; } }
+
         public WPFScatterGraph()
         {
             InitializeComponent();
@@ -68,9 +72,6 @@ namespace DNBSoft.WPF.WPFGraph
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            this.XAxisTitle = "X Axis";
-            this.YAxisTitle = "Y Axis";
-
             series.ElementAdded += new ListenableList<WPFGraphSeries>.ElementAddedDelegate(series_ElementAdded);
             series.ElementRemoved += new ListenableList<WPFGraphSeries>.ElementRemovedDelegate(series_ElementRemoved);
 
@@ -316,9 +317,16 @@ namespace DNBSoft.WPF.WPFGraph
             for (double d = minX + intervalX; d < maxX; d += intervalX)
             {
                 Label label = new Label();
-                label.Content = Math.Round(d, XAxisDecimals).ToString();
+                switch (XAxisType)
+                { 
+                    case XAxisTypeEnum._time: label.Content = new DateTime((long)d).ToLongTimeString(); break;
+                    case XAxisTypeEnum._double: 
+                    default: label.Content = Math.Round(d, XAxisDecimals).ToString(); break;
+                }
                 label.SetValue(Canvas.TopProperty, 8.0);
                 horizontalAxis.Children.Add(label);
+                //label.FontFamily = this.FontFamily;
+                //label.FontSize = this.FontSize;
                 label.UpdateLayout();
                 if (label.ActualWidth > 0)
                 {
