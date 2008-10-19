@@ -74,7 +74,7 @@ namespace PresentationLayer
             InitializeComponent();
             //Todo da se izbrishe posle - DA SE PAMTI nekade
 
-            fileStoring = XmlFileServices.readXml(@"E:\file.info");
+            fileStoring = XmlFileServices.readXml(@"Ref\file.info");
             
             //WorkPlacePath=@"E:\";
             WorkPlacePath = fileStoring.WorkplacePath;

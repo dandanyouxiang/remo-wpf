@@ -209,6 +209,9 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Ref\file.info">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
@@ -217,6 +220,7 @@
     <Content Include="Ref\PLCP.dll" />
     <Content Include="Ref\PlcProtocol.dll" />
     <Content Include="Ref\ProcessManager.dll" />
+    <Content Include="Ref\WpfCustomControlLibrary.dll" />
     <Content Include="Ref\WPFGraph.dll" />
   </ItemGroup>
   <ItemGroup>
