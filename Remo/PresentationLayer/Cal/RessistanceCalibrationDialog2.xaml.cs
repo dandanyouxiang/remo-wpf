@@ -35,7 +35,7 @@ namespace PresentationLayer
             s = new DataSourceLayer.DataSourceServices();
             ch = new EntityLayer.RessistanceTransformerChannel();
             ch.RessistanceMeasurenments = new EntityLayer.ListWithChangeEvents<EntityLayer.RessistanceMeasurenment>();
-            s.RessistanceMeasurenmentFinished += new DataSourceLayer.DataSourceServices.RessistanceMeasurenmentFinishedEventHandler(s_RessistanceMeasurenmentFinished);
+            s.RessistanceMeasurenmentFinished += new DataSourceLayer.DataSourceServices.RessistanceMeasurenmentFinishedEvent(s_RessistanceMeasurenmentFinished);
         }
         
         private void cancelButton_Click(object sender, RoutedEventArgs e)
@@ -51,7 +51,7 @@ namespace PresentationLayer
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             //Започни го мерењто на отпор
-            s.start_RessistanceMeasurenment(ch, true);
+            s.start_RessistanceMeasurenment(ch, true, false);
         }
 
     }

@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
 using DataAccessLayer;
+using System.Windows.Threading;
 
 namespace PresentationLayer
 {
@@ -50,6 +51,8 @@ namespace PresentationLayer
         }
         string[] statusStrings = new String[] { "Measuring Ressistance", "Measuring Temperature", "Idle"};
         private bool IS_TEST;
+        private DispatcherTimer acHotTimer;
+        private TimeSpan acTimeToNextSample;
         [DefaultValue("Idle")]
         public string StatusString { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
@@ -144,6 +147,10 @@ namespace PresentationLayer
                     thermometerChannelAC3.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T3;
                     thermometerChannelAC4.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T4;
                 }
+                acHotTimer = new DispatcherTimer();
+                //100 ms
+                acHotTimer.Interval = new TimeSpan(0, 0, 0, 1);
+                acHotTimer.Tick += new EventHandler(acHotTimer_Tick);
             }
             catch (Exception ex) 
             {
@@ -219,8 +226,9 @@ namespace PresentationLayer
 
                     //Стартувај го мерењето на температура
                     ds = new DataSourceLayer.DataSourceServices();
-                    ds.TempMeasurenmentFinished += new DataSourceLayer.DataSourceServices.TempMeasurenmentFinishedEventHandler(ds_TempMeasurenmentFinished);
-                    ds.start_TempMeasurenment(datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration, IS_TEST);
+                    ds.TempMeasurenmentDone+=new DataSourceLayer.DataSourceServices.TempMeasurenmentDoneEvent(ds_TempMeasurenmentDone);
+                    ds.TempMeasurenmentFinished += new DataSourceLayer.DataSourceServices.TempMeasurenmentFinishedEvent(ds_TempMeasurenmentFinished);
+                    ds.start_TempMeasurenment(datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration, IS_TEST, true);
                     //
                 }
             }
@@ -238,7 +246,18 @@ namespace PresentationLayer
             }
         }
 
-
+        /// <summary>
+        /// Завршено е едно температурно мерење
+        /// </summary>
+        public void ds_TempMeasurenmentDone()
+        {
+            //Рестарт на тајмерот
+            if (currentProcessState == ProcessStatesEnum.ACHotTemp)
+            {
+                acTimeToNextSample = new TimeSpan(0, 0, datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempSampleRateCurrentState);
+                AcTimeToNextSample.Text = getAcTimeToNextSampleString(acTimeToNextSample);   
+            }
+        }
         /// <summary>
         /// Handler за крај на температурнто мерење.
         /// </summary>
@@ -248,6 +267,10 @@ namespace PresentationLayer
             startAcButton.IsChecked = false;
             CurrentProcessState = ProcessStatesEnum.Idle;
             this.acGraphRefresh();
+            //Ac timer
+            acHotTimer.Stop();
+            acTimeToNextSample = new TimeSpan(0, 0, datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempSampleRateCurrentState);
+            AcTimeToNextSample.Text = getAcTimeToNextSampleString(acTimeToNextSample);
         }
 
         /// <summary>
@@ -264,8 +287,8 @@ namespace PresentationLayer
                     datasource.Root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel].IsChannel2On = true;
                     //Стартувај го мерењето на отпор
                     DataSourceLayer.DataSourceServices ds = new DataSourceLayer.DataSourceServices();
-                    ds.RessistanceMeasurenmentFinished += new DataSourceLayer.DataSourceServices.RessistanceMeasurenmentFinishedEventHandler(ds_ColdRessistanceMeasurenmentFinished);
-                    ds.start_RessistanceMeasurenment(datasource.Root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel], IS_TEST);
+                    ds.RessistanceMeasurenmentFinished += new DataSourceLayer.DataSourceServices.RessistanceMeasurenmentFinishedEvent(ds_ColdRessistanceMeasurenmentFinished);
+                    ds.start_RessistanceMeasurenment(datasource.Root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel], IS_TEST, true);
                 }
             }
             else
@@ -332,10 +355,13 @@ namespace PresentationLayer
 
                 //Стартувај го мерењето на температура
                 ds = new DataSourceLayer.DataSourceServices();
-                ds.TempMeasurenmentFinished += new DataSourceLayer.DataSourceServices.TempMeasurenmentFinishedEventHandler(ds_TempMeasurenmentFinished);
+                ds.TempMeasurenmentDone += new DataSourceLayer.DataSourceServices.TempMeasurenmentDoneEvent(ds_TempMeasurenmentDone);
+                ds.TempMeasurenmentFinished += new DataSourceLayer.DataSourceServices.TempMeasurenmentFinishedEvent(ds_TempMeasurenmentFinished);
                 datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempNoOfSamplesCurrentState = 5;
-                ds.start_TempMeasurenment(datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration, IS_TEST);
+                ds.start_TempMeasurenment(datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration, IS_TEST, false);
                 //
+                acTimeToNextSample = new TimeSpan(0, 0, datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempSampleRateCurrentState);
+                acHotTimer.Start();
             }
         }
         /// <summary>
@@ -350,6 +376,23 @@ namespace PresentationLayer
                 ds.IsTempMeasStopped = true;
             }
         }
+
+        public void acHotTimer_Tick(object sender, EventArgs e)
+        {
+            acTimeToNextSample -= acHotTimer.Interval;
+            AcTimeToNextSample.Text = getAcTimeToNextSampleString(acTimeToNextSample);
+        }
+        private string getAcTimeToNextSampleString(TimeSpan t)
+        {
+            string m = "";
+            if (t.Minutes.ToString().Length == 1)
+                m += "0";
+            string s = "";
+            if (t.Seconds.ToString().Length == 1)
+                s += "0";
+            return m + t.Minutes + ":" + s + t.Seconds;
+        }
+
         /// <summary>
         /// Старт на мерење на отпор на ладење DcCooling
         /// </summary>
@@ -362,8 +405,8 @@ namespace PresentationLayer
                 datasource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel.IsChannel2On = true;
                 //Стартувај го мерењето на отпор
                 ds = new DataSourceLayer.DataSourceServices();
-                ds.RessistanceMeasurenmentFinished += new DataSourceLayer.DataSourceServices.RessistanceMeasurenmentFinishedEventHandler(ds_CoolRessistanceMeasurenmentFinished);
-                ds.start_RessistanceMeasurenment(datasource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel, IS_TEST);
+                ds.RessistanceMeasurenmentFinished += new DataSourceLayer.DataSourceServices.RessistanceMeasurenmentFinishedEvent(ds_CoolRessistanceMeasurenmentFinished);
+                ds.start_RessistanceMeasurenment(datasource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel, IS_TEST, false);
             }
             else
             {
@@ -374,6 +417,7 @@ namespace PresentationLayer
         {
             datasource.calculateResults();
             this.ds_ColdRessistanceMeasurenmentFinished();
+            dcCoolingGraphsRefresh();
         }
 
         private void reduceButton_Checked(object sender, RoutedEventArgs e)

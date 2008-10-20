@@ -20,6 +20,7 @@ namespace DataSourceLayer
         private EntityLayer.TempMeasurenementConfiguration _tempMeasurenementConfiguration;
         private EntityLayer.RessistanceTransformerChannel _ressistanceTransformerChannel;
         private bool isTest;
+        private bool isColdMeas;
         //Instruments conf
         private RessistanceDataSource rds;
         private TemperatureDataSource tds;
@@ -49,20 +50,25 @@ namespace DataSourceLayer
         /// <summary>
         /// Delegate за EventHandler кој дава Notification за завршено мерење на температури
         /// </summary>
-        public delegate void TempMeasurenmentFinishedEventHandler();
+        public delegate void TempMeasurenmentFinishedEvent();
         /// <summary>
         /// Delegate за EventHandler кој дава Notification за завршено мерење на отпори
         /// </summary>
-        public delegate void RessistanceMeasurenmentFinishedEventHandler();
+        public delegate void RessistanceMeasurenmentFinishedEvent();
+        /// <summary>
+        /// Delegate за EventHandler кој дава Notification за напревено едно мерење на температурите
+        /// </summary>
+        public delegate void TempMeasurenmentDoneEvent();
+        /// <summary>
+        /// Delegate за EventHandler кој дава Notification за едно завршено мерење на отпор
+        /// </summary>
+        public delegate void RessistanceMeasurenmentDoneEvent();
 
-        /// <summary>
-        /// EventHandler кој дава Notification за завршено мерење на температури
-        /// </summary>
-        public event TempMeasurenmentFinishedEventHandler TempMeasurenmentFinished;
-        /// <summary>
-        /// EventHandler кој дава Notification за завршено мерење на отпори
-        /// </summary>
-        public event RessistanceMeasurenmentFinishedEventHandler RessistanceMeasurenmentFinished;
+        public event TempMeasurenmentFinishedEvent TempMeasurenmentFinished;
+        public event RessistanceMeasurenmentFinishedEvent RessistanceMeasurenmentFinished;
+        public event TempMeasurenmentDoneEvent TempMeasurenmentDone;
+        public event RessistanceMeasurenmentDoneEvent RessistanceMeasurenmentDone;
+
         private void OnTempMeasurenmentFinished()
         {
             //Call this method on the Right Thread
@@ -76,6 +82,20 @@ namespace DataSourceLayer
             if (RessistanceMeasurenmentFinished != null)
                 ((System.Windows.Threading.DispatcherObject)RessistanceMeasurenmentFinished.Target).Dispatcher.
                     BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, RessistanceMeasurenmentFinished);
+        }
+        private void OnTempMeasurenmentDone()
+        {
+            //Call this method on the Right Thread
+            if (TempMeasurenmentDone != null)
+                ((System.Windows.Threading.DispatcherObject)TempMeasurenmentDone.Target).Dispatcher.
+                    BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, TempMeasurenmentDone);
+        }
+        private void OnRessistanceMeasurenmentDone()
+        {
+            //Call this method on the Right Thread
+            if (RessistanceMeasurenmentDone != null)
+                ((System.Windows.Threading.DispatcherObject)RessistanceMeasurenmentDone.Target).Dispatcher.
+                    BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, RessistanceMeasurenmentDone);
         }
         #endregion
 
@@ -92,13 +112,14 @@ namespace DataSourceLayer
         /// <summary>
         /// Стартување на мерење на отпори. Оваа метода веднаш враќа и ја врши стартува нов Thread, во кој се врши мерењето.
         /// </summary>
-        public void start_RessistanceMeasurenment(EntityLayer.RessistanceTransformerChannel ressistanceTransformerChannel, bool isTest)
+        public void start_RessistanceMeasurenment(EntityLayer.RessistanceTransformerChannel ressistanceTransformerChannel, bool isTest, bool isColdMeas)
         {
             _sampleRate = ressistanceTransformerChannel.RessistanceSampleRateCurrentState;
             _numberOfSamples = ressistanceTransformerChannel.RessistanceNoOfSamplesCurrentState;
             _current = ressistanceTransformerChannel.TestCurrent;
             _ressistanceTransformerChannel = ressistanceTransformerChannel;
             this.isTest = isTest;
+            this.isColdMeas = isColdMeas;
             if (!isTest)
             {
                 pm = new ProcessManager((PLCP.enPortNumber)PLC_PORT_NUMBER);
@@ -130,6 +151,7 @@ namespace DataSourceLayer
                 {
                     _ressistanceTransformerChannel.RessistanceMeasurenments.Add(
                             new RessistanceMeasurenment(DateTime.Now, channelNo, voltage, current));
+                    OnRessistanceMeasurenmentDone();
                 }
                 if (channelNo == 1)
                     channelNo = 2;
@@ -168,7 +190,7 @@ namespace DataSourceLayer
         /// <summary>
         /// Стартување на мерење на температури. Оваа метода веднаш враќа и ја врши стартува нов Thread, во кој се врши мерењето.
         /// </summary>
-        public void start_TempMeasurenment(EntityLayer.TempMeasurenementConfiguration tempMeasurenmentConfiguration, bool isTest)
+        public void start_TempMeasurenment(EntityLayer.TempMeasurenementConfiguration tempMeasurenmentConfiguration, bool isTest, bool isColdMeas)
         {
             this._sampleRate = tempMeasurenmentConfiguration.TempSampleRateCurrentState;
             this._numberOfSamples = tempMeasurenmentConfiguration.TempNoOfSamplesCurrentState;
@@ -177,6 +199,7 @@ namespace DataSourceLayer
             IsTempMeasInterupted = false;
             IsSampleReduced = false;
             IsTempMeasStopped = false;
+            this.isColdMeas = isColdMeas;
             if (!isTest)
             {
 
@@ -200,6 +223,7 @@ namespace DataSourceLayer
         {
             DateTime time = DateTime.Now;
             _tempMeasurenementConfiguration.TempMeasurenments.Add(new TempMeasurenment(time, t1, t2, t3, t4));
+            OnTempMeasurenmentDone();
         }
         /// <summary>
         /// Крај на температурните мерења
@@ -230,15 +254,29 @@ namespace DataSourceLayer
                 Random rand = new Random();
                 for (int i = 0; i < _numberOfSamples && !IsTempMeasStopped; i++)
                 {
-                    _tempMeasurenementConfiguration.TempMeasurenments.Add(new TempMeasurenment(
-                        DateTime.Now,
-                        _tempMeasurenementConfiguration.IsChannel1On ? rand.NextDouble() * 10 + 20 : double.NaN,
-                        _tempMeasurenementConfiguration.IsChannel2On ? rand.NextDouble() * 10 + 20 : double.NaN,
-                        _tempMeasurenementConfiguration.IsChannel3On ? rand.NextDouble() * 10 + 20 : double.NaN,
-                        _tempMeasurenementConfiguration.IsChannel4On ? rand.NextDouble() * 10 + 20 : double.NaN
+                    if (isColdMeas)
+                    {
+                        _tempMeasurenementConfiguration.TempMeasurenments.Add(new TempMeasurenment(
+                            DateTime.Now,
+                            _tempMeasurenementConfiguration.IsChannel1On ? 20.2 : double.NaN,
+                            _tempMeasurenementConfiguration.IsChannel2On ? 20.2 : double.NaN,
+                            _tempMeasurenementConfiguration.IsChannel3On ? 20.2 : double.NaN,
+                            _tempMeasurenementConfiguration.IsChannel4On ? 20.2 : double.NaN
                         ));
+                    }
+                    else
+                    {
+                        _tempMeasurenementConfiguration.TempMeasurenments.Add(new TempMeasurenment(
+                                DateTime.Now,
+                                _tempMeasurenementConfiguration.IsChannel1On ? rand.NextDouble() * 10 + 20 : double.NaN,
+                                _tempMeasurenementConfiguration.IsChannel2On ? rand.NextDouble() * 10 + 20 : double.NaN,
+                                _tempMeasurenementConfiguration.IsChannel3On ? rand.NextDouble() * 10 + 20 : double.NaN,
+                                _tempMeasurenementConfiguration.IsChannel4On ? rand.NextDouble() * 10 + 20 : double.NaN
+                                ));
+                    }
                     _tempMeasurenementConfiguration.TempMeasurenments[i].IsSampleReduced = this.IsSampleReduced;
                     this.IsSampleReduced = false;
+                    OnTempMeasurenmentDone();
                     for (int j = 0; j < _sampleRate && !IsTempMeasInterupted && !IsTempMeasStopped && i < _numberOfSamples - 1; j++)
                         Thread.Sleep(1000);
                     IsTempMeasInterupted = false;
@@ -253,6 +291,9 @@ namespace DataSourceLayer
 
         private void ressistanceMeasurenmentDoWork()
         {
+            List<double> testValues = new List<double>()
+            {0.99632, 0.9961, 0.99603, 0.99584, 0.99584, 0.99556, 0.99527, 0.99523, 0.99527, 0.99517, 0.99477, 0.99488, 0.99470, 0.99463, 0.99443, 0.99445, 0.99419, 0.99408, 0.99388, 0.99386, 0.99373, 0.99369};
+            
             lock (_ressistanceTransformerChannel.RessistanceMeasurenments)
             {
                 _ressistanceTransformerChannel.RessistanceMeasurenments.Clear();
@@ -264,8 +305,13 @@ namespace DataSourceLayer
                         channel = 1;
                     else
                         channel = 2;
-                    _ressistanceTransformerChannel.RessistanceMeasurenments.Add(
-                        new RessistanceMeasurenment(DateTime.Now, channel, rand.NextDouble() * 10, rand.NextDouble() * 10));
+                    if (isColdMeas)
+                        _ressistanceTransformerChannel.RessistanceMeasurenments.Add(
+                            new RessistanceMeasurenment(DateTime.Now, channel, 0.82293996, 1));
+                    else
+                        _ressistanceTransformerChannel.RessistanceMeasurenments.Add(
+                            new RessistanceMeasurenment(DateTime.Now, channel, testValues[(int)(i / 2)], 1));
+                    OnRessistanceMeasurenmentDone();
                     Thread.Sleep(_sampleRate * 1000);
                 }
             }

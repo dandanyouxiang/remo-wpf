@@ -60,7 +60,6 @@ namespace DataAccessLayer
                     }
                 }
             }
-
             public double EndAcTemp 
             {
                 get { return EndAcTmp; }
@@ -160,12 +159,18 @@ namespace DataAccessLayer
         #region Private Members
 
             private double r1AtT0;
-            private double T1Rise;
-            private string FT1;
+            private double t1AtT0;
+            private double t1Rise;
+            private string ft1;
+            private double aot1;
+            private double r1AtAOT;
 
-            private double T2T0;
-            private double T2Rise;
-            private string FT2;
+            private double r2AtT0;
+            private double t2AtT0;
+            private double t2Rise;
+            private string ff2;
+            private double aot2;
+            private double r2AtAOT;
 
         #endregion
 
@@ -182,66 +187,141 @@ namespace DataAccessLayer
                     }
                 }
             }
-            public double T1_Rise
+            public double T1AtT0
             {
-                get { return T1Rise; }
+                get { return t1AtT0; }
                 set
                 {
-                    if (T1Rise != value)
+                    if (t1AtT0 != value)
                     {
-                        T1Rise = value;
+                        t1AtT0 = value;
+                        OnPropertyChanged(new PropertyChangedEventArgs("T1AtT0"));
+                    }
+                }
+            }
+            public double AOT1
+            {
+                get { return aot1; }
+                set
+                {
+                    if (aot1 != value)
+                    {
+                        aot1 = value;
+                        OnPropertyChanged(new PropertyChangedEventArgs("AOT1"));
+                    }
+                }
+            }
+            public double T1_Rise
+            {
+                get { return t1Rise; }
+                set
+                {
+                    if (t1Rise != value)
+                    {
+                        t1Rise = value;
                         OnPropertyChanged(new PropertyChangedEventArgs("T1_Rise"));
                     }
                 }
             }
             public string F_T1
             {
-                get { return FT1 ; }
+                get { return ft1 ; }
                 set
                 {
-                    if (FT1 != value)
+                    if (ft1 != value)
                     {
-                        FT1 = value;
+                        ft1 = value;
                         OnPropertyChanged(new PropertyChangedEventArgs("F_T1"));
+                    }
+                }
+            }
+            public double R1AtAOT
+            {
+                get { return r1AtAOT; }
+                set
+                {
+                    if (r1AtAOT != value)
+                    {
+                        r1AtAOT = value;
+                        OnPropertyChanged(new PropertyChangedEventArgs("R1AtAOT"));
+                    }
+                }
+            }
+            public List<MeasurenmentEntity> TempMeasurenments1 { get; private set; }
+
+            public double R2AtT0
+            {
+                get { return r2AtT0; }
+                set
+                {
+                    if (r2AtT0 != value)
+                    {
+                        r2AtT0 = value;
+                        OnPropertyChanged(new PropertyChangedEventArgs("R2AtT0"));
                     }
                 }
             }
             public double T2AtT0
             {
-                get { return T2T0; }
+                get { return t2AtT0; }
                 set
                 {
-                    if (T2T0 != value)
+                    if (t2AtT0 != value)
                     {
-                        T2T0 = value;
-                        OnPropertyChanged(new PropertyChangedEventArgs("T2_T0"));
+                        t2AtT0 = value;
+                        OnPropertyChanged(new PropertyChangedEventArgs("T2AtT0"));
+                    }
+                }
+            }
+            public double AOT2
+            {
+                get { return aot2; }
+                set
+                {
+                    if (aot2 != value)
+                    {
+                        aot2 = value;
+                        OnPropertyChanged(new PropertyChangedEventArgs("AOT2"));
                     }
                 }
             }
             public double T2_Rise
             {
-                get { return T2Rise; }
+                get { return t2Rise; }
                 set
                 {
-                    if (T2Rise != value)
+                    if (t2Rise != value)
                     {
-                        T2Rise = value;
+                        t2Rise = value;
                         OnPropertyChanged(new PropertyChangedEventArgs("T2_Rise"));
                     }
                 }
             }
             public string F_T2
             {
-                get { return FT2; }
+                get { return ff2; }
                 set
                 {
-                    if (FT2 != value)
+                    if (ff2 != value)
                     {
-                        FT2 = value;
+                        ff2 = value;
                         OnPropertyChanged(new PropertyChangedEventArgs("F_T2"));
                     }
                 }
             }
+            public double R2AtAOT
+            {
+                get { return r2AtAOT; }
+                set
+                {
+                    if (r2AtAOT != value)
+                    {
+                        r2AtAOT = value;
+                        OnPropertyChanged(new PropertyChangedEventArgs("R2AtAOT"));
+                    }
+                }
+            }
+            public List<MeasurenmentEntity> TempMeasurenments2 { get; private set; }
         #endregion
         #region Functions
             public void calculateResults()
@@ -259,8 +339,12 @@ namespace DataAccessLayer
                 c1.RessMeasurenments = ressMeasurenments1;
                 c1.calculate();
                 F_T1 = c1.Func;
-                R1AtT0 = c1.TAtT0;
+                T1AtT0 = c1.TAtT0;
                 T1_Rise = c1.TAtT0 - c1.TCold;
+                R1AtT0 = c1.RAtT0;
+                AOT1 = c1.AOT;
+                R1AtT0 = c1.RAOT;
+                TempMeasurenments1 = c1.TempMeasurenments;
 
                 //Channel 2
                 List<MeasurenmentEntity> ressMeasurenments2 = new List<MeasurenmentEntity>();
@@ -272,10 +356,16 @@ namespace DataAccessLayer
                 c2.RCold = R2ColdAtDcCool;
                 c2.TempCoeff = this.Root.TransformerProperties.LvTempCoefficient;
                 c2.RessMeasurenments = ressMeasurenments2;
+
                 c2.calculate();
+
                 F_T2 = c2.Func;
                 T2AtT0 = c2.TAtT0;
                 T2_Rise = c2.TAtT0 - c2.TCold;
+                R2AtT0 = c2.RAtT0;
+                AOT2 = c2.AOT;
+                R2AtT0 = c2.RAOT;
+                TempMeasurenments2 = c2.TempMeasurenments;
             }
 
         #endregion

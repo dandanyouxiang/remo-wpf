@@ -23,11 +23,18 @@ namespace PresentationLayer
         private void graphsInit()
         {
             acGraphInit();
+            dcCoolingGraphsInit();
         }
 
+        //Ac Hot
         WPFGraphSeries seriesOilTemp;
         WPFGraphSeries seriesAmbTemp;
         WPFGraphSeries seriesTempRise;
+
+        //Dc Cooling
+        WPFGraphSeries series1Temp;
+        WPFGraphSeries series2Temp;
+
         private void acGraphInit()
         {
             seriesOilTemp = new DNBSoft.WPF.WPFGraph.WPFGraphSeries();
@@ -69,6 +76,21 @@ namespace PresentationLayer
 
         private void dcCoolingGraphsInit()
         {
+            series1Temp = new DNBSoft.WPF.WPFGraph.WPFGraphSeries();
+            series2Temp = new DNBSoft.WPF.WPFGraph.WPFGraphSeries();
+            series1Temp.Name = "Temperature";
+            series2Temp.Name = "Temperature";
+            T1Graph.Series.Add(series1Temp);
+            T2Graph.Series.Add(series2Temp);
+            WPFGraphPointRenderers.RoundPoint series1PointRenderer = new WPFGraphPointRenderers.RoundPoint();
+            series1PointRenderer.PointBrush = Brushes.Red;
+            series1PointRenderer.PointSize = 5;
+            series1Temp.PointRenderer = series1PointRenderer;
+            series2Temp.PointRenderer = series1PointRenderer;
+            WPFGraphLineRenderers.DashedLine series1LineRenderer = new WPFGraphLineRenderers.DashedLine();
+            series1LineRenderer.LineBrush = Brushes.Pink;
+            series1Temp.LineRenderer = series1LineRenderer;
+            series2Temp.LineRenderer = series1LineRenderer;
         }
 
         private void acGraphRefresh()
@@ -145,7 +167,49 @@ namespace PresentationLayer
             AcGraph.IntervalXRange = (AcGraph.MaxXRange - AcGraph.MinXRange) / 10;
 
             AcGraph.Refresh();
-            this.InvalidateVisual();
+        }
+        private void dcCoolingGraphsRefresh()
+        {
+            double maxX = -1000;
+            series1Temp.Points.Clear();
+            series2Temp.Points.Clear();
+            foreach (MeasurenmentEntity t in datasource.TempMeasurenments1)
+            {
+                WPFGraphDataPoint point = new DNBSoft.WPF.WPFGraph.WPFGraphDataPoint();
+
+                point.X = t.TimeSeconds;
+                point.Y = t.Value;
+                if (point.X > maxX)
+                    maxX = point.X + 0.1;
+                    series1Temp.Points.Add(point);
+            }
+            T1Graph.MaxYRange = datasource.T1AtT0;
+            T1Graph.MinYRange = datasource.AOT1;
+            T1Graph.MaxXRange = maxX + 5;
+            T1Graph.MinXRange = 0;
+            T1Graph.IntervalYRange = (T1Graph.MaxYRange - T1Graph.MinYRange) / 10;
+            T1Graph.IntervalXRange = (T1Graph.MaxXRange - T1Graph.MinXRange) / 10;
+
+            foreach (MeasurenmentEntity t in datasource.TempMeasurenments2)
+            {
+                WPFGraphDataPoint point = new DNBSoft.WPF.WPFGraph.WPFGraphDataPoint();
+
+                point.X = t.TimeSeconds;
+                point.Y = t.Value;
+                if (point.X > maxX)
+                    maxX = point.X + 0.1;
+                series2Temp.Points.Add(point);
+            }
+
+            T2Graph.MaxYRange = datasource.T2AtT0;
+            T2Graph.MinYRange = datasource.AOT2;
+            T2Graph.MaxXRange = maxX + 5;
+            T2Graph.MinXRange = 0;
+            T2Graph.IntervalYRange = (T2Graph.MaxYRange - T2Graph.MinYRange) / 10;
+            T2Graph.IntervalXRange = (T2Graph.MaxXRange - T2Graph.MinXRange) / 10;
+
+            T1Graph.Refresh();
+            T2Graph.Refresh();
         }
     }
 }

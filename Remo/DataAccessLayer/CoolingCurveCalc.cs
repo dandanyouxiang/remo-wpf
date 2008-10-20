@@ -67,6 +67,7 @@ namespace DataAccessLayer
             TAtT0 = a + AOT;
             RAtT0 = calcRHot(TCold, TAtT0, RCold, TempCoeff);
             RAOT = calcRHot(TCold, AOT, RCold, TempCoeff);
+            Func = Math.Round(a, 6) + " * Exp(" + Math.Round(b, 6) + "*t)";
         }
         private double calcEq(double aot)
         {
