@@ -9,8 +9,10 @@ namespace FlukeClient
     {
         static void Main(String[] args)
         {
-            new RessistanceDataSourceTest();
+            RessistanceDataSourceTest rdsTest = new RessistanceDataSourceTest();
             //new FlukeMeasurenmentClientTest();
+            Console.ReadKey();
+            rdsTest.stopMeas();
             Console.ReadKey();
         }
     }

@@ -49,6 +49,7 @@ namespace PresentationLayer
             }
         }
         string[] statusStrings = new String[] { "Measuring Ressistance", "Measuring Temperature", "Idle"};
+        private bool IS_TEST;
         [DefaultValue("Idle")]
         public string StatusString { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
@@ -58,7 +59,7 @@ namespace PresentationLayer
                 PropertyChanged(this, e);
         }
         DataSourceLayer.DataSourceServices ds;
-        
+       
         /// <summary>
         /// Изворот на податоци.
         /// </summary>
@@ -72,19 +73,15 @@ namespace PresentationLayer
         public Window1()
         {
             InitializeComponent();
-            //Todo da se izbrishe posle - DA SE PAMTI nekade
-
+            IS_TEST = Convert.ToBoolean(System.Configuration.ConfigurationSettings.AppSettings["IS_TEST"]);
             fileStoring = XmlFileServices.readXml(@"Ref\file.info");
-            
-            //WorkPlacePath=@"E:\";
             WorkPlacePath = fileStoring.WorkplacePath;
             FileName = fileStoring.FileName;
-
 
             this.Title = "Remo - " + FileName;
             
             //Todo Da se vidi dali e vo red na ovoj nacin da se cita prethodno zacuvanata programa.
-            datasource = new DataSource(FileName, FileCommand.Open);
+            datasource = new DataSource(FileName, FileCommand.New);
             MainGrid.DataContext = datasource;
             StatusString = statusStrings[2];
             this.graphsInit();
@@ -127,16 +124,13 @@ namespace PresentationLayer
                 */
                 statusTextBlock.DataContext = this;
 
-                if (datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Count>0)
+                if (datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Count > 0)
                 {
                     thermometerChannelAC1.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T1;
                     thermometerChannelAC2.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T2;
                     thermometerChannelAC3.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T3;
                     thermometerChannelAC4.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T4;
                 }
-
-
-
                 //Todo termometrite vo vtoriot tab
                 if (datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Count > 0)
                 {
@@ -145,20 +139,6 @@ namespace PresentationLayer
                     thermometerChannelAC3.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T3;
                     thermometerChannelAC4.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T4;
                 }
-
-                //Todo Rabota so fajlovi
-                #region File Manipulation
-
-                //XmlFileServices.writeToXml(@"E:\file.info",new FileStoring(".remo","Remo file","Data.remo",@"E:\"));
-
-                //fileStoring = new FileStoring(WorkPlacePath);
-                //fileStoring.FileExtension = "remo";
-                //fileStoring.FileDescription = "Remo documents";
-                
-
-                #endregion File Manipulation
-
-
             }
             catch (Exception ex) 
             {
@@ -233,9 +213,9 @@ namespace PresentationLayer
                     datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel4Oil = thermometerChannel4.IsOil;
 
                     //Стартувај го мерењето на температура
-                    DataSourceLayer.DataSourceServices ds = new DataSourceLayer.DataSourceServices();
+                    ds = new DataSourceLayer.DataSourceServices();
                     ds.TempMeasurenmentFinished += new DataSourceLayer.DataSourceServices.TempMeasurenmentFinishedEventHandler(ds_TempMeasurenmentFinished);
-                    ds.start_TempMeasurenment(datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration);
+                    ds.start_TempMeasurenment(datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration, IS_TEST);
                     //
                 }
             }
@@ -244,6 +224,15 @@ namespace PresentationLayer
                 startTempMeasDcColdButton.IsChecked = false;
             }
         }
+        private void startTempMeasDcColdButton_Click(object sender, RoutedEventArgs e)
+        {
+            //Стопирање на температурните мерења
+            if (startTempMeasDcColdButton.IsChecked == false)
+            {
+                ds.stopTempMeasurenments();
+            }
+        }
+
 
         /// <summary>
         /// Handler за крај на температурнто мерење.
@@ -270,8 +259,8 @@ namespace PresentationLayer
                     datasource.Root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel].IsChannel2On = true;
                     //Стартувај го мерењето на отпор
                     DataSourceLayer.DataSourceServices ds = new DataSourceLayer.DataSourceServices();
-                    ds.RessistanceMeasurenmentFinished += new DataSourceLayer.DataSourceServices.RessistanceMeasurenmentFinishedEventHandler(ds_RessistanceMeasurenmentFinished);
-                    ds.start_RessistanceMeasurenment(datasource.Root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel], false);
+                    ds.RessistanceMeasurenmentFinished += new DataSourceLayer.DataSourceServices.RessistanceMeasurenmentFinishedEventHandler(ds_ColdRessistanceMeasurenmentFinished);
+                    ds.start_RessistanceMeasurenment(datasource.Root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel], IS_TEST);
                 }
             }
             else
@@ -282,7 +271,7 @@ namespace PresentationLayer
         /// <summary>
         /// Handler за крај на мерењето на отпор.
         /// </summary>
-        private void ds_RessistanceMeasurenmentFinished()
+        private void ds_ColdRessistanceMeasurenmentFinished()
         {
             startResMeasDcColdButton.IsChecked = false;
             StartDcCoolResButton.IsChecked = false;
@@ -340,7 +329,7 @@ namespace PresentationLayer
                 ds = new DataSourceLayer.DataSourceServices();
                 ds.TempMeasurenmentFinished += new DataSourceLayer.DataSourceServices.TempMeasurenmentFinishedEventHandler(ds_TempMeasurenmentFinished);
                 datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempNoOfSamplesCurrentState = 5;
-                ds.start_TempMeasurenment(datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration);
+                ds.start_TempMeasurenment(datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration, IS_TEST);
                 //
             }
         }
@@ -351,9 +340,9 @@ namespace PresentationLayer
         {
             if (((ToggleButton)e.Source).IsChecked == false && CurrentProcessState != ProcessStatesEnum.Idle)
             {
-
+                ds.stopTempMeasurenments();
+                //pri testiranje
                 ds.IsTempMeasStopped = true;
-                startAcButton.IsChecked = false;
             }
         }
         /// <summary>
@@ -368,13 +357,18 @@ namespace PresentationLayer
                 datasource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel.IsChannel2On = true;
                 //Стартувај го мерењето на отпор
                 ds = new DataSourceLayer.DataSourceServices();
-                ds.RessistanceMeasurenmentFinished += new DataSourceLayer.DataSourceServices.RessistanceMeasurenmentFinishedEventHandler(ds_RessistanceMeasurenmentFinished);
-                ds.start_RessistanceMeasurenment(datasource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel, true);
+                ds.RessistanceMeasurenmentFinished += new DataSourceLayer.DataSourceServices.RessistanceMeasurenmentFinishedEventHandler(ds_CoolRessistanceMeasurenmentFinished);
+                ds.start_RessistanceMeasurenment(datasource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel, IS_TEST);
             }
             else
             {
                 StartDcCoolResButton.IsChecked = false;
             }
+        }
+        public void ds_CoolRessistanceMeasurenmentFinished()
+        {
+            datasource.calculateResults();
+            this.ds_ColdRessistanceMeasurenmentFinished();
         }
 
         private void reduceButton_Checked(object sender, RoutedEventArgs e)
@@ -395,16 +389,14 @@ namespace PresentationLayer
            
         }
 
-        private void MainGrid_Loaded(object sender, RoutedEventArgs e)
-        {
-
-        }
         /// <summary>
         /// При Validation Error на FrameworkElement компонента,
         /// да се врати последната валидна вредност (вредноста во binding source-от)
         /// </summary>
         private void OnValidationError(object sender, ValidationErrorEventArgs e)
         {
+            //Стави Null Validation.ErrorTEmplate за да не покажува црвена граница кај TextBox
+            System.Windows.Controls.Validation.SetErrorTemplate(((FrameworkElement)e.OriginalSource), null);
             ((FrameworkElement)e.OriginalSource).GetBindingExpression(TextBox.TextProperty).UpdateTarget();
         }
 
@@ -419,65 +411,6 @@ namespace PresentationLayer
                 case "T4MeanDCColdTextBox": thermometerChannel4.Value = datasource.T4MeanDCColdTempTable; break;
             }
         }
-
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
-
-        
-
-        
     }
-    //Todo zema mnogu procesorsko vreme
-    /// <summary>
-    /// Поставуванје на стил за табелатата во ACHeating табот
-    /// </summary>
-    public class ListViewItemStyleSelector : StyleSelector
-    {
-        public int reducedIndex{get;set;}
-
-        //Todo zema mnogu procesorsko vreme
-        public override Style SelectStyle(object item, DependencyObject container)
-        {
-            DateTime start = DateTime.Now;
-            Console.WriteLine("start SelectStyle");
-            Style st = new Style();
-            try
-            {
-                st.TargetType = typeof(ListViewItem);
-                Setter backGroundSetter = new Setter();
-                backGroundSetter.Property = ListViewItem.BackgroundProperty;
-                ListView listView =
-                    ItemsControl.ItemsControlFromItemContainer(container)
-                      as ListView;
-               
-                int index =
-                    listView.ItemContainerGenerator.IndexFromContainer(container);
-                //Todo ??? zasto se cita pak
-                
-                DataSource datasource = new DataSource(@"D:\root.xml",FileCommand.New);
-                reducedIndex = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.FindIndex(Utils.isReduced);
-
-                if (index == reducedIndex)
-                {
-                    backGroundSetter.Value = Brushes.LightBlue;
-                }
-                else
-                {
-                    backGroundSetter.Value = Brushes.White;
-                }
-                st.Setters.Add(backGroundSetter);
-            }
-            catch (Exception ex) 
-            {
-                DateTime end = DateTime.Now;
-                Console.WriteLine("end SelectStyle - Time:" + (end - start).TotalMilliseconds + " ms");
-                return null;
-            }
-            DateTime end1 = DateTime.Now;
-            Console.WriteLine("end SelectStyle - Time:"+(end1-start).TotalMilliseconds+" ms");
-            return st;
-        }
-    } 
+   
 }

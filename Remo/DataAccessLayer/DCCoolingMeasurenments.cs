@@ -116,10 +116,30 @@ namespace DataAccessLayer
                 EntityLayer.TempMeasurenment reducedTempMeasurenment=Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Find(Utils.isReduced);
                 EntityLayer.TempMeasurenment lastTempMeasurenment = Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last<EntityLayer.TempMeasurenment>();
 
-                double meanReducedTemp = (((tempch.IsChannel1Oil && tempch.IsChannel1On) ? reducedTempMeasurenment.T1 : 0) + ((tempch.IsChannel2Oil && tempch.IsChannel2On) ? reducedTempMeasurenment.T2 : 0) + ((tempch.IsChannel3Oil && tempch.IsChannel3On) ? reducedTempMeasurenment.T3 : 0) + ((tempch.IsChannel4Oil && tempch.IsChannel4On) ? reducedTempMeasurenment.T4 : 0)) / (((tempch.IsChannel1Oil && tempch.IsChannel1On) ? 1 : 0) + ((tempch.IsChannel2Oil && tempch.IsChannel2On) ? 1 : 0) + ((tempch.IsChannel3Oil && tempch.IsChannel3On) ? 1 : 0) + ((tempch.IsChannel4Oil && tempch.IsChannel4On) ? 1 : 0));
-                double lastReducedTemp = (((tempch.IsChannel1Oil && tempch.IsChannel1On) ? lastTempMeasurenment.T1 : 0) + ((tempch.IsChannel2Oil && tempch.IsChannel2On) ? lastTempMeasurenment.T2 : 0) + ((tempch.IsChannel3Oil && tempch.IsChannel3On) ? lastTempMeasurenment.T3 : 0) + ((tempch.IsChannel4Oil && tempch.IsChannel4On) ? lastTempMeasurenment.T4 : 0)) / (((tempch.IsChannel1Oil && tempch.IsChannel1On) ? 1 : 0) + ((tempch.IsChannel2Oil && tempch.IsChannel2On) ? 1 : 0) + ((tempch.IsChannel3Oil && tempch.IsChannel3On) ? 1 : 0) + ((tempch.IsChannel4Oil && tempch.IsChannel4On) ? 1 : 0));
-                
-                return meanReducedTemp-lastReducedTemp;
+                //Измерената температура во времето на редуцирање
+                double meanReducedTemp =
+                    (((tempch.IsChannel1Oil && tempch.IsChannel1On) ? reducedTempMeasurenment.T1 : 0)
+                    + ((tempch.IsChannel2Oil && tempch.IsChannel2On) ? reducedTempMeasurenment.T2 : 0)
+                    + ((tempch.IsChannel3Oil && tempch.IsChannel3On) ? reducedTempMeasurenment.T3 : 0)
+                    + ((tempch.IsChannel4Oil && tempch.IsChannel4On) ? reducedTempMeasurenment.T4 : 0))
+                    / (((tempch.IsChannel1Oil && tempch.IsChannel1On) ? 1 : 0)
+                        + ((tempch.IsChannel2Oil && tempch.IsChannel2On) ? 1 : 0)
+                        + ((tempch.IsChannel3Oil && tempch.IsChannel3On) ? 1 : 0)
+                        + ((tempch.IsChannel4Oil && tempch.IsChannel4On) ? 1 : 0)
+                    );
+                //Последната измерена температура
+                double lastReducedTemp =
+                    (((tempch.IsChannel1Oil && tempch.IsChannel1On) ? lastTempMeasurenment.T1 : 0)
+                    + ((tempch.IsChannel2Oil && tempch.IsChannel2On) ? lastTempMeasurenment.T2 : 0)
+                    + ((tempch.IsChannel3Oil && tempch.IsChannel3On) ? lastTempMeasurenment.T3 : 0)
+                    + ((tempch.IsChannel4Oil && tempch.IsChannel4On) ? lastTempMeasurenment.T4 : 0))
+                    / (((tempch.IsChannel1Oil && tempch.IsChannel1On) ? 1 : 0)
+                        + ((tempch.IsChannel2Oil && tempch.IsChannel2On) ? 1 : 0)
+                        + ((tempch.IsChannel3Oil && tempch.IsChannel3On) ? 1 : 0)
+                        + ((tempch.IsChannel4Oil && tempch.IsChannel4On) ? 1 : 0)
+                    );
+
+                return meanReducedTemp - lastReducedTemp;
             }
             private double evalEndAcTemp() 
             {
@@ -139,25 +159,25 @@ namespace DataAccessLayer
 
         #region Private Members
 
-        private double T1T0;
+            private double r1AtT0;
             private double T1Rise;
-            private double FT1;
+            private string FT1;
 
             private double T2T0;
             private double T2Rise;
-            private double FT2;
+            private string FT2;
 
         #endregion
 
         #region Public Members
-            public double T1_T0
+            public double R1AtT0
             {
-                get { return T1T0; }
+                get { return r1AtT0; }
                 set
                 {
-                    if (T1T0 != value)
+                    if (r1AtT0 != value)
                     {
-                        T1T0 = value;
+                        r1AtT0 = value;
                         OnPropertyChanged(new PropertyChangedEventArgs("T1_T0"));
                     }
                 }
@@ -174,9 +194,9 @@ namespace DataAccessLayer
                     }
                 }
             }
-            public double F_T1
+            public string F_T1
             {
-                get { return T1Rise; }
+                get { return FT1 ; }
                 set
                 {
                     if (FT1 != value)
@@ -186,7 +206,7 @@ namespace DataAccessLayer
                     }
                 }
             }
-            public double T2_T0
+            public double T2AtT0
             {
                 get { return T2T0; }
                 set
@@ -210,9 +230,9 @@ namespace DataAccessLayer
                     }
                 }
             }
-            public double F_T2
+            public string F_T2
             {
-                get { return T2Rise; }
+                get { return FT2; }
                 set
                 {
                     if (FT2 != value)
@@ -224,30 +244,38 @@ namespace DataAccessLayer
             }
         #endregion
         #region Functions
+            public void calculateResults()
+            {
+                //Channel 1
+                List<MeasurenmentEntity> ressMeasurenments1 = new List<MeasurenmentEntity>();
+                DateTime tNullTime = Root.DcCoolingMeasurenments.TNullTime;
+                foreach (EntityLayer.RessistanceMeasurenment m in Root.DcCoolingMeasurenments.RessistanceTransformerChannel.RessistanceMeasurenments)
+                    if (m.ChannelNo == 1)
+                        ressMeasurenments1.Add(new MeasurenmentEntity((m.Time - tNullTime).TotalSeconds, m.Voltage / m.Current));
+                CoolingCurveCalc c1 = new CoolingCurveCalc();
+                c1.TCold = TCold;
+                c1.RCold = R1ColdAtDcCool;
+                c1.TempCoeff = this.Root.TransformerProperties.HvTempCoefficient;
+                c1.RessMeasurenments = ressMeasurenments1;
+                c1.calculate();
+                F_T1 = c1.Func;
+                R1AtT0 = c1.TAtT0;
+                T1_Rise = c1.TAtT0 - c1.TCold;
 
-            private double evalT1T0() 
-            {
-                return -1;
-            }
-            private double evalT1Rise() 
-            {
-                return -1;
-            }
-            private double evalFT1() 
-            {
-                return -1;
-            }
-            private double evalT2T0()
-            {
-                return -1;
-            }
-            private double evalT2Rise()
-            {
-                return -1;
-            }
-            private double evalFT2() 
-            {
-                return -1;
+                //Channel 2
+                List<MeasurenmentEntity> ressMeasurenments2 = new List<MeasurenmentEntity>();
+                foreach (EntityLayer.RessistanceMeasurenment m in Root.DcCoolingMeasurenments.RessistanceTransformerChannel.RessistanceMeasurenments)
+                    if (m.ChannelNo == 2)
+                        ressMeasurenments2.Add(new MeasurenmentEntity((m.Time - tNullTime).TotalSeconds, m.Voltage / m.Current));
+                CoolingCurveCalc c2 = new CoolingCurveCalc();
+                c2.TCold = TCold;
+                c2.RCold = R2ColdAtDcCool;
+                c2.TempCoeff = this.Root.TransformerProperties.LvTempCoefficient;
+                c2.RessMeasurenments = ressMeasurenments2;
+                c2.calculate();
+                F_T2 = c2.Func;
+                T2AtT0 = c2.TAtT0;
+                T2_Rise = c2.TAtT0 - c2.TCold;
             }
 
         #endregion

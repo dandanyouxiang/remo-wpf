@@ -10,7 +10,16 @@ namespace FlukeClient
     public class FlukeMeasurenmentClient
     {
         public delegate void MeasFinishedEvent(double measurenment);
+        public delegate void MeasEndEvent();
+        /// <summary>
+        /// event за крај на едно мерење
+        /// </summary>
         public event MeasFinishedEvent MeasFinished;
+       
+        /// <summary>
+        /// event за крај на сите мерења
+        /// </summary>
+        public event MeasEndEvent MeasEnd;
 
         private enum TriggerSource { IMMEDIATE, EXTERNAL };
         private enum NPlc { _1 = 0, _10, _100 };
@@ -22,11 +31,17 @@ namespace FlukeClient
         private string _ipAddress;
         private int _port;
         private int _numberOfMeasurenments;
-
+        private NetworkStream stream;
+        public bool IsStop { get; set; }
         private void OnMeasFinished(double measurenment)
         {
             if (MeasFinished != null)
                 MeasFinished(measurenment);
+        }
+        private void OnMeasEnd()
+        {
+            if (MeasEnd != null)
+                MeasEnd();
         }
 
         public FlukeMeasurenmentClient(string ipAddress, int port, int numberOfMeasurenments)
@@ -41,21 +56,24 @@ namespace FlukeClient
             try
             {
                 //Отварање на конекција кон инструментот
-                NetworkStream stream = openConection(ref client, _ipAddress, _port);
-
+                stream = openConection(ref client, _ipAddress, _port);
                 //Конфигурирање на мерењата
                 enterRemote(stream);
-                reset(stream);
-                clearStatusReg(stream);
+                reset();
+                clearStatusReg();
+                reset();
+                clearStatusReg();
+                System.Threading.Thread.Sleep(1000);
                 setNplc(stream, NPlc._10);
                 setVoltageAutoRange(stream);
                 setTriggerCount(stream, TRIGGER_COUNT);
                 setSampleCount(stream, SAMPLE_COUNT);
                 setTriggerDelay(stream);
                 setTriggerSource(stream, TriggerSource.EXTERNAL);
+                IsStop = false;
                 System.Threading.Thread.Sleep(100);
                 //Изведување на мерења
-                for (int i = 0; i < _numberOfMeasurenments; i++)
+                for (int i = 0; i < _numberOfMeasurenments && !IsStop; i++)
                 {
                     //Испраќање на команда за читање на податоци од инструментот
                     //После ова команда се чека на Trigger-и
@@ -63,7 +81,7 @@ namespace FlukeClient
                     //Читање на податоци од input stream штом ќе станат достапни
                     //Оваа метода ќе врати по читањето на сите податоци
                     string measStr = readData(stream, TRIGGER_COUNT * SAMPLE_COUNT);
-              
+
                     //Пресметување на средна вредност од сите читања
                     double mean = parseStringAndCalcMean(measStr);
 
@@ -71,12 +89,13 @@ namespace FlukeClient
                     //Throw event
                     OnMeasFinished(mean);
                 }
-                clearStatusReg(stream);
-                reset(stream);
-                
+                reset();
+                clearStatusReg();
+                stream.Flush();
                 stream.Dispose();
+                OnMeasEnd();
             }
-            catch (Exception ex)
+            catch (System.Net.Sockets.SocketException ex)
             {
                 Console.WriteLine("Exception:" + ex.Message);
                 throw ex;
@@ -157,18 +176,18 @@ namespace FlukeClient
             byte[] buffer = encoder.GetBytes("syst:rem\n");
             clientStream.Write(buffer, 0, buffer.Length);
         }
-        private void reset(NetworkStream clientStream)
+        public void reset()
         {
             ASCIIEncoding encoder = new ASCIIEncoding();
             byte[] buffer = encoder.GetBytes("*rst\n");
-            clientStream.Write(buffer, 0, buffer.Length);
+            stream.Write(buffer, 0, buffer.Length);
         }
         //Clear status byte summary and all event registers
-        private void clearStatusReg(NetworkStream clientStream)
+        public void clearStatusReg()
         {
             ASCIIEncoding encoder = new ASCIIEncoding();
             byte[] buffer = encoder.GetBytes("*CLS\n");
-            clientStream.Write(buffer, 0, buffer.Length);
+            stream.Write(buffer, 0, buffer.Length);
         }
         //NPLC cycles
         private void setNplc(NetworkStream clientStream, NPlc nplc)

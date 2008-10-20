@@ -284,8 +284,8 @@ namespace DataAccessLayer
                             exp = from temp in Root.DcColdMeasurenments.TempMeasurenementConfiguration.TempMeasurenments
                                   select new
                                   {
-                                      Time = temp.Time.Date,
-                                      Date = temp.Time.ToLongTimeString(),
+                                      Date = temp.Time.Date.ToShortDateString(),
+                                      Time = temp.Time.ToLongTimeString(),
                                       T1 = temp.T1,
                                       T2 = temp.T2,
                                       T3 = temp.T3,
@@ -442,11 +442,11 @@ namespace DataAccessLayer
                 + ((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel2Oil && Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel2On) ? 1 : 0)
                 + ((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel3Oil && Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel3On) ? 1 : 0) 
                 + ((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel4Oil && Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel4On) ? 1 : 0);
-            double channelInOilSum = 
-                ((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel1Oil) ? T1MeanDCColdTempTable : 0) 
-                + ((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel2Oil) ? T2MeanDCColdTempTable : 0) 
-                + ((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel3Oil) ? T3MeanDCColdTempTable : 0) 
-                + ((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel4Oil) ? T4MeanDCColdTempTable : 0);
+            double channelInOilSum =
+                ((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel1Oil && Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel1On) ? T1MeanDCColdTempTable : 0)
+                + ((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel2Oil && Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel2On) ? T2MeanDCColdTempTable : 0)
+                + ((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel3Oil && Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel3On) ? T3MeanDCColdTempTable : 0)
+                + ((Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel4Oil && Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel4On) ? T4MeanDCColdTempTable : 0);
 
             return channelInOil == 0 ? double.NaN : channelInOilSum / channelInOil;
         }
@@ -457,10 +457,18 @@ namespace DataAccessLayer
         /// <returns></returns>
         private double evalAmbDCColdTempTable()
         {
-            int channelInOil = ((!Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel1Oil) ? 1 : 0) + ((!Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel2Oil) ? 1 : 0) + ((!Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel3Oil) ? 1 : 0) + ((!Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel4Oil) ? 1 : 0);
-            double channelInOilSum = ((!Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel1Oil) ? T1MeanDCColdTempTable : 0) + ((!Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel2Oil) ? T2MeanDCColdTempTable : 0) + ((!Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel3Oil) ? T3MeanDCColdTempTable : 0) + ((!Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel4Oil) ? T4MeanDCColdTempTable : 0);
+            int channelsInAmb =
+                ((!Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel1Oil && Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel1On) ? 1 : 0)
+                + ((!Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel2Oil && Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel2On) ? 1 : 0)
+                + ((!Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel3Oil && Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel3On) ? 1 : 0)
+                + ((!Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel4Oil && Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel4On) ? 1 : 0);
+            double channelInAmbSum =
+                ((!Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel1Oil && Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel1On) ? T1MeanDCColdTempTable : 0)
+                + ((!Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel2Oil && Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel2On) ? T2MeanDCColdTempTable : 0)
+                + ((!Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel3Oil && Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel3On) ? T3MeanDCColdTempTable : 0)
+                + ((!Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel4Oil && Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel4On) ? T4MeanDCColdTempTable : 0);
 
-            return channelInOilSum / channelInOil;
+            return channelInAmbSum / channelsInAmb;
         }
 
         ////////////////////////////////////////////////////
@@ -755,8 +763,8 @@ namespace DataAccessLayer
                 exp = from ress in Root.DcColdMeasurenments.RessistanceTransformerChannels[channelIndex].RessistanceMeasurenments
                       select new
                       {
-                          Time = ress.Time.Date,
-                          Date = ress.Time.ToLongTimeString(),
+                          Date = ress.Time.Date.ToShortDateString(),
+                          Time = ress.Time.ToLongTimeString(),
                           RCA = (ress.ChannelNo == 1) ? (ress.Voltage / ress.Current) : double.NaN,
                           Rca = (ress.ChannelNo == 2) ? (ress.Voltage / ress.Current) : double.NaN
                       };

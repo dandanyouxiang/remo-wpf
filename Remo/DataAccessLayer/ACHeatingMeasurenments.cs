@@ -42,7 +42,7 @@ namespace DataAccessLayer
         #region Private Memebers
         private ACTableHeader _acHeatingTableHeader;
         private int _minSampleRate;
-        private int _secondsSampleRate;
+        private int _secondsSampleRate = 1;
         private int _samplesDone;
         #endregion
 
@@ -112,7 +112,8 @@ namespace DataAccessLayer
             IEnumerable ACValues = from ac in Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments
                                    select new
                                    {
-                                       Time = ac.Time.ToString("dd:mm:yyyy hh:mm:ss"),
+                                       Date = ac.Time.ToShortDateString(),
+                                       Time = ac.Time.ToLongTimeString(),
                                        No = Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.IndexOf(ac) + 1,
                                        T1 = ac.T1,
                                        T2 = ac.T2,
@@ -161,7 +162,7 @@ namespace DataAccessLayer
 
             return Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempSampleRateCurrentState % 60;
         }
-
+        //Todo 
         private int evalSamplesDone() 
         {
             return -1;

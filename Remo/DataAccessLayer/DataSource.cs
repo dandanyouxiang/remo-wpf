@@ -120,15 +120,8 @@ namespace DataAccessLayer
             /// <param name="e"></param>
             public void DcCoolingMeasurenments_RessistanceTransformerChannels_PropertyChanged(object sender, PropertyChangedEventArgs e) 
             {
+                //Todo dali treba?
                 TCold = evalTCold();
-
-                T1_T0=evalT1T0();
-                T1Rise=evalT1Rise();
-                FT1=evalFT1();
-                T2_T0 = evalT2T0();
-                T2Rise = evalT2Rise();
-                FT2 = evalFT2(); 
-            
             }
             /// <summary>
             /// Во TransformerProperties Ако се смени некој прочитан податок, одново да се пресметаат вредностите на полињата што се добиваат преку некако функција.
@@ -140,15 +133,6 @@ namespace DataAccessLayer
                 //Settings
                 EndAcTemp = evalEndAcTemp();
                 KDropInOil = evalKDropInOil();
-
-                //Results
-                T1_T0 = evalT1T0();
-                T1_Rise = evalT1Rise();
-                F_T1 = evalFT1();
-
-                T2_T0 = evalT2T0();
-                T2_Rise = evalT2Rise();
-                F_T2 = evalFT2();
             }
             public DataSource(string path,FileCommand fileCommand) 
             {
@@ -158,19 +142,21 @@ namespace DataAccessLayer
 
                 switch (fileCommand) 
                 {
-                    case FileCommand.New: new EntityLayer.XmlServices().writeToXmlNew(path); break;
-                    case FileCommand.Open: break;
-                    case FileCommand.Save: break;
+                    case FileCommand.New:
+                        Root = new EntityLayer.Root();
+                        break;
+                    case FileCommand.Open:
+                        Root = serv.readXml(path); 
+                        break;
+                    case FileCommand.Save:
+                        Root = serv.readXml(path); 
+                        break;
+                    default: Root = new EntityLayer.Root(); break;
                 }
 
                 //new EntityLayer.XmlServices().writeToXmlTest(path);
                 //new EntityLayer.XmlServices().writeToXml(path, new EntityLayer.Root());
     
-                Root = serv.readXml(path);
-
-                Root = new EntityLayer.XmlServices().readXml(path);
-
-
                 //DCCold
                 Root.DcColdMeasurenments.RessistanceTransformerChannels.PropertyChanged += new PropertyChangedEventHandler(DcColdMeasurenments_RessistanceTransformerChannels_PropertyChanged);
                 Root.DcColdMeasurenments.TempMeasurenementConfiguration.PropertyChanged += new PropertyChangedEventHandler(DcColdMeasurenments_TempMeasurenementConfiguration_PropertyChanged);

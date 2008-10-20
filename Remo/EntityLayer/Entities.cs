@@ -622,9 +622,9 @@ namespace EntityLayer
     public class TempMeasurenementConfiguration : INotifyPropertyChanged
     {
 
-        
 
-        private int _tempSampleRateCurrentState;
+
+        private int _tempSampleRateCurrentState = 1;
         /// <summary>
         /// Тековна состојба на SampleRate за температурни мерења
         /// </summary>
@@ -640,7 +640,7 @@ namespace EntityLayer
                 }
             }
         }
-        private int _tempNoOfSamplesCurrentState;
+        private int _tempNoOfSamplesCurrentState = 1;
         /// <summary>
         /// Тековна состојба на NoOfSamples за температурни мерења
         /// </summary>

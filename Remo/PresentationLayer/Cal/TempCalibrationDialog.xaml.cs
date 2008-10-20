@@ -35,7 +35,7 @@ namespace PresentationLayer
             _tempMeasurenementConfiguration.TempMeasurenments = new EntityLayer.ListWithChangeEvents<EntityLayer.TempMeasurenment>();
 
             dataSourceServices = new DataSourceServices();
-            dataSourceServices.start_TempMeasurenment(_tempMeasurenementConfiguration);
+            dataSourceServices.start_TempMeasurenment(_tempMeasurenementConfiguration, true);
             dataSourceServices.TempMeasurenmentFinished+=new DataSourceServices.TempMeasurenmentFinishedEventHandler(dataSourceServices_TempMeasurenmentFinished);
             
             T1Meas.DataContext = this;
@@ -63,7 +63,7 @@ namespace PresentationLayer
             T2Meas.DataContext = t;
             T3Meas.DataContext = t;
             T4Meas.DataContext = t;
-            dataSourceServices.start_TempMeasurenment(_tempMeasurenementConfiguration);    
+            dataSourceServices.start_TempMeasurenment(_tempMeasurenementConfiguration, true);    
         }
 
         private void okButton_Click(object sender, RoutedEventArgs e)

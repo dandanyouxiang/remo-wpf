@@ -2,6 +2,6 @@
 <FileStoring xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <FileExtension>.remo</FileExtension>
   <FileDescription>Remo file</FileDescription>
-  <FileName>E:\\Data.remo</FileName>
-  <WorkplacePath>E:\</WorkplacePath>
+  <FileName>C:\\Data.remo</FileName>
+  <WorkplacePath>C:\</WorkplacePath>
 </FileStoring>

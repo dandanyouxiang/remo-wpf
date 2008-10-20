@@ -19,17 +19,23 @@ namespace FlukeClient
         private Thread meas1Thread;
         private Thread meas2Thread;
         private int measNumber;
+        private bool meas1End;
+        private bool meas2End;
         private List<double> voltageMeas;
         private List<double> currentMeas;
         FlukeMeasurenmentClient meas1;
         FlukeMeasurenmentClient meas2;
 
         public delegate void MeasurenmentDoneEvent(double voltage, double current, int measNumber);
-
+        public delegate void MeasurenmentsEndEvent();
         /// <summary>
         /// Завршено е едно мерење на отпор.
         /// </summary>
         public event MeasurenmentDoneEvent MeasurenmentDone;
+        /// <summary>
+        /// Сите мерења се завршени
+        /// </summary>
+        public event MeasurenmentsEndEvent MeasurenmentsEnd;
 
         public RessistanceDataSource(int sampleRate, int numberOfSamples, double current, string ipAddress1, string ipAddress2, int port1, int port2)
         {
@@ -55,22 +61,24 @@ namespace FlukeClient
         }
         public void stopRessistanceMeasurenments()
         {
-            meas1.closeSocket();
-            meas2.closeSocket();
-            meas1Thread.Abort();
-            meas2Thread.Abort();
+            meas1.IsStop = true;
+            meas2.IsStop = true;
         }
 
         private void measure1()
         {
+            meas1End = false;
             meas1 = new FlukeMeasurenmentClient(_ipAddress1, _port1, 2 * _numberOfSamples);
             meas1.MeasFinished += new FlukeMeasurenmentClient.MeasFinishedEvent(meas1_MeasFinished);
+            meas1.MeasEnd += new FlukeMeasurenmentClient.MeasEndEvent(meas1_MeasEnd);
             meas1.startMeasurenment();
         }
         private void measure2()
         {
-            FlukeMeasurenmentClient meas2 = new FlukeMeasurenmentClient(_ipAddress2, _port2, 2 * _numberOfSamples);
+            meas2End = false;
+            meas2 = new FlukeMeasurenmentClient(_ipAddress2, _port2, 2 * _numberOfSamples);
             meas2.MeasFinished += new FlukeMeasurenmentClient.MeasFinishedEvent(meas2_MeasFinished);
+            meas2.MeasEnd += new FlukeMeasurenmentClient.MeasEndEvent(meas2_MeasEnd);
             meas2.startMeasurenment();
         }
         public void meas1_MeasFinished(double result)
@@ -87,6 +95,18 @@ namespace FlukeClient
             if (currentMeas.Count > measNumber && voltageMeas.Count > measNumber)
                 OnMeasurenmentDone();
         }
+        public void meas1_MeasEnd()
+        {
+            meas1End = true;
+            if (meas2End)
+                OnMeasurenmentsEnd();
+        }
+        public void meas2_MeasEnd()
+        {
+            meas2End = true;
+            if (meas1End)
+                OnMeasurenmentsEnd();
+        }
         /// <summary>
         /// Завршено е едно мерење на отпор
         /// </summary>
@@ -97,6 +117,16 @@ namespace FlukeClient
                 MeasurenmentDone.BeginInvoke(voltageMeas[measNumber], currentMeas[measNumber], measNumber,null,null);
             }
             measNumber++;
+        }
+        /// <summary>
+        /// Крај на мерењата на двата канали
+        /// </summary>
+        private void OnMeasurenmentsEnd()
+        {
+            if (MeasurenmentsEnd != null)
+            {
+                MeasurenmentsEnd.BeginInvoke(null, null);
+            }
         }
     }
 }

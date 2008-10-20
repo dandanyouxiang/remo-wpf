@@ -141,6 +141,7 @@
     </Compile>
     <Compile Include="DataAccessLayer\ACHeatingMeasurenments.cs" />
     <Compile Include="DataAccessLayer\CalibrationServices.cs" />
+    <Compile Include="DataAccessLayer\CoolingCurveCalc.cs" />
     <Compile Include="DataAccessLayer\DataConversion.cs" />
     <Compile Include="DataAccessLayer\DataSource.cs" />
     <Compile Include="DataAccessLayer\DCColdMeasurenments.cs" />
@@ -150,6 +151,7 @@
     <Compile Include="DataAccessLayer\Utils.cs" />
     <Compile Include="DataAccessLayer\Validation.cs" />
     <Compile Include="DataSourceLayer\DataSourceServices.cs" />
+    <Compile Include="DataSourceLayer\TemperatureDataSource.cs" />
     <Compile Include="EntityLayer\Entities.cs" />
     <Compile Include="EntityLayer\ListWithChangeEvents.cs" />
     <Compile Include="EntityLayer\RessistanceCalibrationEntities.cs" />
@@ -203,6 +205,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="App.config" />
     <None Include="DataAccessLayer\ClassDiagram1.cd" />
     <None Include="EntityLayer\ClassDiagram.cd" />
     <None Include="Properties\Settings.settings">

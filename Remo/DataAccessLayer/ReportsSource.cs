@@ -101,7 +101,7 @@ namespace DataAccessLayer
         /// <returns></returns>
         public double retT1T0()
         {
-            return evalT1T0();
+            return R1AtT0;
         }
         /// <summary>
         /// Temp Rise at time t=0.
@@ -109,15 +109,15 @@ namespace DataAccessLayer
         /// <returns></returns>
         public double retT1Rise()
         {
-            return evalT1Rise();
+            return T1_Rise;
         }
         /// <summary>
         /// Exponential Curve f(t).
         /// </summary>
         /// <returns></returns>
-        public double retFT1()
+        public string retFT1()
         {
-            return evalFT2();
+            return F_T1;
         }
         /// <summary>
         /// R2 at time t=0.
@@ -125,7 +125,7 @@ namespace DataAccessLayer
         /// <returns></returns>
         public double retT2T0()
         {
-            return evalT2T0();
+            return T2AtT0;
         }
         /// <summary>
         /// Temp Rise at time t=0.
@@ -133,15 +133,15 @@ namespace DataAccessLayer
         /// <returns></returns>
         public double retT2Rise()
         {
-            return evalT2Rise();
+            return T2_Rise;
         }
         /// <summary>
         /// Exponential Curve f(t).
         /// </summary>
         /// <returns></returns>
-        public double retFT2()
+        public string retFT2()
         {
-            return evalFT2();
+            return F_T2;
         }
     }
 }

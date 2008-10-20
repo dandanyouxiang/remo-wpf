@@ -19,14 +19,16 @@ namespace DataSourceLayer
         private double _current;
         private EntityLayer.TempMeasurenementConfiguration _tempMeasurenementConfiguration;
         private EntityLayer.RessistanceTransformerChannel _ressistanceTransformerChannel;
+        private bool isTest;
         //Instruments conf
         private RessistanceDataSource rds;
-        private string IP_ADDRESS_VOLTAGE = "192.168.1.1";
-        private string IP_ADDRESS_CURRENT = "192.168.1.2";
-        private int PORT_VOLTAGE = 3490;
-        private int PORT_CURRENT = 3490;
+        private TemperatureDataSource tds;
+        private string IP_ADDRESS_VOLTAGE;
+        private string IP_ADDRESS_CURRENT;
+        private int PORT_VOLTAGE;
+        private int PORT_CURRENT;
         //PLC conf
-        private int PLC_PORT_NUMBER = 8;
+        private int PLC_PORT_NUMBER;
         private short NO_OF_TRIGGERS_ADDRESS = 1;
         private short START_MEAS_ADDRESS = 2;
 
@@ -61,12 +63,6 @@ namespace DataSourceLayer
         /// EventHandler кој дава Notification за завршено мерење на отпори
         /// </summary>
         public event RessistanceMeasurenmentFinishedEventHandler RessistanceMeasurenmentFinished;
-
-        public DataSourceServices()
-        {
-           
-        }
-
         private void OnTempMeasurenmentFinished()
         {
             //Call this method on the Right Thread
@@ -83,21 +79,15 @@ namespace DataSourceLayer
         }
         #endregion
 
-        /// <summary>
-        /// Стартување на мерење на температури. Оваа метода веднаш враќа и ја врши стартува нов Thread, во кој се врши мерењето.
-        /// </summary>
-        public void start_TempMeasurenment(EntityLayer.TempMeasurenementConfiguration tempMeasurenmentConfiguration)
+        public DataSourceServices()
         {
-            this._sampleRate = tempMeasurenmentConfiguration.TempSampleRateCurrentState;
-            this._numberOfSamples = tempMeasurenmentConfiguration.TempNoOfSamplesCurrentState;
-            this._tempMeasurenementConfiguration = tempMeasurenmentConfiguration;
-
-            IsTempMeasInterupted = false;
-            IsSampleReduced = false;
-            IsTempMeasStopped = false;
-            measurenmentThread = new Thread(tempMeasurenmentDoWork);
-            measurenmentThread.Start();
+            PLC_PORT_NUMBER = Convert.ToInt32(System.Configuration.ConfigurationSettings.AppSettings["PLC_PORT_NUMBER"]);
+            IP_ADDRESS_VOLTAGE = Convert.ToString(System.Configuration.ConfigurationSettings.AppSettings["IP_ADDRESS_VOLTAGE"]);
+            IP_ADDRESS_CURRENT = Convert.ToString(System.Configuration.ConfigurationSettings.AppSettings["IP_ADDRESS_CURRENT"]);
+            PORT_VOLTAGE = Convert.ToInt32(System.Configuration.ConfigurationSettings.AppSettings["PORT_VOLTAGE"]);
+            PORT_CURRENT = Convert.ToInt32(System.Configuration.ConfigurationSettings.AppSettings["PORT_CURRENT"]);
         }
+
         #region ressistance measurenments
         /// <summary>
         /// Стартување на мерење на отпори. Оваа метода веднаш враќа и ја врши стартува нов Thread, во кој се врши мерењето.
@@ -108,19 +98,19 @@ namespace DataSourceLayer
             _numberOfSamples = ressistanceTransformerChannel.RessistanceNoOfSamplesCurrentState;
             _current = ressistanceTransformerChannel.TestCurrent;
             _ressistanceTransformerChannel = ressistanceTransformerChannel;
-
+            this.isTest = isTest;
             if (!isTest)
             {
                 pm = new ProcessManager((PLCP.enPortNumber)PLC_PORT_NUMBER);
                 
                 SetMemBitTask startMeasTask = new SetMemBitTask("start meas task", START_MEAS_ADDRESS);
                 WriteMemIntTask writeNoOfTriggersTask = new WriteMemIntTask("writeNoOfTriggersTask", NO_OF_TRIGGERS_ADDRESS, (short)(_numberOfSamples + 1));
-                writeNoOfTriggersTask.TaskExecutedEvent+=new PlcRWTask.TaskExecutedEventHandler(writeNoOfTriggersTask_TaskExecutedEvent);
                 pm.addPlcTask(startMeasTask);
                 pm.addPlcTask(writeNoOfTriggersTask);
                 
                 rds = new RessistanceDataSource(_sampleRate, _numberOfSamples, _current, IP_ADDRESS_VOLTAGE, IP_ADDRESS_CURRENT, PORT_VOLTAGE, PORT_CURRENT);
                 rds.MeasurenmentDone += new RessistanceDataSource.MeasurenmentDoneEvent(rsd_MeasurenmentDone);
+                rds.MeasurenmentsEnd+=new RessistanceDataSource.MeasurenmentsEndEvent(rds_MeasurenmentsEnd);
                 _ressistanceTransformerChannel.RessistanceMeasurenments.Clear();
                 rds.start_RessistanceMeasurenments();
                 pm.start();
@@ -131,11 +121,7 @@ namespace DataSourceLayer
                 measurenmentThread.Start();
             }
         }
-        public void writeNoOfTriggersTask_TaskExecutedEvent(PlcRWTask task, EventArgs e)
-        {
-            if (pm != null)
-                pm.stop();
-        }
+        
         public void rsd_MeasurenmentDone(double voltage, double current, int measNumber)
         {
             if (!isFirstMeasurenment)
@@ -155,12 +141,84 @@ namespace DataSourceLayer
             if (measNumber == 2 * _numberOfSamples - 1)
                 OnRessistanceMeasurenmentFinished();
         }
+       
 
         public void stopRessistanceMeasurenments()
         {
-            if (rds != null) 
+            if (rds != null)
                 rds.stopRessistanceMeasurenments();
         }
+        /// <summary>
+        /// Крај на мерењата
+        /// </summary>
+        public void rds_MeasurenmentsEnd()
+        {
+            ResetMemBitTask stopRessMeasTask = new ResetMemBitTask("Stop meas", START_MEAS_ADDRESS);
+            stopRessMeasTask.TaskExecutedEvent += new PlcRWTask.TaskExecutedEventHandler(stopRessMeasTask_TaskExecutedEvent);
+            pm.addPlcTask(stopRessMeasTask);
+        }
+        public void stopRessMeasTask_TaskExecutedEvent(object sender, EventArgs e)
+        {
+            if (pm != null)
+                pm.stop();
+        }
+        #endregion
+
+        #region temperature measurenments
+        /// <summary>
+        /// Стартување на мерење на температури. Оваа метода веднаш враќа и ја врши стартува нов Thread, во кој се врши мерењето.
+        /// </summary>
+        public void start_TempMeasurenment(EntityLayer.TempMeasurenementConfiguration tempMeasurenmentConfiguration, bool isTest)
+        {
+            this._sampleRate = tempMeasurenmentConfiguration.TempSampleRateCurrentState;
+            this._numberOfSamples = tempMeasurenmentConfiguration.TempNoOfSamplesCurrentState;
+            this._tempMeasurenementConfiguration = tempMeasurenmentConfiguration;
+            this.isTest = isTest;
+            IsTempMeasInterupted = false;
+            IsSampleReduced = false;
+            IsTempMeasStopped = false;
+            if (!isTest)
+            {
+
+                pm = new ProcessManager((PLCP.enPortNumber)PLC_PORT_NUMBER);
+                tds = new TemperatureDataSource(pm, _sampleRate, _numberOfSamples);
+                _tempMeasurenementConfiguration.TempMeasurenments.Clear();
+                tds.MeasurenmentDone+=new TemperatureDataSource.MeasurenmentDoneEvent(tds_MeasurenmentDone);
+                tds.MeasurenmentEnd+=new TemperatureDataSource.MeasurenmentEndEvent(tds_MeasurenmentEnd);
+                tds.startTempMeasurenments();
+            }
+            else
+            {
+                measurenmentThread = new Thread(tempMeasurenmentDoWork);
+                measurenmentThread.Start();
+            }
+        }
+        /// <summary>
+        /// Едно температурни мерење е завршено
+        /// </summary>
+        public void tds_MeasurenmentDone(double t1, double t2, double t3, double t4)
+        {
+            DateTime time = DateTime.Now;
+            _tempMeasurenementConfiguration.TempMeasurenments.Add(new TempMeasurenment(time, t1, t2, t3, t4));
+        }
+        /// <summary>
+        /// Крај на температурните мерења
+        /// </summary>
+        public void tds_MeasurenmentEnd()
+        {
+            this.OnTempMeasurenmentFinished();
+        }
+        /// <summary>
+        /// Стопирање на температурните мерења
+        /// </summary>
+        public void stopTempMeasurenments()
+        {
+            if(isTest)
+                IsTempMeasStopped = true;
+            else
+                tds.stopTempMeasurenments();
+        }
+
         #endregion
 
         #region test methods

@@ -17,8 +17,7 @@ namespace FlukeClient
             meas1Thread.Start();
             Thread meas2Thread = new Thread(meas2);
             meas2Thread.Start();
-            //meas2();
-            //meas1();
+
         }
         private void meas1()
         {

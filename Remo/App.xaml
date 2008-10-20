@@ -51,8 +51,8 @@
         <LinearGradientBrush x:Key="NormalBrush" StartPoint="0,0" EndPoint="0,1">
             <GradientBrush.GradientStops>
                 <GradientStopCollection>
-                    <GradientStop Color="Green"  Offset="0.0"/>
-                    <GradientStop Color="LightGreen"  Offset="1.0"/>
+                    <GradientStop Color="#FFAAAA" Offset="0.0"/>
+                    <GradientStop Color="#C22" Offset="1.0"/>
                 </GradientStopCollection>
             </GradientBrush.GradientStops>
         </LinearGradientBrush>
@@ -66,7 +66,15 @@
             </GradientBrush.GradientStops>
         </LinearGradientBrush>
 
-        <LinearGradientBrush x:Key="StopBrush" StartPoint="0,0" EndPoint="0,1">
+        <LinearGradientBrush x:Key="DarkBrush" StartPoint="0,0" EndPoint="0,1">
+            <GradientBrush.GradientStops>
+                <GradientStopCollection>
+                    <GradientStop Color="#99FF99" Offset="0.0"/>
+                    <GradientStop Color="#88EE88" Offset="1.0"/>
+                </GradientStopCollection>
+            </GradientBrush.GradientStops>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="LightRedBrush" StartPoint="0,0" EndPoint="0,1">
             <GradientBrush.GradientStops>
                 <GradientStopCollection>
                     <GradientStop Color="#FF9999" Offset="0.0"/>
@@ -75,7 +83,7 @@
             </GradientBrush.GradientStops>
         </LinearGradientBrush>
 
-        <LinearGradientBrush x:Key="OverBrush" StartPoint="0,0" EndPoint="0,1">
+        <LinearGradientBrush x:Key="OffBrush" StartPoint="0,0" EndPoint="0,1">
             <GradientBrush.GradientStops>
                 <GradientStopCollection>
                     <GradientStop Color="#AAFFAA" Offset="0.0"/>
@@ -84,7 +92,7 @@
             </GradientBrush.GradientStops>
         </LinearGradientBrush>
 
-        <LinearGradientBrush x:Key="OverBorderBrush" StartPoint="0,0" EndPoint="0,1">
+        <LinearGradientBrush x:Key="OffBorderBrush" StartPoint="0,0" EndPoint="0,1">
             <GradientBrush.GradientStops>
                 <GradientStopCollection>
                     <GradientStop Color="#444" Offset="0.0"/>
@@ -104,82 +112,13 @@
                 </GradientStopCollection>
             </GradientBrush.GradientStops>
         </LinearGradientBrush>
-        <!--
-        <ControlTemplate x:Key="ToggleButtonTemplate" TargetType="ToggleButton"  >
-            <mwt:ButtonChrome ThemeColor="NormalColor" Fill="{TemplateBinding Panel.Background}" BorderBrush="{TemplateBinding Border.BorderBrush}" RenderDefaulted="{TemplateBinding Button.IsDefaulted}" RenderMouseOver="{TemplateBinding UIElement.IsMouseOver}" RenderPressed="{TemplateBinding ButtonBase.IsPressed}" Name="Chrome" SnapsToDevicePixels="True">
-                <ContentPresenter RecognizesAccessKey="True" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" Margin="{TemplateBinding Control.Padding}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
-            </mwt:ButtonChrome>
-            <ControlTemplate.Triggers>
-                <Trigger Property="UIElement.IsKeyboardFocused">
-                    <Setter Property="mwt:ButtonChrome.RenderDefaulted" TargetName="Chrome">
-                        <Setter.Value>
-                            <s:Boolean>True</s:Boolean>
-                        </Setter.Value>
-                    </Setter>
-                    <Trigger.Value>
-                        <s:Boolean>True</s:Boolean>
-                    </Trigger.Value>
-                </Trigger>
-                <Trigger Property="ToggleButton.IsChecked">
-                    <Setter Property="mwt:ButtonChrome.RenderPressed" TargetName="Chrome">
-                        <Setter.Value>
-                            <s:Boolean>True</s:Boolean>
-                        </Setter.Value>
-                    </Setter>
-                    <Trigger.Value>
-                        <s:Boolean>True</s:Boolean>
-                    </Trigger.Value>
-                </Trigger>
-                <Trigger Property="UIElement.IsEnabled">
-                    <Setter Property="TextElement.Foreground">
-                        <Setter.Value>
-                            <DynamicResource ResourceKey="{x:Static SystemColors.GrayTextBrushKey}" />
-                        </Setter.Value>
-                    </Setter>
-                    <Trigger.Value>
-                        <s:Boolean>False</s:Boolean>
-                    </Trigger.Value>
-                </Trigger>
-            </ControlTemplate.Triggers>
-            
-        </ControlTemplate>
--->
-        <DataTemplate x:Key="IsChackBackground">
-            <StackPanel>
-                <StackPanel.Background>
-                    <LinearGradientBrush  StartPoint="0,0" EndPoint="0,1">
-                        <GradientBrush.GradientStops>
-                            <GradientStopCollection>
-                                <GradientStop Color="Green"  Offset="0.0"/>
-                                <GradientStop Color="LightGreen"  Offset="1.0"/>
-                            </GradientStopCollection>
-                        </GradientBrush.GradientStops>
-                    </LinearGradientBrush>
-                </StackPanel.Background>
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" Text="{Binding}"/>
-            </StackPanel>
-        </DataTemplate>
-        <!--
-        <Style x:Key="StartStopStyle" TargetType="{x:Type ToggleButton}" >
-            <Setter Property="Control.Template" Value="{StaticResource ToggleButtonTemplate}"/>
-            <Style.Triggers>
-                <Trigger Property="IsChecked" Value="True">
-                    <Setter Property="Content" Value="Stop"/>
-                    <Setter Property="ContentTemplate" Value="{StaticResource IsChackBackground}"/>
-                </Trigger>
-                <Trigger Property="IsChecked" Value="False">
-                    <Setter Property="Content" Value="Start"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
--->
         <ControlTemplate x:Key="OnOffTemplate" TargetType="{x:Type ToggleButton}">
             <Border 
                 x:Name="Border"  
                 CornerRadius="2" 
                 BorderThickness="1"
-                Background="{StaticResource NormalBrush}"
-                BorderBrush="{StaticResource NormalBorderBrush}">
+                Background="{StaticResource OffBrush}"
+                BorderBrush="{StaticResource OffBorderBrush}">
                 <ContentPresenter 
                     Name="ContentPresenter"
                     Margin="{TemplateBinding Button.Padding}"
@@ -191,17 +130,26 @@
                 <Trigger Property="IsKeyboardFocused" Value="True">
                     <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource DefaultedBorderBrush}" />
                 </Trigger>
-                <Trigger Property="IsMouseOver" Value="true">
-                    <Setter TargetName="Border" Property="Background" Value="{StaticResource OverBrush}" />
-                    <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource OverBorderBrush}" />
+               <Trigger Property="IsMouseOver" Value="true">
+                    <Setter TargetName="Border" Property="Background" Value="{StaticResource DarkBrush}" />
                 </Trigger>
                 <Trigger Property="IsChecked" Value="true">
-                    <Setter TargetName="Border" Property="Background" Value="{StaticResource StopBrush}" />
+                    <Setter TargetName="Border" Property="Background" Value="{StaticResource NormalBrush}" />
+                    <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource NormalBorderBrush}" />
                     <Setter TargetName="ContentPresenter" Property="Content" Value="Stop"/>
                 </Trigger>
                 <Trigger Property="IsChecked" Value="False">
                     <Setter TargetName="ContentPresenter" Property="Content" Value="Start"/>
                 </Trigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsMouseOver" Value="True"/>
+                        <Condition Property="IsChecked" Value="True"/>
+                    </MultiTrigger.Conditions>
+                    <MultiTrigger.Setters>
+                        <Setter TargetName="Border" Property="Background" Value="{StaticResource LightRedBrush}" />
+                    </MultiTrigger.Setters>
+                </MultiTrigger>
                 <Trigger Property="IsEnabled" Value="false">
                     <Setter TargetName="Border" Property="Background" Value="{StaticResource DisabledBackgroundBrush}" />
                     <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource DisabledBorderBrush}" />
