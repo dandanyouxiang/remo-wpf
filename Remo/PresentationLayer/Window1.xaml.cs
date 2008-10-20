@@ -420,7 +420,15 @@ namespace PresentationLayer
         private void Window_ContentRendered(object sender, EventArgs e)
         {
             StartUpWindow stp = new StartUpWindow();
-            stp.ShowDialog();
+            if ((bool)stp.ShowDialog()) 
+            {
+                int i = 0;
+                switch (stp.fileCommand) 
+                {
+                    case FileCommand.New: this.CommandBindings[0].Command.Execute(null); break;
+                    case FileCommand.Open: this.CommandBindings[1].Command.Execute(null); break;
+                }
+            }
         }
 
         

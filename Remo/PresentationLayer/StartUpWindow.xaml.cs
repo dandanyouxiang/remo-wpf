@@ -30,12 +30,14 @@ namespace PresentationLayer
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             fileCommand = FileCommand.New;
+            DialogResult = true;
             this.Close();
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             fileCommand = FileCommand.Open;
+            DialogResult = true;
             this.Close();
         }
 

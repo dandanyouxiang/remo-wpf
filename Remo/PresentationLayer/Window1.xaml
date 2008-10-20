@@ -16,6 +16,7 @@
         <CommandBinding Command="present:WorkPlacePathCommand.Command" Executed="Command_WorkPlacePath_Executed"/>
         <CommandBinding Command="present:PrintCommand.Command" Executed="Command_Print_Executed"/>
         <CommandBinding Command="present:TrasformatorPropertiesCommand.Command" Executed="Command_TransformatorProperties_Executed"/>
+        <CommandBinding Command="ApplicationCommands.SaveAs" Executed="Command_SaveAs_Executed"/>
     </Window.CommandBindings>
 
     <Grid Name="MainGrid" IsHitTestVisible="True">
@@ -27,6 +28,7 @@
                     <MenuItem Command="New" Header="New Measurenment"></MenuItem>
                     <MenuItem Command="Open" Header="Open Measurenment" />
                     <MenuItem Command="Save" Header="Save Measurenment" />
+                    <MenuItem Command="SaveAs" Header="Save As Measurenment"/>
                     <Separator></Separator>
                     <MenuItem Command="present:PrintCommand.Command" Header="Print" />
                     <MenuItem Header="Export in Excel" />

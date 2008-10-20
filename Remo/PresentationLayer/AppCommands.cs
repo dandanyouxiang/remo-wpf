@@ -151,6 +151,28 @@ namespace PresentationLayer
             }
 
         }
+
+        private void Command_SaveAs_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            dlg.FileName = fileStoring.sugestFileName(DateTime.Now); // Default file name
+            dlg.DefaultExt = ".remo"; // Default file extension
+            dlg.Filter = "Remo documents (.remo)|*.remo"; // Filter files by extension
+            dlg.InitialDirectory = WorkPlacePath;
+            dlg.ValidateNames = true;
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // Process open file dialog box results
+            if (result == true)
+            {
+                // Open document
+                FileName = dlg.FileName;
+
+                datasource.saveData(FileName);
+            }
+
+        }
+
         #endregion Commands
 
         #region Others Functions

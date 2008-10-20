@@ -24,8 +24,9 @@ namespace PresentationLayer
             this.FileDescription = fileDescription;
             this.FileName = fileName;
             this.WorkplacePath = workplacePath;
-            workplace = new DirectoryInfo(workplacePath);
+            //workplace = new DirectoryInfo(workplacePath);
         }
+
 
         public FileStoring()
         {
@@ -41,6 +42,7 @@ namespace PresentationLayer
         /// <returns></returns>
         public string getFirstFile() 
         {
+            workplace = new DirectoryInfo(WorkplacePath);
             string retValue = "";
             FileInfo[] files=workplace.GetFiles("*.remo");
 
@@ -58,6 +60,7 @@ namespace PresentationLayer
         /// <returns></returns>
         public bool existFile(string fileName)
         {
+            workplace = new DirectoryInfo(WorkplacePath);
             bool retValue = false;
 
             FileInfo[] files = workplace.GetFiles(fileName);
