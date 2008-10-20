@@ -73,13 +73,17 @@ namespace PresentationLayer
         public Window1()
         {
             InitializeComponent();
+
             IS_TEST = Convert.ToBoolean(System.Configuration.ConfigurationSettings.AppSettings["IS_TEST"]);
             fileStoring = XmlFileServices.readXml(@"Ref\file.info");
             WorkPlacePath = fileStoring.WorkplacePath;
             FileName = fileStoring.FileName;
 
             this.Title = "Remo - " + FileName;
+
+
             
+
             //Todo Da se vidi dali e vo red na ovoj nacin da se cita prethodno zacuvanata programa.
             datasource = new DataSource(FileName, FileCommand.New);
             MainGrid.DataContext = datasource;
@@ -411,6 +415,12 @@ namespace PresentationLayer
                 case "T3MeanDCColdTextBox": thermometerChannel3.Value = datasource.T3MeanDCColdTempTable; break;
                 case "T4MeanDCColdTextBox": thermometerChannel4.Value = datasource.T4MeanDCColdTempTable; break;
             }
+        }
+
+        private void Window_ContentRendered(object sender, EventArgs e)
+        {
+            StartUpWindow stp = new StartUpWindow();
+            stp.ShowDialog();
         }
 
         

@@ -1,0 +1,26 @@
+﻿<Window x:Class="PresentationLayer.StartUpWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="StartUpWindow" Height="120" Width="300" ResizeMode="NoResize" Background="YellowGreen"  WindowStartupLocation="CenterScreen" Visibility="Visible" WindowStyle="SingleBorderWindow">
+    
+    
+    <Grid>
+        <StackPanel Orientation="Horizontal">
+            <Button Margin="10,5,5,5"  Width="80" Click="Button_Click" Content="New"  IsDefault="True">
+                <Button.Background>
+                    <ImageBrush ImageSource="pictures\New.png" />
+                </Button.Background>
+            </Button>
+            <Button Margin="5,5,5,5" Width="80" Content="Open" Click="Button_Click_1" IsDefault="True">
+                <Button.Background>
+                    <ImageBrush ImageSource="pictures\OpenFolder.png"/>
+                </Button.Background>
+            </Button>
+            <Button Margin="5,5,5,5" Width="80" Content="Close" IsCancel="True">
+                <Button.Background>
+                    <ImageBrush ImageSource="pictures\Close.png"/>
+                </Button.Background>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>

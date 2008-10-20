@@ -110,6 +110,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="PresentationLayer\StartUpWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="PresentationLayer\TransformatorProperties.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -179,6 +183,9 @@
     <Compile Include="PresentationLayer\FileStoring\FileInfoSerilisation.cs" />
     <Compile Include="PresentationLayer\FileStoring\FileStoring.cs" />
     <Compile Include="PresentationLayer\GraphRendering.cs" />
+    <Compile Include="PresentationLayer\StartUpWindow.xaml.cs">
+      <DependentUpon>StartUpWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PresentationLayer\TransformatorProperties.xaml.cs">
       <DependentUpon>TransformatorProperties.xaml</DependentUpon>
     </Compile>
@@ -218,6 +225,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="PresentationLayer\pictures\Close.png" />
+    <Resource Include="PresentationLayer\pictures\New.png">
+    </Resource>
+    <Resource Include="PresentationLayer\pictures\OpenFolder.png" />
     <Content Include="Ref\ColorPicker.dll" />
     <Content Include="Ref\Generics.dll" />
     <Content Include="Ref\PLCP.dll" />
