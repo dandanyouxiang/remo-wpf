@@ -95,9 +95,26 @@ namespace PresentationLayer
         {
            datasource.saveData(FileName);
         }
+        /// <summary>
+        /// Команда за затворање.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Command_Close_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void Command_WorkPlacePath_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            
+            WorkPlacePath workPlacePath = new WorkPlacePath();
+
+            if ((bool)workPlacePath.ShowDialog()) 
+            {
+                fileStoring.WorkplacePath = workPlacePath.Path;
+                XmlFileServices.writeToXml(@"E:\file.info", fileStoring);
+            }
         }
 
         #endregion Commands

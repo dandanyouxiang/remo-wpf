@@ -18,6 +18,8 @@ namespace PresentationLayer
     /// </summary>
     public partial class WorkPlacePath : Window
     {
+        public string Path{get;set;}
+
         public WorkPlacePath()
         {
             InitializeComponent();
@@ -25,17 +27,22 @@ namespace PresentationLayer
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-            dlg.InitialDirectory = "C:\\";
+            System.Windows.Forms.FolderBrowserDialog fd = new System.Windows.Forms.FolderBrowserDialog();
 
-            Nullable<bool> result = dlg.ShowDialog();
+            fd.ShowDialog();
 
             // Process open file dialog box results
-            if (result == true)
+            if (true)
             {
                 //Todo da se napravi da se odeluva samo patekata.
-                WorkPlaceTextBox.Text = dlg.FileName;
+                WorkPlaceTextBox.Text = fd.SelectedPath; 
             }
+        }
+
+        private void ButtonOK_Click(object sender, RoutedEventArgs e)
+        {
+            Path=WorkPlaceTextBox.Text;
+            this.DialogResult = true;
         }
     }
 }

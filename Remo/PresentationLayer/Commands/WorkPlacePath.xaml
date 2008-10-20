@@ -10,8 +10,8 @@
                 <Button  Margin="5" Content="..." Width="40" Click="Button_Click"></Button>
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
-                <Button Margin="60,5,5,5" Content="Ok" Width="80"></Button>
-                <Button  Margin="5" Content="Cancel" Width="80"></Button>
+                <Button Margin="60,5,5,5" Content="Ok" Width="80" IsDefault="True" Click="ButtonOK_Click"></Button>
+                <Button  Margin="5" Content="Cancel" Width="80" IsCancel="True"></Button>
             </StackPanel>
         </StackPanel>
     </Grid>

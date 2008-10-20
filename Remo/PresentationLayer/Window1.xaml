@@ -4,6 +4,7 @@
         xmlns:graph="clr-namespace:DNBSoft.WPF.WPFGraph;assembly=WPFGraph"
         xmlns:data="clr-namespace:DataAccessLayer"
         xmlns:pres="clr-namespace:DataAccessLayer.PresentationLayer"
+        xmlns:present="clr-namespace:PresentationLayer"
         Title="Window1" Height="850" Width="1200" Validation.Error="OnValidationError">
     
     <!--Definiranje na komandite za aplikacijat-->
@@ -12,6 +13,7 @@
         <CommandBinding Command="ApplicationCommands.Open"  Executed="Command_Open_Executed" />
         <CommandBinding Command="ApplicationCommands.Save" Executed="Command_Save_Executed"/>
         <CommandBinding Command="ApplicationCommands.Close" Executed="Command_Close_Executed"/>
+        <CommandBinding Command="present:DataCommands.WorkPlacePathCommand" Executed="Command_WorkPlacePath_Executed"/>
     </Window.CommandBindings>
 
     <Grid Name="MainGrid" IsHitTestVisible="True">
@@ -27,7 +29,7 @@
                     <MenuItem Header="Print" />
                     <MenuItem Header="Export in Excel" />
                     <Separator></Separator>
-                    <MenuItem Header="Set WorkPlace Path"/>
+                    <MenuItem Command="present:DataCommands.WorkPlacePathCommand" Header="Set WorkPlace Path"/>
                     <Separator></Separator>
                     <MenuItem Command="Close" Header="Exit" />
                 </MenuItem>

@@ -411,6 +411,8 @@ namespace PresentationLayer
                 case "T4MeanDCColdTextBox": thermometerChannel4.Value = datasource.T4MeanDCColdTempTable; break;
             }
         }
+
+        
     }
    
 }
