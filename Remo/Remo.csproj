@@ -172,7 +172,7 @@
     <Compile Include="PresentationLayer\Cal\TempCalibrationDialog.xaml.cs">
       <DependentUpon>TempCalibrationDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PresentationLayer\Commands\NewCommand.cs" />
+    <Compile Include="PresentationLayer\Commands\CustomCommands.cs" />
     <Compile Include="PresentationLayer\Commands\WorkPlacePath.xaml.cs">
       <DependentUpon>WorkPlacePath.xaml</DependentUpon>
     </Compile>
@@ -213,7 +213,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Include="Ref\file.info">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>

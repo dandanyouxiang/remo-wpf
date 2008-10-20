@@ -104,19 +104,53 @@ namespace PresentationLayer
         {
             this.Close();
         }
-
+        /// <summary>
+        /// Команда за подесување на работниот простор.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Command_WorkPlacePath_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             
-            WorkPlacePath workPlacePath = new WorkPlacePath();
+            WorkPlacePath workPlacePath = new WorkPlacePath(fileStoring);
 
             if ((bool)workPlacePath.ShowDialog()) 
             {
+                //System.Reflection.Assembly.GetExecutingAssembly().Location
                 fileStoring.WorkplacePath = workPlacePath.Path;
-                XmlFileServices.writeToXml(@"E:\file.info", fileStoring);
+                XmlFileServices.writeToXml(@"Ref\file.info", fileStoring);
             }
         }
+        /// <summary>
+        /// Команди за принтање.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Command_Print_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            ReportsLayer.GenerateReports gr= new ReportsLayer.GenerateReports(datasource);
 
+
+            if ((bool)gr.ShowDialog())
+            {
+            }
+                
+        }
+        /// <summary>
+        /// Команда за подесување на податоците за трансформаторот.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Command_TransformatorProperties_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            
+            TransformatorProperties tp = new TransformatorProperties(datasource);
+
+            if ((bool)tp.ShowDialog())
+            {
+            }
+
+        }
         #endregion Commands
 
         #region Others Functions

@@ -24,15 +24,17 @@ namespace PresentationLayer
         {
             InitializeComponent();
         }
+        public WorkPlacePath(FileStoring fileStoring):this()
+        {
+            WorkPlaceTextBox.Text = fileStoring.WorkplacePath;
+        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.FolderBrowserDialog fd = new System.Windows.Forms.FolderBrowserDialog();
-
-            fd.ShowDialog();
-
+            
             // Process open file dialog box results
-            if (true)
+            if (System.Windows.Forms.DialogResult.OK == fd.ShowDialog())
             {
                 //Todo da se napravi da se odeluva samo patekata.
                 WorkPlaceTextBox.Text = fd.SelectedPath; 

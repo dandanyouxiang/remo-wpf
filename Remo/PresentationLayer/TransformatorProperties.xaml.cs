@@ -12,7 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using DataAccessLayer;
 
-namespace DataAccessLayer.PresentationLayer
+namespace PresentationLayer
 {
     /// <summary>
     /// Interaction logic for TransformatorProperties.xaml
