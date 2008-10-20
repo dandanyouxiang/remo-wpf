@@ -96,6 +96,6 @@
             <Label Margin="30,10,0,0" Name="CommentLabel">Comment</Label>
             <TextBox Height="99" Name="CommentTextBox" Width="457" AcceptsReturn="True" Text="{Binding Path=Comment}"/>
         </StackPanel>
-        <Button Grid.Row="3" HorizontalAlignment="Right" Margin="0,10,40,10" Name="OkButton" Width="100">OK</Button>
+        <Button Grid.Row="3" HorizontalAlignment="Right" Margin="0,10,40,10" Name="OkButton" Width="100" IsCancel="True">OK</Button>
     </Grid>
 </Window>

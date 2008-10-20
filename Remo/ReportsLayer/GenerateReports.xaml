@@ -1,7 +1,7 @@
 ﻿<Window x:Class="ReportsLayer.GenerateReports"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="GenerateReports" Height="800" Width="800" >
+    Title="GenerateReports" Height="800" Width="800" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <ResourceDictionary>
         <LinearGradientBrush x:Key="BorderColor">

@@ -56,6 +56,15 @@
                 </GradientStopCollection>
             </GradientBrush.GradientStops>
         </LinearGradientBrush>
+        
+        <LinearGradientBrush x:Key="ReducedBrush" StartPoint="0,0" EndPoint="0,1">
+            <GradientBrush.GradientStops>
+                <GradientStopCollection>
+                    <GradientStop Color="Green"  Offset="0.0"/>
+                    <GradientStop Color="YellowGreen"  Offset="1.0"/>
+                </GradientStopCollection>
+            </GradientBrush.GradientStops>
+        </LinearGradientBrush>
 
         <LinearGradientBrush x:Key="DefaultedBorderBrush" StartPoint="0,0" EndPoint="0,1">
             <GradientBrush.GradientStops>
@@ -172,6 +181,22 @@
                 </StackPanel>
             </Grid>
         </DataTemplate>
-        
+        <Style x:Key="ItemContStyle" TargetType="{x:Type ListViewItem}">
+            
+
+            <!--Boenje. -->
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+
+            <Style.Triggers>
+                <!-- When a customer owes money, color them green. -->
+                <DataTrigger Binding="{Binding Path=Reduced}" Value="True">
+                    <Setter Property="Background" Value="YellowGreen" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=Reduced}" Value="False">
+                    <Setter Property="Background" Value="White" />
+                </DataTrigger>
+
+            </Style.Triggers>
+        </Style>
     </Application.Resources>
 </Application>
