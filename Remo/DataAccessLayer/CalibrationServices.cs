@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Collections;
 using System.ComponentModel;
-
+using System.IO;
+using System.Xml.Serialization;
 namespace DataAccessLayer
 {
     public class TempCalibrationService : INotifyPropertyChanged
@@ -67,19 +68,12 @@ namespace DataAccessLayer
         /// <summary>
         /// Property Change Event за листата TempCalibrationEntity.TempCalMeasurenments (ListWithChangeEvents)
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void TempCalMeasurenments_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        public void TempCalMeasurenments_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             this.OnPropertyChanged(new PropertyChangedEventArgs(e.PropertyName));
-        }       
-
-        //Todo 
-        public TempCalibrationService(EntityLayer.TempCalibration tempCalibrationEntity)
+        }    
+        public TempCalibrationService()
         {
-            this.TempCalibrationEntity = tempCalibrationEntity;
-            //Регистрирај Event handler на листата TempCalibrationEntity.TempCalMeasurenments (ListWithChangeEvents)
-            TempCalibrationEntity.TempCalMeasurenments.PropertyChanged+=new PropertyChangedEventHandler(TempCalMeasurenments_PropertyChanged);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

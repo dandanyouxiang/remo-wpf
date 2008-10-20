@@ -553,7 +553,7 @@ namespace DataAccessLayer
 
             public double R1Phase
             {
-                get { return _r2AtStdTemp; }
+                get { return _r1Phase; }
                 set
                 {
                     if (_r1Phase != value)

@@ -49,9 +49,7 @@ namespace ReportsLayer
         public FlowDocumentReport(DataSource dataSource)
         {
             this.dataSource = dataSource;
-            //todo da se trgne
-            dataSource.Root.TransformerProperties = new EntityLayer.TransformerProperties("12345", "6789", "Gjore", "Nesto", EntityLayer.TransformerProperties.ConnectionType.D, EntityLayer.TransformerProperties.ConnectionType.Y, EntityLayer.TransformerProperties.Material.Aluminium, EntityLayer.TransformerProperties.Material.Aluminium, 20, 20);
-
+            
             DcColdMeasurenmentsDocument = new FlowDocument();
             AcHotMeasurenmentsDocument = new FlowDocument();
             DcCoolingMeasurenmentsDocument = new FlowDocument();

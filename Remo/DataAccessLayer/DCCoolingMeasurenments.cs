@@ -14,8 +14,8 @@ namespace DataAccessLayer
             private int _selectedChannelDcCool;
             private double _r1ColdAtDcCool;
             private double _r2ColdAtDcCool;
-            private double EndAcTmp;
-            private double KDropInOl;
+            private double EndAcTmp = double.NaN;
+            private double KDropInOl = double.NaN;
 
         #endregion
         #region Public Members
@@ -111,38 +111,59 @@ namespace DataAccessLayer
             }
             private double evalKDropInOil() 
             {
-                EntityLayer.TempMeasurenementConfiguration tempch = Root.DcColdMeasurenments.TempMeasurenementConfiguration;
-                EntityLayer.TempMeasurenment reducedTempMeasurenment=Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Find(Utils.isReduced);
-                EntityLayer.TempMeasurenment lastTempMeasurenment = Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last<EntityLayer.TempMeasurenment>();
+                EntityLayer.TempMeasurenementConfiguration tempch = Root.AcHotMeasurenments.TempMeasurenementConfiguration;
+                EntityLayer.TempMeasurenment reducedTempMeasurenment = Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Find(Utils.isReduced);
+                if (Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Count > 0 && reducedTempMeasurenment != null)
+                {
+                    EntityLayer.TempMeasurenment lastTempMeasurenment = Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last<EntityLayer.TempMeasurenment>();
+                    //Измерената температура во времето на редуцирање
+                    double meanReducedTemp =
+                        (((tempch.IsChannel1Oil && tempch.IsChannel1On) ? reducedTempMeasurenment.T1 : 0)
+                        + ((tempch.IsChannel2Oil && tempch.IsChannel2On) ? reducedTempMeasurenment.T2 : 0)
+                        + ((tempch.IsChannel3Oil && tempch.IsChannel3On) ? reducedTempMeasurenment.T3 : 0)
+                        + ((tempch.IsChannel4Oil && tempch.IsChannel4On) ? reducedTempMeasurenment.T4 : 0))
+                        / (((tempch.IsChannel1Oil && tempch.IsChannel1On) ? 1 : 0)
+                            + ((tempch.IsChannel2Oil && tempch.IsChannel2On) ? 1 : 0)
+                            + ((tempch.IsChannel3Oil && tempch.IsChannel3On) ? 1 : 0)
+                            + ((tempch.IsChannel4Oil && tempch.IsChannel4On) ? 1 : 0)
+                        );
+                    //Последната измерена температура
+                    double lastReducedTemp =
+                        (((tempch.IsChannel1Oil && tempch.IsChannel1On) ? lastTempMeasurenment.T1 : 0)
+                        + ((tempch.IsChannel2Oil && tempch.IsChannel2On) ? lastTempMeasurenment.T2 : 0)
+                        + ((tempch.IsChannel3Oil && tempch.IsChannel3On) ? lastTempMeasurenment.T3 : 0)
+                        + ((tempch.IsChannel4Oil && tempch.IsChannel4On) ? lastTempMeasurenment.T4 : 0))
+                        / (((tempch.IsChannel1Oil && tempch.IsChannel1On) ? 1 : 0)
+                            + ((tempch.IsChannel2Oil && tempch.IsChannel2On) ? 1 : 0)
+                            + ((tempch.IsChannel3Oil && tempch.IsChannel3On) ? 1 : 0)
+                            + ((tempch.IsChannel4Oil && tempch.IsChannel4On) ? 1 : 0)
+                        );
 
-                //Измерената температура во времето на редуцирање
-                double meanReducedTemp =
-                    (((tempch.IsChannel1Oil && tempch.IsChannel1On) ? reducedTempMeasurenment.T1 : 0)
-                    + ((tempch.IsChannel2Oil && tempch.IsChannel2On) ? reducedTempMeasurenment.T2 : 0)
-                    + ((tempch.IsChannel3Oil && tempch.IsChannel3On) ? reducedTempMeasurenment.T3 : 0)
-                    + ((tempch.IsChannel4Oil && tempch.IsChannel4On) ? reducedTempMeasurenment.T4 : 0))
-                    / (((tempch.IsChannel1Oil && tempch.IsChannel1On) ? 1 : 0)
-                        + ((tempch.IsChannel2Oil && tempch.IsChannel2On) ? 1 : 0)
-                        + ((tempch.IsChannel3Oil && tempch.IsChannel3On) ? 1 : 0)
-                        + ((tempch.IsChannel4Oil && tempch.IsChannel4On) ? 1 : 0)
-                    );
-                //Последната измерена температура
-                double lastReducedTemp =
-                    (((tempch.IsChannel1Oil && tempch.IsChannel1On) ? lastTempMeasurenment.T1 : 0)
-                    + ((tempch.IsChannel2Oil && tempch.IsChannel2On) ? lastTempMeasurenment.T2 : 0)
-                    + ((tempch.IsChannel3Oil && tempch.IsChannel3On) ? lastTempMeasurenment.T3 : 0)
-                    + ((tempch.IsChannel4Oil && tempch.IsChannel4On) ? lastTempMeasurenment.T4 : 0))
-                    / (((tempch.IsChannel1Oil && tempch.IsChannel1On) ? 1 : 0)
-                        + ((tempch.IsChannel2Oil && tempch.IsChannel2On) ? 1 : 0)
-                        + ((tempch.IsChannel3Oil && tempch.IsChannel3On) ? 1 : 0)
-                        + ((tempch.IsChannel4Oil && tempch.IsChannel4On) ? 1 : 0)
-                    );
-
-                return meanReducedTemp - lastReducedTemp;
+                    return meanReducedTemp - lastReducedTemp;
+                }
+                else
+                {
+                    return Double.NaN;
+                }
             }
             private double evalEndAcTemp() 
             {
-                return -1;
+                int n = Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Count;
+                if (n > 0)
+                {
+                    int oilCount =
+                        ((  Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel1On && Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel1Oil) ? 1 : 0)
+                        + ((Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel2On && Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel2Oil) ? 1 : 0)
+                        + ((Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel3On && Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel3Oil) ? 1 : 0)
+                        + ((Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel4On && Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel4Oil) ? 1 : 0);
+                    double tempOil =
+                        ((Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel1On && Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel1Oil) ? Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments[n-1].T1 : 0)
+                        + ((Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel2On && Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel2Oil) ? Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments[n - 1].T2 : 0)
+                        + ((Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel3On && Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel3Oil) ? Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments[n - 1].T3 : 0)
+                        + ((Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel4On && Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel4Oil) ? Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments[n - 1].T4 : 0);
+                    return tempOil / oilCount;
+                }
+                return Double.NaN;
             }
             public double evalR1ColdAtDcCool() 
             {

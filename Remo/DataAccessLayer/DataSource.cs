@@ -110,6 +110,8 @@ namespace DataAccessLayer
                 //SecondesSampleRate = evalSecondesSampleRate();
                 //Todo: Najverojatno ova treba da se trgne.
                 SamplesDone=evalSamplesDone();
+                EndAcTemp = evalEndAcTemp();
+                KDropInOil = evalKDropInOil();
 
 
             }
@@ -123,17 +125,12 @@ namespace DataAccessLayer
                 //Todo dali treba?
                 TCold = evalTCold();
             }
-            /// <summary>
-            /// Во TransformerProperties Ако се смени некој прочитан податок, одново да се пресметаат вредностите на полињата што се добиваат преку некако функција.
-            /// </summary>
-            /// <param name="sender"></param>
-            /// <param name="e"></param>
-            public void TransformerProperties_PropertyChanged(object sender, PropertyChangedEventArgs e) 
+
+            public void TransformerProperties_PropertyChanged(object sender, PropertyChangedEventArgs e)
             {
-                //Settings
-                EndAcTemp = evalEndAcTemp();
-                KDropInOil = evalKDropInOil();
+
             }
+
             public DataSource(string path,FileCommand fileCommand) 
             {
                 //Citanje na podatocite

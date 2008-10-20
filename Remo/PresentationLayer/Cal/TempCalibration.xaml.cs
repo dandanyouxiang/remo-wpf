@@ -23,6 +23,7 @@ namespace PresentationLayer
     public partial class TempCalibration : Window
     {
         private TempCalibrationService tempCalibrationService;
+        private const string TemperatureCalibrationFilePath = "Ref\\TemperatureCalibration.xml";
 
         DNBSoft.WPF.WPFGraph.WPFGraphSeries series1;
         DNBSoft.WPF.WPFGraph.WPFGraphSeries series2;
@@ -34,13 +35,11 @@ namespace PresentationLayer
 
             this.initGraph();
 
-            EntityLayer.TempCalibration t = new EntityLayer.TempCalibration();
-            t.TempCalMeasurenments = new EntityLayer.ListWithChangeEvents<EntityLayer.TempCalMeasurenment>();
-            t.TempCalMeasurenments.Add(new EntityLayer.TempCalMeasurenment(new DateTime(2008, 10, 1, 10, 1, 25), 20, 20.5, 30, 30.5, 25, 25.5, 26, 26.5));
-            t.TempCalMeasurenments.Add(new EntityLayer.TempCalMeasurenment(new DateTime(2008, 10, 1, 10, 2, 38), 21, 20.5, 31, 30.5, 27, 25.5, 28, 26.5));
-            t.TempCalMeasurenments.Add(new EntityLayer.TempCalMeasurenment(new DateTime(2008, 10, 1, 10, 3, 5), 22, 20.5, 29, 30.5, 26, 25.5, 28, 26.5)); 
-            tempCalibrationService = new TempCalibrationService(t);
-
+            tempCalibrationService = new TempCalibrationService();
+            tempCalibrationService.TempCalibrationEntity = new EntityLayer.TempCalibration();
+            tempCalibrationService.TempCalibrationEntity.readXml(TemperatureCalibrationFilePath);
+            
+            tempCalibrationService.TempCalibrationEntity.TempCalMeasurenments.PropertyChanged += tempCalibrationService.TempCalMeasurenments_PropertyChanged;
             tempCalibrationService.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(tempCalibrationService_PropertyChanged);
 
             MeasurenmentListView.ItemsSource = tempCalibrationService.TempCalMeasurenments;
@@ -66,6 +65,7 @@ namespace PresentationLayer
             {
                 tempCalibrationService.TempCalibrationEntity.TempCalMeasurenments.Add(tempCalDialog.TempCalMeasurenment);
                 this.refreshGraph();
+                tempCalibrationService.TempCalibrationEntity.writeToXml(TemperatureCalibrationFilePath);
             }
         }
 

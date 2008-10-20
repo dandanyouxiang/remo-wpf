@@ -46,7 +46,11 @@
             <Button Name="izbrisiButton"  Click="izbrisiButton_Click" BorderThickness="1">Избриши</Button>
             <Button Name="izlezButton"    Click="izlezButton_Click">Излез</Button>
         </StackPanel>
-        <graph:WPFScatterGraph x:Name="graph" Grid.Row="3" MinWidth="200" MinHeight="200" Margin="20 0" YAxisTitle="R Err" XAxisTitle="R Meas" MinYRange="-0.001" MaxYRange="0.001" IntervalYRange="0.0002" GraphBackground="LightGray"/>
+        <graph:WPFScatterGraph x:Name="graph" Grid.Row="3" MinWidth="200" MinHeight="200" Margin="20 0" YAxisTitle="R Err" XAxisTitle="R Meas" MinYRange="-0.001" MaxYRange="0.001" IntervalYRange="0.0002" GraphBackground="LightGray">
+            <graph:WPFScatterGraph.Resources>
+                <Style TargetType="Label"/>
+            </graph:WPFScatterGraph.Resources>
+        </graph:WPFScatterGraph>
         <TextBlock Name="heading" Text="Калибрирање на Отпори" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center" />
         <Line HorizontalAlignment="Center" Y1="40" Y2="40" X1="0" X2="300"  StrokeThickness="1" Stroke="Gray"  />
     </Grid>

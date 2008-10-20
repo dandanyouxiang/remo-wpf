@@ -429,8 +429,27 @@ namespace PresentationLayer
 
         private void TNullButton_Checked(object sender, RoutedEventArgs e)
         {
-            datasource.Root.DcCoolingMeasurenments.TNullTime = DateTime.Now;
-            TNullButton.IsEnabled = false;
+            if (Double.IsNaN(datasource.R1ColdAtDcCool) || Double.IsNaN(datasource.R2ColdAtDcCool))
+            {
+                MessageBox.Show("Немате извршено мерење на отпори на ладно", "Грешка", MessageBoxButton.OK, MessageBoxImage.Error);
+                TNullButton.IsChecked = false;
+                
+            }
+            else if (Double.IsNaN(datasource.TCold))
+            {
+                MessageBox.Show("Немате извршено мерење на температури на ладно", "Грешка", MessageBoxButton.OK, MessageBoxImage.Error);
+                TNullButton.IsChecked = false;
+            }
+            else if(Double.IsNaN(datasource.EndAcTemp) || Double.IsNaN(datasource.KDropInOil))
+            {
+                MessageBox.Show("Немате извршено мерење на температури при загревање", "Грешка", MessageBoxButton.OK, MessageBoxImage.Error);
+                TNullButton.IsChecked = false;
+            }
+            else
+            {
+                datasource.Root.DcCoolingMeasurenments.TNullTime = DateTime.Now;
+                TNullButton.IsEnabled = false;
+            }
         }
 
         private void EndAcTempTextBox_Error(object sender, ValidationErrorEventArgs e)
@@ -463,16 +482,30 @@ namespace PresentationLayer
 
         private void Window_ContentRendered(object sender, EventArgs e)
         {
-            StartUpWindow stp = new StartUpWindow();
-            if ((bool)stp.ShowDialog()) 
+            /*StartUpWindow stp = new StartUpWindow();
+            if ((bool)stp.ShowDialog())
             {
                 int i = 0;
-                switch (stp.fileCommand) 
+                switch (stp.fileCommand)
                 {
                     case FileCommand.New: this.CommandBindings[0].Command.Execute(null); break;
                     case FileCommand.Open: this.CommandBindings[1].Command.Execute(null); break;
                 }
             }
+            else
+                this.Close();*/
+        }
+
+        private void CalibrateTemperatureMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            TempCalibration t = new TempCalibration();
+            t.ShowDialog();
+        }
+
+        private void CalibrateRessistanceMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            ResssistanceCalibration r = new ResssistanceCalibration();
+            r.ShowDialog();
         }
 
         

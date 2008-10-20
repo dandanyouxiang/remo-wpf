@@ -5,7 +5,7 @@
         xmlns:data="clr-namespace:DataAccessLayer"
         xmlns:pres="clr-namespace:DataAccessLayer.Properties"
         xmlns:present="clr-namespace:PresentationLayer"
-        Title="Window1" Height="850" Width="1200" Validation.Error="OnValidationError" ContentRendered="Window_ContentRendered">
+        Title="Window1" Height="850" Width="1200" Validation.Error="OnValidationError" ContentRendered="Window_ContentRendered" WindowStartupLocation="CenterScreen">
     
     <!--Definiranje na komandite za aplikacijat-->
     <Window.CommandBindings>
@@ -31,7 +31,6 @@
                     <MenuItem Command="SaveAs" Header="Save As Measurenment"/>
                     <Separator></Separator>
                     <MenuItem Command="present:PrintCommand.Command" Header="Print" />
-                    <MenuItem Header="Export in Excel" />
                     <Separator></Separator>
                     <MenuItem Command="present:TrasformatorPropertiesCommand.Command" Header="Transformator Properties"/>
                     <Separator></Separator>
@@ -40,8 +39,8 @@
                     <MenuItem Command="Close" Header="Exit" />
                 </MenuItem>
                 <MenuItem Header="_Calibration">
-                    <MenuItem Header="_Resistance" />
-                    <MenuItem Header="_Temperature" />
+                    <MenuItem Header="_Resistance" Name="CalibrateRessistanceMenuItem"  Click="CalibrateRessistanceMenuItem_Click"/>
+                    <MenuItem Header="_Temperature" Name="CalibrateTemperatureMenuItem" Click="CalibrateTemperatureMenuItem_Click"  />
                 </MenuItem>
                 <MenuItem Header="_Help">
                     <MenuItem Header="_About" />
@@ -63,7 +62,7 @@
                                         <ColumnDefinition Width="10*"></ColumnDefinition>
                                         <ColumnDefinition Width="23*" />
                                     </Grid.ColumnDefinitions>
-                                    <ListBox  Margin="60,55.389,81.638,0" MinWidth="150" VerticalAlignment="Top" Name="ChannelsListBox" MinHeight="70" SelectedIndex="{Binding Path=SelectedChannel}" SelectionChanged="ChannelsListBox_SelectionChanged" Height="86.665" FontSize="16">
+                                    <ListBox  Margin="60,55.389,128.576,0" MinWidth="150" VerticalAlignment="Top" Name="ChannelsListBox" MinHeight="70" SelectedIndex="{Binding Path=SelectedChannel}" SelectionChanged="ChannelsListBox_SelectionChanged" Height="86.665" FontSize="16">
                                         <ListBoxItem Margin="5 5 10 0">A - B</ListBoxItem>
                                         <ListBoxItem Margin="5,0">B - C</ListBoxItem>
                                         <ListBoxItem Margin="5,0">C - A</ListBoxItem>
@@ -211,7 +210,7 @@
                                             <ToggleButton Margin="0 20" Height="35" Width="100" FontSize="16"  Name="startTempMeasDcColdButton" Template="{StaticResource OnOffTemplate}" VerticalAlignment="Bottom" Checked="startTempMeasDcColdButton_Checked" Click="startTempMeasDcColdButton_Click" />
                                         </StackPanel>
                                     </GroupBox>
-                                    <ListView Margin="54,0,376,10" Name="DCColdTemperatureTable" SourceUpdated="DCColdTemperatureTable_SourceUpdated" HorizontalContentAlignment="Stretch" VerticalAlignment="Bottom" Height="300" >
+                                    <ListView Margin="54,0,375.957,42.723" Name="DCColdTemperatureTable" SourceUpdated="DCColdTemperatureTable_SourceUpdated" HorizontalContentAlignment="Stretch" VerticalAlignment="Bottom" Height="300" >
                                         <ListView.Resources>
                                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Yellow" />
                                         </ListView.Resources>
@@ -257,7 +256,8 @@
                                             </GridView>
                                         </ListView.View>
                                     </ListView>
-                                    <StackPanel  HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="120" Margin="0,0,228.866,81.747" Height="228.253">
+                                    <GroupBox Header="Temp. Per Channel" Height="264.519" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="140" Margin="0,0,222.336,78.174">
+                                    <StackPanel Margin="0 10 0 0"  Width="120" Height="230">
                                         <Label  Name="T1TempLabel" Content="{Binding Path=T1MeanDCColdTempTableHeader}" MinHeight="28"/>
                                         <TextBox Name="T1MeanDCColdTextBox"  Text="{Binding Path=T1MeanDCColdTempTable,Converter={StaticResource CelsiusConverter}}" IsReadOnly="True" TextChanged="MeanDCColdTextBox_TextChanged" />
                                         <Label Name="T2MeanDCColdLabel" Content="{Binding Path=T2MeanDCColdTempTableHeader}" MinHeight="28"/>
@@ -265,14 +265,17 @@
                                         <Label Name="T3MeanDCColdLabel" Content="{Binding Path=T3MeanDCColdTempTableHeader}" MinHeight="28"></Label>
                                         <TextBox Name="T3MeanDCColdTextBox" Margin="0 0 0 5" Text="{Binding Path=T3MeanDCColdTempTable,Converter={StaticResource CelsiusConverter}}" IsReadOnly="True" TextChanged="MeanDCColdTextBox_TextChanged" />
                                         <Label Name="T4MeanDCColdLabel" Content="{Binding Path=T4MeanDCColdTempTableHeader}" MinHeight="28"/>
-                                        <TextBox  Name="T4MeanDCColdTextBox" Margin="0 0 0 5" Text="{Binding Path=T4MeanDCColdTempTable,Converter={StaticResource CelsiusConverter}}" IsReadOnly="True" TextChanged="MeanDCColdTextBox_TextChanged" />
+                                        <TextBox  Name="T4MeanDCColdTextBox" Text="{Binding Path=T4MeanDCColdTempTable,Converter={StaticResource CelsiusConverter}}" IsReadOnly="True" TextChanged="MeanDCColdTextBox_TextChanged" />
                                     </StackPanel>
-                                    <StackPanel  HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="120" Margin="0,0,95.546,200.748" Height="109.253">
-                                        <Label Name="label17">T Oil</Label>
-                                        <TextBox  Name="AmbDCColdTempTableTextBox" Text="{Binding Path=OilDCColdTempTable,Converter={StaticResource CelsiusConverter}}" IsReadOnly="True" />
-                                        <Label  Name="label18">T Amb</Label>
-                                        <TextBox  Name="OilDCColdTempTableTextBox"  Text="{Binding Path=AmbDCColdTempTable,Converter={StaticResource CelsiusConverter}}" IsReadOnly="True" />
-                                    </StackPanel>
+                                    </GroupBox>
+                                    <GroupBox Header="Temperatures" Height="154.53" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="137.5" Margin="0,0,78.714,188.163">
+                                        <StackPanel Margin="0 10 0 0"  Width="120" >
+                                            <Label Name="label17">T Oil</Label>
+                                            <TextBox  Name="AmbDCColdTempTableTextBox" Text="{Binding Path=OilDCColdTempTable,Converter={StaticResource CelsiusConverter}}" IsReadOnly="True" />
+                                            <Label  Name="label18">T Amb</Label>
+                                            <TextBox  Name="OilDCColdTempTableTextBox"  Text="{Binding Path=AmbDCColdTempTable,Converter={StaticResource CelsiusConverter}}" IsReadOnly="True" />
+                                        </StackPanel>
+                                    </GroupBox>
                                     <my:ThermometerChannel Margin="0,21,96,0" Name="thermometerChannel4" xmlns:my="clr-namespace:WpfCustomControlLibrary;assembly=WpfCustomControlLibrary" VerticalAlignment="Top" HorizontalAlignment="Right" Width="180" Header="Channel 4"  Height="330" />
                                     <my:ThermometerChannel Margin="275,21,0,0" Name="thermometerChannel1" xmlns:my="clr-namespace:WpfCustomControlLibrary;assembly=WpfCustomControlLibrary" HorizontalAlignment="Left" Width="178" MinHeight="0"  VerticalAlignment="Top" Height="330">
                                     </my:ThermometerChannel>
@@ -286,7 +289,7 @@
                         <TabControl Name="HeatingTab" SelectedIndex="0">
                             <TabItem Header="Settings">
                                 <Grid>
-                                    <GroupBox Header="Settings" Height="195.773" Margin="77,45.907,0,0" Name="groupBox4" VerticalAlignment="Top" HorizontalAlignment="Left" Width="309" >
+                                    <GroupBox Header="Settings" Height="195.773" Margin="150,45,0,0" Name="groupBox4" VerticalAlignment="Top" HorizontalAlignment="Left" Width="309" >
                                         <StackPanel Height="170.051">
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
@@ -439,50 +442,6 @@
                                                 </StackPanel>
                                             </StackPanel>
                                         </GroupBox>
-                                        <GroupBox Header="Temperature" Width="160">
-                                            <StackPanel>
-                                                <GroupBox Header="Source">
-                                                    <StackPanel >
-                                                        <RadioButton GroupName="GrName" Margin="5" Name="MeasuredRadioButton" IsChecked="True">Measured</RadioButton>
-                                                        <RadioButton GroupName="GrName" Margin="5" Name="ManuelRadioButton">Manual</RadioButton>
-                                                    </StackPanel>
-                                                </GroupBox>
-                                                <GroupBox Header="Data" >
-                                                    <StackPanel>
-                                                        <Label Name="EndAcTempLabel">End Ac Temp</Label>
-                                                        <TextBox Margin="5 0" Name="EndAcTempTextBox" IsReadOnly="{Binding ElementName=MeasuredRadioButton, Path=IsChecked}" Validation.Error="EndAcTempTextBox_Error" >
-                                                            <TextBox.Text>
-                                                                <Binding Path="EndAcTemp" Converter="{StaticResource CelsiusConverter}" NotifyOnValidationError="True" >
-                                                                    <Binding.ValidationRules>
-                                                                        <data:RegexValidator RegularExpression="^\s*\d*\s*[C|c]?\s*$"></data:RegexValidator>
-                                                                    </Binding.ValidationRules>
-                                                                </Binding>
-                                                            </TextBox.Text>
-                                                        </TextBox>
-                                                        <Label Name="TColdLabel">T Cold</Label>
-                                                        <TextBox Margin="5 0" Name="TColdTextBox" IsReadOnly="{Binding ElementName=MeasuredRadioButton, Path=IsChecked}">
-                                                            <TextBox.Text>
-                                                                <Binding Path="TCold" Converter="{StaticResource CelsiusConverter}" NotifyOnValidationError="True">
-                                                                    <Binding.ValidationRules>
-                                                                        <data:RegexValidator RegularExpression="^\s*\d*\s*[C|c]?\s*$"></data:RegexValidator>
-                                                                    </Binding.ValidationRules>
-                                                                </Binding>
-                                                            </TextBox.Text>
-                                                        </TextBox>
-                                                        <Label Name="KDropInOilLabel">K drop in Oil</Label>
-                                                        <TextBox Margin="5 0" Name="KDropInOilTextBox" IsReadOnly="{Binding ElementName=MeasuredRadioButton, Path=IsChecked}">
-                                                            <TextBox.Text>
-                                                                <Binding Path="KDropInOil" Converter="{StaticResource CelsiusConverter}" NotifyOnValidationError="True">
-                                                                    <Binding.ValidationRules>
-                                                                        <data:RegexValidator RegularExpression="^\s*\d*\s*[C|c]?\s*$"></data:RegexValidator>
-                                                                    </Binding.ValidationRules>
-                                                                </Binding>
-                                                            </TextBox.Text>
-                                                        </TextBox>
-                                                    </StackPanel>
-                                                </GroupBox>
-                                            </StackPanel>
-                                        </GroupBox>
                                     </StackPanel>
                                     <Label Height="30.5" Margin="410,38.961,569,0" Name="DCCoolingTable" VerticalAlignment="Top">DC - Cooling Table</Label>
                                     <ListView Margin="410,70,40.905,40" Name="DCCoolTable">
@@ -497,6 +456,50 @@
                                             </GridView>
                                         </ListView.View>
                                     </ListView>
+                                    <GroupBox Header="Temperature" Width="160" HorizontalAlignment="Left" Margin="243.612,292.584,0,112.333">
+                                        <StackPanel Margin="0 5 0 0">
+                                            <GroupBox Header="Source">
+                                                <StackPanel>
+                                                    <RadioButton GroupName="GrName" Margin="5" Name="MeasuredRadioButton" IsChecked="True">Measured</RadioButton>
+                                                    <RadioButton GroupName="GrName" Margin="5" Name="ManuelRadioButton">Manual</RadioButton>
+                                                </StackPanel>
+                                            </GroupBox>
+                                            <GroupBox Header="Data" Height="193.617">
+                                                <StackPanel>
+                                                    <Label Name="EndAcTempLabel">End Ac Temp</Label>
+                                                    <TextBox Margin="5 0" Name="EndAcTempTextBox" IsReadOnly="{Binding ElementName=MeasuredRadioButton, Path=IsChecked}" Validation.Error="EndAcTempTextBox_Error">
+                                                        <TextBox.Text>
+                                                            <Binding Path="EndAcTemp" Converter="{StaticResource CelsiusConverter}" NotifyOnValidationError="True">
+                                                                <Binding.ValidationRules>
+                                                                    <data:RegexValidator RegularExpression="^\s*\d*\s*[C|c]?\s*$"></data:RegexValidator>
+                                                                </Binding.ValidationRules>
+                                                            </Binding>
+                                                        </TextBox.Text>
+                                                    </TextBox>
+                                                    <Label Name="TColdLabel">T Cold</Label>
+                                                    <TextBox Margin="5 0" Name="TColdTextBox" IsReadOnly="{Binding ElementName=MeasuredRadioButton, Path=IsChecked}">
+                                                        <TextBox.Text>
+                                                            <Binding Path="TCold" Converter="{StaticResource CelsiusConverter}" NotifyOnValidationError="True">
+                                                                <Binding.ValidationRules>
+                                                                    <data:RegexValidator RegularExpression="^\s*\d*\s*[C|c]?\s*$"></data:RegexValidator>
+                                                                </Binding.ValidationRules>
+                                                            </Binding>
+                                                        </TextBox.Text>
+                                                    </TextBox>
+                                                    <Label Name="KDropInOilLabel">K drop in Oil</Label>
+                                                    <TextBox Margin="5 0" Name="KDropInOilTextBox" IsReadOnly="{Binding ElementName=MeasuredRadioButton, Path=IsChecked}">
+                                                        <TextBox.Text>
+                                                            <Binding Path="KDropInOil" Converter="{StaticResource CelsiusConverter}" NotifyOnValidationError="True">
+                                                                <Binding.ValidationRules>
+                                                                    <data:RegexValidator RegularExpression="^\s*\d*\s*[C|c]?\s*$"></data:RegexValidator>
+                                                                </Binding.ValidationRules>
+                                                            </Binding>
+                                                        </TextBox.Text>
+                                                    </TextBox>
+                                                </StackPanel>
+                                            </GroupBox>
+                                        </StackPanel>
+                                    </GroupBox>
                                 </Grid>
                             </TabItem>
                             <TabItem Name="Results" Header="Results">
@@ -555,9 +558,9 @@
                     </TabItem>
                 </TabControl>
                 <Grid VerticalAlignment="Top" HorizontalAlignment="Right">
-                    <StackPanel Orientation="Horizontal" Margin="0 0 20 0">
+                    <StackPanel Orientation="Horizontal" Margin="0 3 20 0">
                         <TextBlock FontSize="16">Status:</TextBlock>
-                        <TextBlock Name="statusTextBlock" FontSize="16" TextAlignment="Center" Text="{Binding Path=StatusString}" MinWidth="150" />
+                        <TextBlock Name="statusTextBlock" FontSize="16" Margin="5 0" TextAlignment="Center" Text="{Binding Path=StatusString}" MinWidth="150" />
                         <ProgressBar Name="progressBar1" Width="120" IsIndeterminate="False" IsEnabled="True" />
                     </StackPanel>
                 </Grid>

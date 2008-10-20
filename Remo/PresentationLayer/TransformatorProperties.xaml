@@ -68,7 +68,7 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0">
                             <Label Margin="10,0,0,0" Name="HVCoefLabel">HV</Label>
-                            <ComboBox Margin="10,5,5,5" Name="comboBox1" Text="{Binding Path=HvMaterial}" SelectionChanged="comboBox1_SelectionChanged">
+                            <ComboBox SelectedIndex="0" Margin="10,5,5,5" Name="comboBox1" Text="{Binding Path=HvMaterial}" SelectionChanged="comboBox1_SelectionChanged">
                                 <ComboBoxItem>Copper</ComboBoxItem>
                                 <ComboBoxItem>Aluminium</ComboBoxItem>
                                 <ComboBoxItem Name="OtherHV">Other</ComboBoxItem>
@@ -78,7 +78,7 @@
                         </StackPanel>
                         <StackPanel Grid.Column="1">
                             <Label Margin="10,0,0,0" Name="LVCoefLabel">LV</Label>
-                            <ComboBox Margin="10,5,5,5" Name="LVCoefComboBox" Text="{Binding Path=LvMaterial}" SelectionChanged="LVCoefComboBox_SelectionChanged">
+                            <ComboBox SelectedIndex="0" Margin="10,5,5,5" Name="LVCoefComboBox" Text="{Binding Path=LvMaterial}" SelectionChanged="LVCoefComboBox_SelectionChanged">
                                 
                                 <ComboBoxItem>Copper</ComboBoxItem>
                                 <ComboBoxItem>Aluminium</ComboBoxItem>

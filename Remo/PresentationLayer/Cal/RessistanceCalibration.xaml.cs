@@ -22,7 +22,7 @@ namespace PresentationLayer
     public partial class ResssistanceCalibration : Window
     {
 
-        private const string RessistanceCalibrationFilePath = "RessistanceCalibration.xml";
+        private const string RessistanceCalibrationFilePath = "Ref\\RessistanceCalibration.xml";
 
         DNBSoft.WPF.WPFGraph.WPFGraphSeries series1;
         private EntityLayer.RessistanceCalibration r;
@@ -32,7 +32,6 @@ namespace PresentationLayer
 
             r = new EntityLayer.RessistanceCalibration();
             r.readXml(RessistanceCalibrationFilePath);
-
             r.RessistanceCalMeasurenments.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(tempCalibrationService_PropertyChanged);
 
             MeasurenmentListView.ItemsSource = r.RessistanceCalMeasurenments;
@@ -69,7 +68,7 @@ namespace PresentationLayer
 
         private void izlezButton_Click(object sender, RoutedEventArgs e)
         {
-
+            this.Close();
         }
 
         private void initGraph()

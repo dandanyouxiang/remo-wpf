@@ -218,7 +218,9 @@ namespace EntityLayer
             if (PropertyChanged != null)
                 PropertyChanged(this, e);
         }
-
+        public TempCalMeasurenment()
+        {
+        }
         //Todo не е добро PresentationLayer да е свесен за EntityLayer
         public TempCalMeasurenment(DateTime time, double t1, double t1Ref, double t2, double t2Ref, double t3, double t3Ref, double t4, double t4Ref)
         {

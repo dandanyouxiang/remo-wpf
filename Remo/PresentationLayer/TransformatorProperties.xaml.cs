@@ -40,15 +40,21 @@ namespace PresentationLayer
         }
         private void comboBox1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(ValueHVtextBox!=null)
-            ValueHVtextBox.Text = CoefValue[comboBox1.SelectedIndex];
+            if (ValueHVtextBox != null)
+            {
+                ValueHVtextBox.Text = CoefValue[comboBox1.SelectedIndex];
+                ValueHVtextBox.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+            }
         }
 
 
         private void LVCoefComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (ValueLVtextBox != null)
+            {
                 ValueLVtextBox.Text = CoefValue[LVCoefComboBox.SelectedIndex];
+                ValueLVtextBox.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+            }
         }
         /// <summary>
         /// При Validation Error на FrameworkElement компонента,

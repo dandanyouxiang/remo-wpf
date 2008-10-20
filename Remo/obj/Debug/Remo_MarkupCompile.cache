@@ -4,14 +4,15 @@
 winexe
 C#
 .cs
-E:\Documents and Settings\Dragan Sahpaski\Desktop\remo-wpf\Remo\obj\Debug\
+C:\Documents and Settings\Fidko\My Documents\Visual Studio 2008\Projects\Remo.sln\Remo\obj\Debug\
 DataAccessLayer
 none
 false
 DEBUG;TRACE
-E:\Documents and Settings\Dragan Sahpaski\Desktop\remo-wpf\Remo\PresentationLayer\App.xaml
-1925758310
+C:\Documents and Settings\Fidko\My Documents\Visual Studio 2008\Projects\Remo.sln\Remo\App.xaml
+12-496766947
+72041683396
+391833964915
+21819070662
+ConverterProbi.xaml;PresentationLayer\Cal\RessistanceCalibration.xaml;PresentationLayer\Cal\RessistanceCalibrationDialog1.xaml;PresentationLayer\Cal\RessistanceCalibrationDialog2.xaml;PresentationLayer\Cal\TempCalibration.xaml;PresentationLayer\Cal\TempCalibrationDialog.xaml;PresentationLayer\Commands\WorkPlacePath.xaml;PresentationLayer\StartUpWindow.xaml;PresentationLayer\TransformatorProperties.xaml;PresentationLayer\Window1.xaml;ReportsLayer\GenerateReports.xaml;ReportsLayer\Report.xaml;
 
-10-1357806756
-9432293069
-PresentationLayer\Window1.xaml;

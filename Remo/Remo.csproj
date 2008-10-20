@@ -234,6 +234,12 @@
     <Content Include="Ref\PLCP.dll" />
     <Content Include="Ref\PlcProtocol.dll" />
     <Content Include="Ref\ProcessManager.dll" />
+    <None Include="Ref\RessistanceCalibration.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Ref\TemperatureCalibration.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="Ref\WpfCustomControlLibrary.dll" />
     <Content Include="Ref\WPFGraph.dll" />
   </ItemGroup>
