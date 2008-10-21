@@ -9,6 +9,9 @@ namespace FlukeClient
 {
     public class FlukeMeasurenmentClient
     {
+        public delegate void MeasErrorEvent();
+        public event MeasErrorEvent MeasError;
+
         public delegate void MeasFinishedEvent(double measurenment);
         public delegate void MeasEndEvent();
         /// <summary>
@@ -25,7 +28,7 @@ namespace FlukeClient
         private enum NPlc { _1 = 0, _10, _100 };
 
         private const int TRIGGER_COUNT = 1;
-        private const int SAMPLE_COUNT = 4;
+        private const int SAMPLE_COUNT = 2;
 
         private TcpClient client;
         private string _ipAddress;
@@ -55,23 +58,13 @@ namespace FlukeClient
         {
             try
             {
+                client = new TcpClient(_ipAddress, _port);
+                //client.Connect(_ipAddress, _port);
+                stream = client.GetStream();
                 //Отварање на конекција кон инструментот
-                stream = openConection(ref client, _ipAddress, _port);
+                //stream = openConection(ref client, _ipAddress, _port);
                 //Конфигурирање на мерењата
-                enterRemote(stream);
-                reset();
-                clearStatusReg();
-                reset();
-                clearStatusReg();
-                System.Threading.Thread.Sleep(1000);
-                setNplc(stream, NPlc._10);
-                setVoltageAutoRange(stream);
-                setTriggerCount(stream, TRIGGER_COUNT);
-                setSampleCount(stream, SAMPLE_COUNT);
-                setTriggerDelay(stream);
-                setTriggerSource(stream, TriggerSource.EXTERNAL);
-                IsStop = false;
-                System.Threading.Thread.Sleep(100);
+                init();
                 //Изведување на мерења
                 for (int i = 0; i < _numberOfMeasurenments && !IsStop; i++)
                 {
@@ -95,17 +88,35 @@ namespace FlukeClient
                 stream.Dispose();
                 OnMeasEnd();
             }
-            catch (System.Net.Sockets.SocketException ex)
+            catch (Exception ex)
             {
                 Console.WriteLine("Exception:" + ex.Message);
-                throw ex;
+                if (MeasError != null)
+                    MeasError();
+                //throw ex;
             }
             finally
             {
                 closeSocket();
             }          
         }
-
+        public void init()
+        {
+            enterRemote(stream);
+            reset();
+            clearStatusReg();
+            reset();
+            clearStatusReg();
+            System.Threading.Thread.Sleep(1000);
+            setNplc(stream, NPlc._10);
+            setVoltageAutoRange(stream);
+            setTriggerCount(stream, TRIGGER_COUNT);
+            setSampleCount(stream, SAMPLE_COUNT);
+            setTriggerDelay(stream);
+            setTriggerSource(stream, TriggerSource.EXTERNAL);
+            IsStop = false;
+            //System.Threading.Thread.Sleep(100);
+        }
         private double parseStringAndCalcMean(string measStr)
         {
             string[] split = measStr.Split(',');
@@ -113,8 +124,9 @@ namespace FlukeClient
             foreach (string str in split)
             {
                 double result;
-                if (Double.TryParse(str, out result))
+                if (Double.TryParse(str.Replace('.',','), out result))
                     measurenments.Add(result);
+                Console.Write("parsed result:" + result);
             }
             double mean = 0;
             foreach (double meas in measurenments)

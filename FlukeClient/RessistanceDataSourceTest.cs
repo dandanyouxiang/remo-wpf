@@ -12,7 +12,7 @@ namespace FlukeClient
         private int PORT_VOLTAGE = 3490;
         private int PORT_CURRENT = 3490;
         private int _sampleRate = 2;
-        private int _numberOfSamples = 2;
+        private int _numberOfSamples = 4;
         private double _current = 1;
         RessistanceDataSource rds;
         public RessistanceDataSourceTest()
