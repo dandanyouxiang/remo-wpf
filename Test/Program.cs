@@ -59,9 +59,12 @@ namespace Test
         }
         static void Main(string[] args)
         {
-            new Program();
-
+            //new Program();
+            new InterpolationCal().test();
             //Console.WriteLine(new CoolingCurveCalc().calcTHot(20.2, 0.82293996, 0.985137, 234.5));
+            // double r;
+            //Double.TryParse("+1.67899100E-02",System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.CurrentCulture, out r);
+            //Console.Write(r);
             Console.ReadKey();
         }
     }
