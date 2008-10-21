@@ -152,7 +152,7 @@
                                                     <TextBox Name="evalStdDevTempR2textBox" Text="{Binding Path=StdDevTempR2,Converter={StaticResource OhmConvertor}}" IsEnabled="True" IsReadOnly="True"/>
                                                 </StackPanel>
                                             </Grid>
-                                            <ToggleButton Grid.Row="2" Width="100" Height="35" FontSize="16"   Name="startResMeasDcColdButton" Template="{StaticResource OnOffTemplate}" Checked="startResMeasDcColdButton_Checked" />
+                                            <ToggleButton Grid.Row="2" Width="100" Height="35" FontSize="16"   Name="startResMeasDcColdButton" Template="{StaticResource OnOffTemplate}" Checked="startResMeasDcColdButton_Checked" Click="startResMeasDcColdButton_Click" />
 
                                         </Grid>
                                     </GroupBox>
@@ -534,7 +534,7 @@
                     <StackPanel Orientation="Horizontal" Margin="0 0 20 0">
                         <TextBlock FontSize="16">Status:</TextBlock>
                         <TextBlock Name="statusTextBlock" FontSize="16" TextAlignment="Center" Text="{Binding Path=StatusString}" MinWidth="150" />
-                        <ProgressBar Name="progressBar1" Width="120" IsIndeterminate="False" IsEnabled="True" />
+                        <ProgressBar Name="progressBar1" Width="120" IsIndeterminate="False" IsEnabled="True" Maximum="24" />
                     </StackPanel>
                 </Grid>
             </Grid>

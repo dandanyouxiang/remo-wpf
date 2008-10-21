@@ -41,13 +41,13 @@ namespace DataSourceLayer
             this.sampleRate = sampleRate;
             this.numberOfSamples = numberOfSamples;
             numberOfTempsRead = 0;
-            temp1 = new ReadMemIntTask("read temp 1 task", 1);
+            temp1 = new ReadMemIntTask("read temp 1 task", 15);
             temp1.TaskExecutedEvent+=new PlcRWTask.TaskExecutedEventHandler(tempAll_TaskExecutedEvent);
-            temp2 = new ReadMemIntTask("read temp 2 task", 1);
+            temp2 = new ReadMemIntTask("read temp 2 task", 16);
             temp2.TaskExecutedEvent += new PlcRWTask.TaskExecutedEventHandler(tempAll_TaskExecutedEvent);
-            temp3 = new ReadMemIntTask("read temp 3 task", 1);
+            temp3 = new ReadMemIntTask("read temp 3 task", 17);
             temp3.TaskExecutedEvent += new PlcRWTask.TaskExecutedEventHandler(tempAll_TaskExecutedEvent);
-            temp4 = new ReadMemIntTask("read temp 4 task", 1);
+            temp4 = new ReadMemIntTask("read temp 4 task", 18);
             temp4.TaskExecutedEvent += new PlcRWTask.TaskExecutedEventHandler(tempAll_TaskExecutedEvent);
             pm.addPlcTask(temp1);
             pm.addPlcTask(temp2);
@@ -63,16 +63,17 @@ namespace DataSourceLayer
         public void stopTempMeasurenments()
         {
             pm.stop();
+            OnMesurenmentEnd();
         }
 
         public void tempAll_TaskExecutedEvent(object sender, EventArgs e)
         {
            switch(((ReadMemIntTask)sender).TaskName)
            {
-               case "read temp 1 task": t1 = ((ReadMemIntTask)sender).Value / 10; break;
-               case "read temp 2 task": t2 = ((ReadMemIntTask)sender).Value / 10; break;
-               case "read temp 3 task": t3 = ((ReadMemIntTask)sender).Value / 10; break;
-               case "read temp 4 task": t4 = ((ReadMemIntTask)sender).Value / 10; break;
+               case "read temp 1 task": t1 = ((ReadMemIntTask)sender).Value; break;
+               case "read temp 2 task": t2 = ((ReadMemIntTask)sender).Value; break;
+               case "read temp 3 task": t3 = ((ReadMemIntTask)sender).Value; break;
+               case "read temp 4 task": t4 = ((ReadMemIntTask)sender).Value; break;
            }
             numberOfTempsRead++;
             //Измерени се сите 4 канали
@@ -83,7 +84,7 @@ namespace DataSourceLayer
                 TimeSpan elapsed = now - time;
                 if (elapsed.TotalSeconds <= sampleRate)
                     System.Threading.Thread.Sleep((int)(sampleRate - elapsed.TotalSeconds) * 1000);
-
+                time = DateTime.Now;
                 numberOfTempsRead = 0;
                 samplesMeasured++;
 
@@ -108,7 +109,7 @@ namespace DataSourceLayer
         private void OnMeasurenmentDone(double t1, double t2, double t3, double t4)
         {
             if (MeasurenmentDone != null)
-                MeasurenmentDone(t1, t2, t3, t4);
+                MeasurenmentDone(t1 / 10, t2 / 10, t3 / 10, t4 / 10);
         }
         /// <summary>
         /// Крај на сите мерења

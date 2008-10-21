@@ -58,6 +58,10 @@ namespace PresentationLayer
                 if (value != currentProcessState)
                 {
                     currentProcessState = value;
+                    if(currentProcessState == ProcessStatesEnum.Idle)
+                        progressBar1.IsIndeterminate = false;
+                    else
+                        progressBar1.IsIndeterminate = true;
                     int index = (int)currentProcessState;
                     StatusString = statusStrings[index / 2];
                     this.OnPropertyChanged(new PropertyChangedEventArgs(null));
@@ -168,7 +172,7 @@ namespace PresentationLayer
                     thermometerChannelAC4.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T4;
                 }
                 acHotTimer = new DispatcherTimer();
-                //100 ms
+                //1 s
                 acHotTimer.Interval = new TimeSpan(0, 0, 0, 1);
                 acHotTimer.Tick += new EventHandler(acHotTimer_Tick);
             }
@@ -208,11 +212,13 @@ namespace PresentationLayer
         {
             //Повторно се наведува ItemsSource-от на оваа табела.
             ACTable.ItemsSource = datasource.ACHeatingTable();
-
-            thermometerChannelAC1.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T1;
-            thermometerChannelAC2.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T2;
-            thermometerChannelAC3.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T3;
-            thermometerChannelAC4.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T4;
+            if (datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Count > 0)
+            {
+                thermometerChannelAC1.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T1;
+                thermometerChannelAC2.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T2;
+                thermometerChannelAC3.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T3;
+                thermometerChannelAC4.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T4;
+            }
         }
         /// <summary>
         /// OnPropertyChanged Handler за мерењата на отпор при ладење - DcCooling
@@ -275,7 +281,7 @@ namespace PresentationLayer
             if (currentProcessState == ProcessStatesEnum.ACHotTemp)
             {
                 acTimeToNextSample = new TimeSpan(0, 0, datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempSampleRateCurrentState);
-                AcTimeToNextSample.Text = getAcTimeToNextSampleString(acTimeToNextSample);   
+                AcTimeToNextSample.Text = getAcTimeToNextSampleString(acTimeToNextSample);
             }
         }
         /// <summary>
@@ -306,8 +312,9 @@ namespace PresentationLayer
                     datasource.Root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel].IsChannel1On = true;
                     datasource.Root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel].IsChannel2On = true;
                     //Стартувај го мерењето на отпор
-                    DataSourceLayer.DataSourceServices ds = new DataSourceLayer.DataSourceServices();
+                    ds = new DataSourceLayer.DataSourceServices();
                     ds.RessistanceMeasurenmentFinished += new DataSourceLayer.DataSourceServices.RessistanceMeasurenmentFinishedEvent(ds_ColdRessistanceMeasurenmentFinished);
+                    ds.RessistanceMeasurenmentsError+=new DataSourceLayer.DataSourceServices.RessistanceMeasurenmentsErrorEvent(ds_RessistanceMeasurenmentsError);
                     ds.start_RessistanceMeasurenment(datasource.Root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel], IS_TEST, true);
                 }
             }
@@ -315,6 +322,23 @@ namespace PresentationLayer
             {
                 startResMeasDcColdButton.IsChecked = false;
             }
+        }
+        private void startResMeasDcColdButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!startResMeasDcColdButton.IsChecked == true && currentProcessState == ProcessStatesEnum.DcColdRes)
+            {
+                ds.stopRessistanceMeasurenments();
+                CurrentProcessState = ProcessStatesEnum.Idle;
+            }
+        }
+        delegate void d();
+        public void ds_RessistanceMeasurenmentsError()
+        {
+            MessageBox.Show("Се појави грешки при поврзување со инструментите.\nПробајте пак. Ако проблемот не се реши рестартирајте ги инструментите.", "Грешка", MessageBoxButton.OK, MessageBoxImage.Error);
+            ds.stopRessistanceMeasurenments();
+
+            d dd = delegate() { CurrentProcessState = ProcessStatesEnum.Idle; startResMeasDcColdButton.IsChecked = false; };
+            this.Dispatcher.BeginInvoke( dd );
         }
         /// <summary>
         /// Handler за крај на мерењето на отпор.
@@ -377,7 +401,7 @@ namespace PresentationLayer
                 ds = new DataSourceLayer.DataSourceServices();
                 ds.TempMeasurenmentDone += new DataSourceLayer.DataSourceServices.TempMeasurenmentDoneEvent(ds_TempMeasurenmentDone);
                 ds.TempMeasurenmentFinished += new DataSourceLayer.DataSourceServices.TempMeasurenmentFinishedEvent(ds_TempMeasurenmentFinished);
-                datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempNoOfSamplesCurrentState = 5;
+                datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempNoOfSamplesCurrentState = 500000;
                 ds.start_TempMeasurenment(datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration, IS_TEST, false);
                 //
                 acTimeToNextSample = new TimeSpan(0, 0, datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempSampleRateCurrentState);
@@ -392,8 +416,11 @@ namespace PresentationLayer
             if (((ToggleButton)e.Source).IsChecked == false && CurrentProcessState != ProcessStatesEnum.Idle)
             {
                 ds.stopTempMeasurenments();
+                acHotTimer.Stop();
+                AcTimeToNextSample.Text = "00:00";
                 //pri testiranje
                 ds.IsTempMeasStopped = true;
+                CurrentProcessState = ProcessStatesEnum.Idle;
             }
         }
 
@@ -426,6 +453,7 @@ namespace PresentationLayer
                 //Стартувај го мерењето на отпор
                 ds = new DataSourceLayer.DataSourceServices();
                 ds.RessistanceMeasurenmentFinished += new DataSourceLayer.DataSourceServices.RessistanceMeasurenmentFinishedEvent(ds_CoolRessistanceMeasurenmentFinished);
+                ds.RessistanceMeasurenmentsError += new DataSourceLayer.DataSourceServices.RessistanceMeasurenmentsErrorEvent(ds_RessistanceMeasurenmentsError);
                 ds.start_RessistanceMeasurenment(datasource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel, IS_TEST, false);
             }
             else
@@ -511,6 +539,8 @@ namespace PresentationLayer
                     case FileCommand.New: this.CommandBindings[0].Command.Execute(null); break;
                     case FileCommand.Open: this.CommandBindings[1].Command.Execute(null); break;
                 }
+                //Show Transformator Properties
+                this.CommandBindings[6].Command.Execute(null);
             }
             else
                 this.Close();*/
@@ -527,7 +557,6 @@ namespace PresentationLayer
             ResssistanceCalibration r = new ResssistanceCalibration();
             r.ShowDialog();
         }
-
         
     }
    

@@ -21,6 +21,7 @@ namespace DataSourceLayer
         private EntityLayer.RessistanceTransformerChannel _ressistanceTransformerChannel;
         private bool isTest;
         private bool isColdMeas;
+        private double CURRENT_ODNOS = Convert.ToDouble(System.Configuration.ConfigurationSettings.AppSettings["CURRENT_ODNOS"]);
         //Instruments conf
         private RessistanceDataSource rds;
         private TemperatureDataSource tds;
@@ -32,12 +33,13 @@ namespace DataSourceLayer
         private int PLC_PORT_NUMBER;
         private short NO_OF_TRIGGERS_ADDRESS = 1;
         private short START_MEAS_ADDRESS = 2;
+        private short TEST_CURRENT_ADDRESS = 9;
 
         private ProcessManager pm;
 
         private int channelNo = 1;
         private bool isFirstMeasurenment = true;
-        
+        private DataAccessLayer.InterpolationCal intCal;
         #endregion
 
         #region Properties
@@ -63,11 +65,12 @@ namespace DataSourceLayer
         /// Delegate за EventHandler кој дава Notification за едно завршено мерење на отпор
         /// </summary>
         public delegate void RessistanceMeasurenmentDoneEvent();
-
+        public delegate void RessistanceMeasurenmentsErrorEvent();
         public event TempMeasurenmentFinishedEvent TempMeasurenmentFinished;
         public event RessistanceMeasurenmentFinishedEvent RessistanceMeasurenmentFinished;
         public event TempMeasurenmentDoneEvent TempMeasurenmentDone;
         public event RessistanceMeasurenmentDoneEvent RessistanceMeasurenmentDone;
+        public event RessistanceMeasurenmentsErrorEvent RessistanceMeasurenmentsError;
 
         private void OnTempMeasurenmentFinished()
         {
@@ -106,6 +109,7 @@ namespace DataSourceLayer
             IP_ADDRESS_CURRENT = Convert.ToString(System.Configuration.ConfigurationSettings.AppSettings["IP_ADDRESS_CURRENT"]);
             PORT_VOLTAGE = Convert.ToInt32(System.Configuration.ConfigurationSettings.AppSettings["PORT_VOLTAGE"]);
             PORT_CURRENT = Convert.ToInt32(System.Configuration.ConfigurationSettings.AppSettings["PORT_CURRENT"]);
+            intCal = new DataAccessLayer.InterpolationCal();
         }
 
         #region ressistance measurenments
@@ -115,7 +119,7 @@ namespace DataSourceLayer
         public void start_RessistanceMeasurenment(EntityLayer.RessistanceTransformerChannel ressistanceTransformerChannel, bool isTest, bool isColdMeas)
         {
             _sampleRate = ressistanceTransformerChannel.RessistanceSampleRateCurrentState;
-            _numberOfSamples = ressistanceTransformerChannel.RessistanceNoOfSamplesCurrentState;
+            _numberOfSamples = 2 * ressistanceTransformerChannel.RessistanceNoOfSamplesCurrentState;
             _current = ressistanceTransformerChannel.TestCurrent;
             _ressistanceTransformerChannel = ressistanceTransformerChannel;
             this.isTest = isTest;
@@ -126,13 +130,16 @@ namespace DataSourceLayer
                 
                 SetMemBitTask startMeasTask = new SetMemBitTask("start meas task", START_MEAS_ADDRESS);
                 WriteMemIntTask writeNoOfTriggersTask = new WriteMemIntTask("writeNoOfTriggersTask", NO_OF_TRIGGERS_ADDRESS, (short)(_numberOfSamples + 1));
+                WriteMemIntTask writeTestCurrentTask = new WriteMemIntTask("writeTestCurrentTask", TEST_CURRENT_ADDRESS, (short)(_current * 10));
                 pm.addPlcTask(startMeasTask);
                 pm.addPlcTask(writeNoOfTriggersTask);
+                pm.addPlcTask(writeTestCurrentTask);
                 
                 rds = new RessistanceDataSource(_sampleRate, _numberOfSamples, _current, IP_ADDRESS_VOLTAGE, IP_ADDRESS_CURRENT, PORT_VOLTAGE, PORT_CURRENT);
                 rds.MeasurenmentDone += new RessistanceDataSource.MeasurenmentDoneEvent(rsd_MeasurenmentDone);
                 rds.MeasurenmentsEnd+=new RessistanceDataSource.MeasurenmentsEndEvent(rds_MeasurenmentsEnd);
                 _ressistanceTransformerChannel.RessistanceMeasurenments.Clear();
+                rds.MeasurenmentError+=new RessistanceDataSource.MeasurenmentErrorEvent(rds_MeasurenmentError);
                 rds.start_RessistanceMeasurenments();
                 pm.start();
             }
@@ -142,15 +149,25 @@ namespace DataSourceLayer
                 measurenmentThread.Start();
             }
         }
-        
+        public void rds_MeasurenmentError()
+        {
+            if (RessistanceMeasurenmentsError != null)
+                RessistanceMeasurenmentsError();
+        }
         public void rsd_MeasurenmentDone(double voltage, double current, int measNumber)
         {
             if (!isFirstMeasurenment)
             {
+                double ressMeasured = voltage / (current * CURRENT_ODNOS);
+                double ressCorrected = intCal.interpolateRessistance(ressMeasured);
                 lock (_ressistanceTransformerChannel.RessistanceMeasurenments)
                 {
+                    Console.WriteLine("voltage:" + voltage);
+                    Console.WriteLine("current:" + current);
+                    Console.WriteLine("ressMeasured:" + ressMeasured);
+                    Console.WriteLine("ressCorrected:" + ressCorrected);
                     _ressistanceTransformerChannel.RessistanceMeasurenments.Add(
-                            new RessistanceMeasurenment(DateTime.Now, channelNo, voltage, current));
+                           new RessistanceMeasurenment(DateTime.Now, channelNo, voltage * ressCorrected / ressMeasured, current * CURRENT_ODNOS));
                     OnRessistanceMeasurenmentDone();
                 }
                 if (channelNo == 1)
@@ -159,16 +176,18 @@ namespace DataSourceLayer
                     channelNo = 1;
             }
             isFirstMeasurenment = !isFirstMeasurenment;
-            //throw event
-            if (measNumber == 2 * _numberOfSamples - 1)
-                OnRessistanceMeasurenmentFinished();
         }
        
 
         public void stopRessistanceMeasurenments()
         {
             if (rds != null)
+            {
                 rds.stopRessistanceMeasurenments();
+                ResetMemBitTask stopRessMeasTask = new ResetMemBitTask("Stop meas", START_MEAS_ADDRESS);
+                stopRessMeasTask.TaskExecutedEvent += new PlcRWTask.TaskExecutedEventHandler(stopRessMeasTask_TaskExecutedEvent);
+                pm.addPlcTask(stopRessMeasTask);
+            }
         }
         /// <summary>
         /// Крај на мерењата
@@ -178,6 +197,7 @@ namespace DataSourceLayer
             ResetMemBitTask stopRessMeasTask = new ResetMemBitTask("Stop meas", START_MEAS_ADDRESS);
             stopRessMeasTask.TaskExecutedEvent += new PlcRWTask.TaskExecutedEventHandler(stopRessMeasTask_TaskExecutedEvent);
             pm.addPlcTask(stopRessMeasTask);
+            OnRessistanceMeasurenmentFinished();
         }
         public void stopRessMeasTask_TaskExecutedEvent(object sender, EventArgs e)
         {
@@ -202,7 +222,6 @@ namespace DataSourceLayer
             this.isColdMeas = isColdMeas;
             if (!isTest)
             {
-
                 pm = new ProcessManager((PLCP.enPortNumber)PLC_PORT_NUMBER);
                 tds = new TemperatureDataSource(pm, _sampleRate, _numberOfSamples);
                 _tempMeasurenementConfiguration.TempMeasurenments.Clear();
@@ -221,8 +240,12 @@ namespace DataSourceLayer
         /// </summary>
         public void tds_MeasurenmentDone(double t1, double t2, double t3, double t4)
         {
+            double t1Corrected = _tempMeasurenementConfiguration.IsChannel1On ? intCal.interpolateT1(t1) : Double.NaN;
+            double t2Corrected = _tempMeasurenementConfiguration.IsChannel2On ? intCal.interpolateT2(t2) : Double.NaN;
+            double t3Corrected = _tempMeasurenementConfiguration.IsChannel3On ? intCal.interpolateT3(t3) : Double.NaN;
+            double t4Corrected = _tempMeasurenementConfiguration.IsChannel4On ? intCal.interpolateT4(t4) : Double.NaN;
             DateTime time = DateTime.Now;
-            _tempMeasurenementConfiguration.TempMeasurenments.Add(new TempMeasurenment(time, t1, t2, t3, t4));
+            _tempMeasurenementConfiguration.TempMeasurenments.Add(new TempMeasurenment(time, t1Corrected, t2Corrected, t3Corrected, t4Corrected));
             OnTempMeasurenmentDone();
         }
         /// <summary>

@@ -63,6 +63,8 @@ namespace PresentationLayer
             T2Meas.DataContext = t;
             T3Meas.DataContext = t;
             T4Meas.DataContext = t;
+            _tempMeasurenementConfiguration.TempSampleRateCurrentState = 1;
+            _tempMeasurenementConfiguration.TempNoOfSamplesCurrentState = 2;
             dataSourceServices.start_TempMeasurenment(_tempMeasurenementConfiguration, true, false);    
         }
 

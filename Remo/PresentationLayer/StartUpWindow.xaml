@@ -5,7 +5,15 @@
     
     
     <Grid>
-        <Rectangle Stroke="AliceBlue" Fill="White">
+        <Grid.Resources>
+            <LinearGradientBrush x:Key="BackgroundBrush">
+                <GradientStop Color="#ccccff" Offset="0.0"/>
+                <GradientStop Color="#eeeeee" Offset="0.5"/>
+                <GradientStop Color="#ccccff" Offset="1.0"/>
+                
+            </LinearGradientBrush>
+        </Grid.Resources>
+        <Rectangle Stroke="#eeeeaa" StrokeThickness="5" Fill="{StaticResource BackgroundBrush}" RadiusX="20" RadiusY="20">
         </Rectangle>
         <StackPanel Orientation="Horizontal" Height="80" HorizontalAlignment="Center">
             <Button Margin="10,5,5,5"  Width="80" Click="Button_Click" Content="New"  IsDefault="True">

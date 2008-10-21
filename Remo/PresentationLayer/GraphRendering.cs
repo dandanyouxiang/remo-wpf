@@ -95,6 +95,7 @@ namespace PresentationLayer
 
         private void acGraphRefresh()
         {
+            Console.WriteLine("Start");
             double maxY = -1000;
             double minY = 1000;
             double maxX = -1000;
@@ -167,6 +168,7 @@ namespace PresentationLayer
             AcGraph.IntervalXRange = (AcGraph.MaxXRange - AcGraph.MinXRange) / 10;
 
             AcGraph.Refresh();
+            Console.WriteLine("End");
         }
         private void dcCoolingGraphsRefresh()
         {

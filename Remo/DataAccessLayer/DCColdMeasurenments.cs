@@ -16,14 +16,14 @@ namespace DataAccessLayer
 
     public class TableTempHeader 
     {
-        public string Date{get;set;}
-        public string Time{get;set;}
-        public string T1{get;set;}
-        public string T2{get;set;}
-        public string T3{get;set;}
-        public string T4{get;set;}
-        public string TAmb{get;set;}
-        public string TOil{get;set;}
+        public string Date { get; set; }
+        public string Time { get; set; }
+        public string T1 { get; set; }
+        public string T2 { get; set; }
+        public string T3 { get; set; }
+        public string T4 { get; set; }
+        public string TAmb { get; set; }
+        public string TOil { get; set; }
 
         public TableTempHeader(string date, string time, string t1, string t2,string t3, string t4, string tAmb, string tOil) 
         {
@@ -837,7 +837,7 @@ namespace DataAccessLayer
            {
                if(meas.ChannelNo == 1)
                {
-                   sum = meas.Voltage / meas.Current;
+                   sum += meas.Voltage / meas.Current;
                    n++;
                }
            }
@@ -858,7 +858,7 @@ namespace DataAccessLayer
             {
                 if (meas.ChannelNo == 2)
                 {
-                    sum = meas.Voltage / meas.Current;
+                    sum += meas.Voltage / meas.Current;
                     n++;
                 }
             }

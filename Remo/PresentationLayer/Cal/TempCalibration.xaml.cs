@@ -23,7 +23,7 @@ namespace PresentationLayer
     public partial class TempCalibration : Window
     {
         private TempCalibrationService tempCalibrationService;
-        private const string TemperatureCalibrationFilePath = "Ref\\TemperatureCalibration.xml";
+        private string TemperatureCalibrationFilePath = Convert.ToString(System.Configuration.ConfigurationSettings.AppSettings["TemperatureCalibrationFile"]);
 
         DNBSoft.WPF.WPFGraph.WPFGraphSeries series1;
         DNBSoft.WPF.WPFGraph.WPFGraphSeries series2;
@@ -52,12 +52,6 @@ namespace PresentationLayer
             MeasurenmentListView.ItemsSource = tempCalibrationService.TempCalMeasurenments;
         }
 
-
-        private void izlezButton_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
         private void dodadiButton_Click(object sender, RoutedEventArgs e)
         {
             TempCalibrationDialog tempCalDialog = new TempCalibrationDialog();
@@ -77,6 +71,8 @@ namespace PresentationLayer
                 EntityLayer.TempCalMeasurenment measToRemove = 
                     tempCalibrationService.TempCalibrationEntity.TempCalMeasurenments.Where(t => t.Time.Equals(time)).Single();
                 tempCalibrationService.TempCalibrationEntity.TempCalMeasurenments.Remove(measToRemove);
+                this.refreshGraph();
+                tempCalibrationService.TempCalibrationEntity.writeToXml(TemperatureCalibrationFilePath);
             }
         }
 

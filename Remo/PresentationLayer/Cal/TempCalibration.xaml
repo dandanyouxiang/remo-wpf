@@ -56,7 +56,7 @@
         <StackPanel Grid.Row="2" Width="305" Margin="0,0,30,0" x:Name="stackPanel1" Orientation="Horizontal" HorizontalAlignment="Right">       
             <Button x:Name="dodadiButton"   Click="dodadiButton_Click" Content="Додади"/>
             <Button x:Name="izbrisiButton"  Click="izbrisiButton_Click" Content="Избриши"/>
-            <Button x:Name="izlezButton"    Click="izlezButton_Click" IsCancel="True" Content="Излез"/>
+            <Button x:Name="izlezButton"   IsCancel="True" Content="Излез"/>
         </StackPanel>
         <graph:WPFScatterGraph x:Name="graph" Grid.Row="3" MinWidth="200" MinHeight="200" Margin="20 0" YAxisTitle="T Err" XAxisTitle="T Meas" MinYRange="-2" MaxYRange="2" IntervalYRange="0.2" GraphBackground="LightGray">
             <graph:WPFScatterGraph.Resources>

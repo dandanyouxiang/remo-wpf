@@ -150,6 +150,7 @@
     <Compile Include="DataAccessLayer\DataSource.cs" />
     <Compile Include="DataAccessLayer\DCColdMeasurenments.cs" />
     <Compile Include="DataAccessLayer\DCCoolingMeasurenments.cs" />
+    <Compile Include="DataAccessLayer\InterpolationCal.cs" />
     <Compile Include="DataAccessLayer\ReportsSource.cs" />
     <Compile Include="DataAccessLayer\TransformatorProperties.cs" />
     <Compile Include="DataAccessLayer\Utils.cs" />

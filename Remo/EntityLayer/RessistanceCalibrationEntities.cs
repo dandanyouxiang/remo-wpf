@@ -134,7 +134,7 @@ namespace EntityLayer
 
         public double RErrPerc
         {
-            get { return RErr/RMeas; }
+            get { return 100 * RErr / RMeas; }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -23,7 +23,7 @@ namespace PresentationLayer
         /// Извршеното мерење
         /// </summary>
         public EntityLayer.RessistanceCalMeasurenment RessistanceCalMeasurenment { get; set; }
-
+        private bool IS_TEST = Convert.ToBoolean(System.Configuration.ConfigurationSettings.AppSettings["IS_TEST"]);
         DataSourceLayer.DataSourceServices s;
         EntityLayer.RessistanceTransformerChannel ch;
         public RessistanceCalibrationDialog2(EntityLayer.RessistanceCalMeasurenment ressistanceCalMeasurenment)
@@ -34,24 +34,38 @@ namespace PresentationLayer
 
             s = new DataSourceLayer.DataSourceServices();
             ch = new EntityLayer.RessistanceTransformerChannel();
+            ch.TestCurrent = ressistanceCalMeasurenment.Current;
+            ch.RessistanceNoOfSamplesCurrentState = 4;
             ch.RessistanceMeasurenments = new EntityLayer.ListWithChangeEvents<EntityLayer.RessistanceMeasurenment>();
             s.RessistanceMeasurenmentFinished += new DataSourceLayer.DataSourceServices.RessistanceMeasurenmentFinishedEvent(s_RessistanceMeasurenmentFinished);
         }
         
         private void cancelButton_Click(object sender, RoutedEventArgs e)
         {
+            s.stopRessistanceMeasurenments();
             this.DialogResult = false;
         }
         public void s_RessistanceMeasurenmentFinished()
         {
-            RessistanceCalMeasurenment.RMeas = ch.RessistanceMeasurenments[0].Voltage / ch.RessistanceMeasurenments[0].Current;
+            double rMeas = 0;
+            double n = 0;
+            foreach (EntityLayer.RessistanceMeasurenment meas in ch.RessistanceMeasurenments)
+            {
+                if (meas.ChannelNo == 1)
+                {
+                    rMeas += meas.Voltage / meas.Current;
+                    n++;
+                }
+            }
+            rMeas /= n;
+            RessistanceCalMeasurenment.RMeas = rMeas;
             this.DialogResult = true;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             //Започни го мерењто на отпор
-            s.start_RessistanceMeasurenment(ch, true, false);
+            s.start_RessistanceMeasurenment(ch, IS_TEST, false);
         }
 
     }

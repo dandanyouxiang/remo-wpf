@@ -22,7 +22,7 @@ namespace PresentationLayer
     public partial class ResssistanceCalibration : Window
     {
 
-        private const string RessistanceCalibrationFilePath = "Ref\\RessistanceCalibration.xml";
+        private string RessistanceCalibrationFilePath = Convert.ToString(System.Configuration.ConfigurationSettings.AppSettings["RessistanceCalibrationFile"]);
 
         DNBSoft.WPF.WPFGraph.WPFGraphSeries series1;
         private EntityLayer.RessistanceCalibration r;
