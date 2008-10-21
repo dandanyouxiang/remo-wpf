@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using DataAccessLayer;
+using DNBSoft.WPF.WPFGraph;
 
 namespace ReportsLayer
 {
@@ -23,6 +24,19 @@ namespace ReportsLayer
         private DataSource dataSource;
         private FlowDocumentReportType flowDocumentReportType = FlowDocumentReportType.DcColdMeasurenments;
 
+
+        public GenerateReports(DataSource dataSource, WPFScatterGraph ACHotGraph, WPFScatterGraph GraphT1, WPFScatterGraph GraphT2)
+        {
+            InitializeComponent();
+            this.dataSource = dataSource;
+
+            //dataSource.Root.TransformerProperties = new EntityLayer.TransformerProperties("12345", "6789", "Gjore", "Nesto", EntityLayer.TransformerProperties.ConnectionType.D, EntityLayer.TransformerProperties.ConnectionType.Y, EntityLayer.TransformerProperties.Material.Aluminium, EntityLayer.TransformerProperties.Material.Aluminium, 20, 20);
+            flowDocumentReport = new FlowDocumentReport(dataSource,ACHotGraph,GraphT1,GraphT2);
+            
+           
+
+            flowDocumentScrollViewer.Document = flowDocumentReport.returnDocument(FlowDocumentReportType.DcColdMeasurenments);
+        }
         public GenerateReports(DataSource dataSource)
         {
             InitializeComponent();

@@ -34,7 +34,16 @@ namespace ReportsLayer
         private FlowDocument DcColdMeasurenmentsDocument;
         private FlowDocument AcHotMeasurenmentsDocument;
         private FlowDocument DcCoolingMeasurenmentsDocument;
-        
+
+        #region Graph Properties
+
+        private WPFScatterGraph ACHotGraph;
+        private WPFScatterGraph GraphT1;
+        private WPFScatterGraph GraphT2;
+
+        #endregion Graph Properties
+
+
         public FlowDocumentReport() 
         {
             flowDocument = new FlowDocument(); 
@@ -66,7 +75,37 @@ namespace ReportsLayer
             AcHotMeasurenmentsDocument.DataContext = dataSource;
             DcCoolingMeasurenmentsDocument.DataContext = dataSource;
         }
-       
+        public FlowDocumentReport(DataSource dataSource, WPFScatterGraph aCHotGraph, WPFScatterGraph graphT1, WPFScatterGraph graphT2)
+        {
+            this.dataSource = dataSource;
+            //todo da se trgne
+            //dataSource.Root.TransformerProperties = new EntityLayer.TransformerProperties("12345", "6789", "Gjore", "Nesto", EntityLayer.TransformerProperties.ConnectionType.D, EntityLayer.TransformerProperties.ConnectionType.Y, EntityLayer.TransformerProperties.Material.Aluminium, EntityLayer.TransformerProperties.Material.Aluminium, 20, 20);
+
+            copyGraph(ref ACHotGraph, aCHotGraph);
+            copyGraph(ref GraphT1, graphT1);
+            copyGraph(ref GraphT2, graphT2);
+            //Поставување на графиците
+            /*
+            this.ACHotGraph = ACHotGraph;
+            this.GraphT1 = GraphT1;
+            this.GraphT2 = GraphT2;
+            */
+            DcColdMeasurenmentsDocument = new FlowDocument();
+            AcHotMeasurenmentsDocument = new FlowDocument();
+            DcCoolingMeasurenmentsDocument = new FlowDocument();
+
+            makeDcColdMeasurenmentsDocument(DcColdMeasurenmentsDocument);
+            makeAcHotMeasurenmentsDocument(AcHotMeasurenmentsDocument);
+            makeDcCoolingMeasurenmentsDocument(DcCoolingMeasurenmentsDocument);
+
+            DcColdMeasurenmentsDocument.FontFamily = new FontFamily("Courier New");
+            AcHotMeasurenmentsDocument.FontFamily = new FontFamily("Courier New");
+            DcCoolingMeasurenmentsDocument.FontFamily = new FontFamily("Courier New");
+
+            DcColdMeasurenmentsDocument.DataContext = dataSource;
+            AcHotMeasurenmentsDocument.DataContext = dataSource;
+            DcCoolingMeasurenmentsDocument.DataContext = dataSource;
+        }
         public FlowDocument returnDocument(FlowDocumentReportType flowDocumentReportType)
         {
             switch (flowDocumentReportType)
@@ -424,8 +463,10 @@ namespace ReportsLayer
         {
             Paragraph meanTempFieldsParagraph = new Paragraph();
 
-            meanTempFieldsParagraph.Inlines.Add(new Run("End Amb Temp: " + dataSource.EndAcTemp.ToString()+"\n"));
-            meanTempFieldsParagraph.Inlines.Add(new Run("Avg Oil Temp (AOT): neznam sto treba\n"));
+            double temp = dataSource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T1 + dataSource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T2 + dataSource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T3 + dataSource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T4;
+
+            meanTempFieldsParagraph.Inlines.Add(new Run("End Amb Temp: " + temp.ToString()+"\n"));
+            meanTempFieldsParagraph.Inlines.Add(new Run("Avg Oil Temp (AOT): " + dataSource.EndAcTemp.ToString() + "\n"));
             meanTempFieldsParagraph.Inlines.Add(new Run("K drop in Oil: " + dataSource.KDropInOil+"\n"));
             flowDocument.Blocks.Add(meanTempFieldsParagraph);
         }
@@ -433,8 +474,12 @@ namespace ReportsLayer
         {
             Paragraph meanTempFieldsParagraph = new Paragraph();
 
-            meanTempFieldsParagraph.Inlines.Add(new Run("End Amb Temp: " + dataSource.EndAcTemp.ToString() + "\n"));
-            meanTempFieldsParagraph.Inlines.Add(new Run("Avg Oil Temp (AOT): neznam sto treba\n"));
+            double temp = 0;
+            if(dataSource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Count>0)
+            temp = dataSource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T1 + dataSource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T2 + dataSource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T3 + dataSource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T4;
+
+            meanTempFieldsParagraph.Inlines.Add(new Run("End Amb Temp: " + temp.ToString() + "\n"));
+            meanTempFieldsParagraph.Inlines.Add(new Run("Avg Oil Temp (AOT): " + dataSource.EndAcTemp.ToString() + "\n"));
             meanTempFieldsParagraph.Inlines.Add(new Run("K drop in Oil: " + dataSource.KDropInOil + "\n"));
             flowDocument.Blocks.Add(meanTempFieldsParagraph);
         }
@@ -454,7 +499,7 @@ namespace ReportsLayer
             // Button aligns properly with the text.
 
             StackPanel stackPanel = new StackPanel();
-
+            /*
             // Asign the button as the UI container's child.
             WPFScatterGraph ACHotGraph=new WPFScatterGraph();
             WPFGraphSeries seriesOilTemp = new WPFGraphSeries();
@@ -468,7 +513,7 @@ namespace ReportsLayer
 
             acGraphInit(ref ACHotGraph,ref seriesOilTemp,ref seriesAmbTemp,ref seriesTempRise);
             acGraphRefresh(ref ACHotGraph, ref seriesOilTemp, ref seriesAmbTemp, ref seriesTempRise);
-
+            */
             stackPanel.Width = 900;
             //stackPanel.Height = 500;
             stackPanel.Children.Add(ACHotGraph);
@@ -502,6 +547,7 @@ namespace ReportsLayer
 
             StackPanel stackPanel = new StackPanel();
 
+            /*
             // Asign the button as the UI container's child.
             WPFScatterGraph ACHotGraph = new WPFScatterGraph() {XAxisTitle = "R Err",
             MinYRange = -0.001,
@@ -518,7 +564,7 @@ namespace ReportsLayer
 
             acGraphInit(ref ACHotGraph, ref seriesOilTemp, ref seriesAmbTemp, ref seriesTempRise);
             acGraphRefresh(ref ACHotGraph, ref seriesOilTemp, ref seriesAmbTemp, ref seriesTempRise);
-
+            */
             stackPanel.Width = 700;
             stackPanel.Children.Add(ACHotGraph);
 
@@ -575,6 +621,29 @@ namespace ReportsLayer
             WPFGraphLineRenderers.DashedLine series3LineRenderer = new WPFGraphLineRenderers.DashedLine();
             series3LineRenderer.LineBrush = Brushes.LightGray;
             seriesTempRise.LineRenderer = series3LineRenderer;
+        }
+
+        private void copyGraph(ref WPFScatterGraph newGraph, WPFScatterGraph oldGraph) 
+        {
+            newGraph = new WPFScatterGraph();
+
+            newGraph.Margin = oldGraph.Margin;
+            newGraph.XAxisType = oldGraph.XAxisType;
+            newGraph.XAxisTitle = oldGraph.XAxisTitle;
+            newGraph.YAxisTitle = oldGraph.YAxisTitle;
+            newGraph.MinYRange = oldGraph.MinXRange;
+            newGraph.MaxYRange = oldGraph.MinYRange;
+            newGraph.IntervalYRange = oldGraph.IntervalYRange;
+
+            newGraph.Refresh();
+            newGraph.InitializeComponent();
+            if (oldGraph.Series.Count > 2)
+            {
+                newGraph.Series.Add(oldGraph.Series[0]);
+                newGraph.Series.Add(oldGraph.Series[1]);
+                newGraph.Series.Add(oldGraph.Series[2]);
+            }
+
         }
 
         private void acGraphRefresh(ref WPFScatterGraph AcGraph, ref WPFGraphSeries seriesOilTemp, ref WPFGraphSeries seriesAmbTemp, ref WPFGraphSeries seriesTempRise)
@@ -1085,7 +1154,8 @@ namespace ReportsLayer
             //acGraphRefresh(ref ACHotGraph, ref seriesOilTemp, ref seriesAmbTemp, ref seriesTempRise);
 
             stackPanel.Width = 700;
-            stackPanel.Children.Add(DCCoolingGraph);
+            //stackPanel.Children.Add(DCCoolingGraph);
+            stackPanel.Children.Add(GraphT1);
             myInlineUIContainer.Child = stackPanel;
 
             graphParagraph.Inlines.Add(myInlineUIContainer);
@@ -1119,8 +1189,8 @@ namespace ReportsLayer
 
             stackPanel.Width = 700;
             stackPanel.Height = 400;
-            stackPanel.Children.Add(DCCoolingGraph);
-
+            //stackPanel.Children.Add(DCCoolingGraph);
+            stackPanel.Children.Add(GraphT2);
             myInlineUIContainer.Child = stackPanel;
 
             graphParagraph.Inlines.Add(myInlineUIContainer);

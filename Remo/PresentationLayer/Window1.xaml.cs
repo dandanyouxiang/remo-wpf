@@ -28,8 +28,23 @@ namespace PresentationLayer
         /// Поле кое чува кој е работниот директориум.
         /// </summary>
         public string WorkPlacePath {get;set; }
+        /*
+        public string FileName {
+            get 
+            {
+                return fileStoring.FileName;
+            }
+            set 
+            {
+                if (fileStoring.FileName!=value)
+                {
+                    fileStoring.FileName = value;
+                    OnPropertyChanged(new PropertyChangedEventArgs("FileName"));
+                }
+            }
+        }
+        */
         public string FileName { get; set; }
-
         /// <summary>
         /// Состојбите во кои апликацијата се наоѓа, во однос на мерењата.
         /// </summary>
@@ -83,8 +98,13 @@ namespace PresentationLayer
             FileName = fileStoring.FileName;
 
             this.Title = "Remo - " + FileName;
-
-
+            /*
+            Binding binding = new Binding();
+            binding.Source = FileName;
+            binding.Path = new PropertyPath("FileName");
+            binding.Mode = BindingMode.TwoWay;
+            this.SetBinding(this.TitleProperty, binding);
+            */
             
 
             //Todo Da se vidi dali e vo red na ovoj nacin da se cita prethodno zacuvanata programa.

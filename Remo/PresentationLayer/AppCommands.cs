@@ -41,10 +41,10 @@ namespace PresentationLayer
             if (result == true)
             {
                 // Open document
-                string filename = dlg.FileName;
-
+                FileName = dlg.FileName;
+                this.Title = "Remo - " + FileName;
                 //polneje na fajlot
-                datasource = new DataSource(filename, FileCommand.New);
+                datasource = new DataSource(FileName, FileCommand.New);
                 
                 MainGrid.ClearValue(Grid.DataContextProperty);
 
@@ -73,10 +73,10 @@ namespace PresentationLayer
             if (result == true)
             {
                 // Open document
-                string filename = dlg.FileName;
-
+                FileName = dlg.FileName;
+                this.Title = "Remo - " + FileName;
                 //polneje na fajlot
-                datasource = new DataSource(filename, FileCommand.Open);
+                datasource = new DataSource(FileName, FileCommand.Open);
 
                 MainGrid.ClearValue(Grid.DataContextProperty);
 
@@ -128,7 +128,7 @@ namespace PresentationLayer
         /// <param name="e"></param>
         private void Command_Print_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            ReportsLayer.GenerateReports gr= new ReportsLayer.GenerateReports(datasource);
+            ReportsLayer.GenerateReports gr = new ReportsLayer.GenerateReports(datasource, AcGraph, T1Graph, T2Graph);
 
 
             if ((bool)gr.ShowDialog())
@@ -167,7 +167,7 @@ namespace PresentationLayer
             {
                 // Open document
                 FileName = dlg.FileName;
-
+                this.Title = "Remo - " + FileName;
                 datasource.saveData(FileName);
             }
 
@@ -189,9 +189,12 @@ namespace PresentationLayer
             datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.PropertyChanged += new PropertyChangedEventHandler(ACTempMeasurenments_PropertyChanged);
             datasource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel.RessistanceMeasurenments.PropertyChanged += new PropertyChangedEventHandler(DcCoolingRessistanceMeasurenments_PropertyChanged);
             datasource.PropertyChanged += new PropertyChangedEventHandler(datasource_PropertyChanged);
-            
+
+            datasource.SelectedChannel = 1;
             DCColdRessistanceTable.ItemsSource = datasource.DCColdRessistanceTable(datasource.SelectedChannel);
             DCColdRessistanceTable.DataContext = datasource;
+
+            
 
             NoOfSamplesRessTextBox.DataContext = datasource.Root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel];
             SampleRateTempTextBox.DataContext = datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration;
