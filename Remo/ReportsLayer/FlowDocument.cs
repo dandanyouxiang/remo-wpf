@@ -1088,6 +1088,7 @@ namespace ReportsLayer
         public void insertResistanceChn1(FlowDocument flowDocument)
         {
             Paragraph ResistanceChn1Paragraph = new Paragraph();
+            //Todo 
             //dataSource.calculateResults();
             //todo treba da sto i presmetka na f(t)
             //dataSource.evalResults();

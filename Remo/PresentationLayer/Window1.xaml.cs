@@ -533,6 +533,9 @@ namespace PresentationLayer
             }
         }
 
+        /// <summary>
+        /// Стартување на StartUpWindow
+        /// </summary>
         private void Window_ContentRendered(object sender, EventArgs e)
         {
             /*StartUpWindow stp = new StartUpWindow();

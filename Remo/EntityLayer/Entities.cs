@@ -140,7 +140,7 @@ namespace EntityLayer
         public Root()
         {
             TransformerProperties = new TransformerProperties();
-            DcColdMeasurenments = new DcColdMeasurenments();
+            DcColdMeasurenments = new DcColdMeasurenments(new object());
             AcHotMeasurenments = new AcHotMeasurenments();
             DcCoolingMeasurenments = new DcCoolingMeasurenments();
         }
@@ -170,10 +170,14 @@ namespace EntityLayer
             this.TempMeasurenementConfiguration = tempMeasurenementConfiguration;
             this.RessistanceTransformerChannels = ressistanceTransformerChannels;
         }
-        public DcColdMeasurenments()
-            : this(new TempMeasurenementConfiguration(), new ListWithChangeEvents<RessistanceTransformerChannel>() { new RessistanceTransformerChannel(), new RessistanceTransformerChannel() , new RessistanceTransformerChannel()})
+        
+        public DcColdMeasurenments(object anything)
+            : this(new TempMeasurenementConfiguration(), 
+            new ListWithChangeEvents<RessistanceTransformerChannel>() 
+                { new RessistanceTransformerChannel(), new RessistanceTransformerChannel() , new RessistanceTransformerChannel()})
         {
         }
+        public DcColdMeasurenments() { }
        
     }
     /// <summary>
