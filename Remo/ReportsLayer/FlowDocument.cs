@@ -465,7 +465,7 @@ namespace ReportsLayer
 
             double temp = dataSource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T1 + dataSource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T2 + dataSource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T3 + dataSource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T4;
 
-            meanTempFieldsParagraph.Inlines.Add(new Run("End Amb Temp: " + temp.ToString()+"\n"));
+            meanTempFieldsParagraph.Inlines.Add(new Run("End Amb Temp: " + String.Format("0:0.0", temp)+"\n"));
             meanTempFieldsParagraph.Inlines.Add(new Run("Avg Oil Temp (AOT): " + dataSource.EndAcTemp.ToString() + "\n"));
             meanTempFieldsParagraph.Inlines.Add(new Run("K drop in Oil: " + dataSource.KDropInOil+"\n"));
             flowDocument.Blocks.Add(meanTempFieldsParagraph);
@@ -474,13 +474,14 @@ namespace ReportsLayer
         {
             Paragraph meanTempFieldsParagraph = new Paragraph();
 
-            double temp = 0;
+            double temp = 1.1234;
+
             if(dataSource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Count>0)
             temp = dataSource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T1 + dataSource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T2 + dataSource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T3 + dataSource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T4;
 
-            meanTempFieldsParagraph.Inlines.Add(new Run("End Amb Temp: " + temp.ToString() + "\n"));
-            meanTempFieldsParagraph.Inlines.Add(new Run("Avg Oil Temp (AOT): " + dataSource.EndAcTemp.ToString() + "\n"));
-            meanTempFieldsParagraph.Inlines.Add(new Run("K drop in Oil: " + dataSource.KDropInOil + "\n"));
+            meanTempFieldsParagraph.Inlines.Add(new Run("End Amb Temp:       " + ReportStringFormater.temperatureFormater( temp) + " \n"));
+            meanTempFieldsParagraph.Inlines.Add(new Run("Avg Oil Temp (AOT): " +ReportStringFormater.temperatureFormater( dataSource.EndAcTemp) + " \n"));
+            meanTempFieldsParagraph.Inlines.Add(new Run("K drop in Oil:      " +ReportStringFormater.temperatureFormater( dataSource.KDropInOil) + "\n"));
             flowDocument.Blocks.Add(meanTempFieldsParagraph);
         }
 
@@ -812,9 +813,9 @@ namespace ReportsLayer
 
             DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("\n"));
             //Температура
-            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("T Cold:       " + Math.Round(dataSource.retTCold(), 1) + " C\n"));
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("T Cold:       " + ReportStringFormater.temperatureFormater(dataSource.retTCold()) + "\n"));
             //Струја со која се тестира.
-            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Test Current: " + Math.Round(dataSource.Root.DcColdMeasurenments.RessistanceTransformerChannels[0].TestCurrent, 1) + " A\n"));
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Test Current: " + ReportStringFormater.curentFormater(dataSource.Root.DcColdMeasurenments.RessistanceTransformerChannels[0].TestCurrent) + "\n"));
 
 
             flowDocument.Blocks.Add(DcColdMeasurenmentsHeaderParagraph);
@@ -883,15 +884,15 @@ namespace ReportsLayer
 
             DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Bold(new Run("\n")));
 
-            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("STD Temp:            " + Math.Round(dataSource.StdTemp, 1) + " C\n"));
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("STD Temp:            " + ReportStringFormater.temperatureFormater(dataSource.StdTemp) + " \n"));
 
-            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("R " + evalChannelName(tempChannelType) + " at STD Temp: " + Math.Round(dataSource.retR1AtStdTemp(Convert.ToInt32(tempChannelType)), 7) + " Ohm\n"));
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("R " + evalChannelName(tempChannelType) + " at STD Temp: " + ReportStringFormater.resistanceFormater(dataSource.retR1AtStdTemp(Convert.ToInt32(tempChannelType))) + " \n"));
 
-            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("R " + evalChannelName(tempChannelType).ToLower() + " at STD Temp: " + Math.Round(dataSource.retR2AtStdTemp(Convert.ToInt32(tempChannelType)), 7) + " Ohm\n"));
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("R " + evalChannelName(tempChannelType).ToLower() + " at STD Temp: " + ReportStringFormater.resistanceFormater(dataSource.retR2AtStdTemp(Convert.ToInt32(tempChannelType))) + " \n"));
 
-            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("R " + evalChannelName(tempChannelType)[0] + " at STD Temp:     " + Math.Round(dataSource.retR1Phase(Convert.ToInt32(tempChannelType)), 7) + " Ohm\n"));
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("R " + evalChannelName(tempChannelType)[0] + " at STD Temp:     " + ReportStringFormater.resistanceFormater(dataSource.retR1Phase(Convert.ToInt32(tempChannelType))) + " \n"));
 
-            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("R " + evalChannelName(tempChannelType).ToLower()[0] + " at STD Temp:     " + Math.Round(dataSource.retR2Phase(Convert.ToInt32(tempChannelType)), 7) + " Ohm\n"));
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("R " + evalChannelName(tempChannelType).ToLower()[0] + " at STD Temp:     " + ReportStringFormater.resistanceFormater(dataSource.retR2Phase(Convert.ToInt32(tempChannelType))) + " \n"));
 
             flowDocument.Blocks.Add(DcColdMeasurenmentsHeaderParagraph);
         }
@@ -997,7 +998,7 @@ namespace ReportsLayer
 
             DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("\n"));
             //Температура
-            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Total Samples:      " + dataSource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel.RessistanceNoOfSamplesCurrentState + " C\n"));
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Total Samples:      " + dataSource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel.RessistanceNoOfSamplesCurrentState + "\n"));
             //Струја со која се тестира.
             DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Sample Rate:        " + Math.Round(Convert.ToDouble(dataSource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel.RessistanceSampleRateCurrentState),1) + " S\n"));
 
@@ -1009,15 +1010,15 @@ namespace ReportsLayer
             Paragraph DcColdMeasurenmentsHeaderParagraph = new Paragraph();
 
             //
-            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Amb Temp - Cold:    " + dataSource.retTCold() + " C\n"));
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Amb Temp - Cold:    " + ReportStringFormater.temperatureFormater(dataSource.retTCold()) + "\n"));
             //
-            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("End AC Temp:        " + dataSource.retEndAcTemp() + " C\n"));
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("End AC Temp:        " + ReportStringFormater.temperatureFormater(dataSource.retEndAcTemp()) + "\n"));
 
             DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("\n"));
 
-            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("R1 Cold Resistance: " + dataSource.retR1ColdAtDcCool() + " Ohm\n"));
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("R1 Cold Resistance: " + ReportStringFormater.resistanceFormater(dataSource.retR1ColdAtDcCool()) + "\n"));
             //
-            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("R2 Cold Resistance: " + dataSource.retR2ColdAtDcCool() + " Ohm\n"));
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("R2 Cold Resistance: " + ReportStringFormater.resistanceFormater(dataSource.retR2ColdAtDcCool()) + " \n"));
 
             DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Temp Coeff HV:      " + dataSource.Root.TransformerProperties.HvTempCoefficient + "\n"));
             //
@@ -1025,7 +1026,7 @@ namespace ReportsLayer
 
             DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("\n"));
             //Температура
-            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Total Samples:      " + dataSource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel.RessistanceNoOfSamplesCurrentState + " C\n"));
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Total Samples:      " + dataSource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel.RessistanceNoOfSamplesCurrentState + " \n"));
             //Струја со која се тестира.
             DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Sample Rate:        " + Math.Round(Convert.ToDouble(dataSource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel.RessistanceSampleRateCurrentState), 1) + " S\n"));
 
@@ -1062,7 +1063,7 @@ namespace ReportsLayer
                 TableRow ressRow = tempTable.RowGroups[0].Rows.Last<TableRow>();
 
                 //Време
-                ressRow.Cells.Add(new TableCell(new Paragraph(new Run((rm.Time - dataSource.Root.DcCoolingMeasurenments.TNullTime).TotalSeconds.ToString()))));
+                ressRow.Cells.Add(new TableCell(new Paragraph(new Run(ReportStringFormater.secondFormater((rm.Time - dataSource.Root.DcCoolingMeasurenments.TNullTime).TotalSeconds)))));
                 //R1
                 ressRow.Cells.Add(new TableCell(new Paragraph(new Run(((rm.ChannelNo == 1) ? rm.Voltage / rm.Current : double.NaN).ToString()))));
                 //Порцентуална разлика од претходното мерење на R1.
@@ -1103,14 +1104,15 @@ namespace ReportsLayer
         public void insertResistanceChn1(FlowDocument flowDocument)
         {
             Paragraph ResistanceChn1Paragraph = new Paragraph();
+            //dataSource.calculateResults();
 
             ResistanceChn1Paragraph.Inlines.Add(new Bold(new Run("R1 - Resistance at Channel 1\n")));
             //Exponential Curve
-            ResistanceChn1Paragraph.Inlines.Add(new Run("Exponential Curve f(t):    " + dataSource.retFT1() + " C\n"));
+            ResistanceChn1Paragraph.Inlines.Add(new Run("Exponential Curve f(t):    " + ReportStringFormater.temperatureFormater(dataSource.retFT1()) + " \n"));
             //R1 at time t=0
-            ResistanceChn1Paragraph.Inlines.Add(new Run("R1 at time t=0:            " + dataSource.retT1Rise() + " C\n"));
+            ResistanceChn1Paragraph.Inlines.Add(new Run("R1 at time t=0:            " + ReportStringFormater.resistanceFormater(dataSource.retT1Rise()) + " \n"));
             //Temp Rise at time t=0
-            ResistanceChn1Paragraph.Inlines.Add(new Run("Temp Rise at time t=0:     " + dataSource.retT1T0() + " C\n"));
+            ResistanceChn1Paragraph.Inlines.Add(new Run("Temp Rise at time t=0:     " + ReportStringFormater.temperatureFormater( dataSource.retT1T0()) + " \n"));
 
             flowDocument.Blocks.Add(ResistanceChn1Paragraph);
         }
@@ -1120,11 +1122,11 @@ namespace ReportsLayer
 
             ResistanceChn2Paragraph.Inlines.Add(new Bold(new Run("R2 - Resistance at Channel 1\n")));
             //Exponential Curve
-            ResistanceChn2Paragraph.Inlines.Add(new Run("Exponential Curve f(t):    " + dataSource.retFT2() + " C\n"));
+            ResistanceChn2Paragraph.Inlines.Add(new Run("Exponential Curve f(t):    " + ReportStringFormater.temperatureFormater(dataSource.retFT2()) + " \n"));
             //R1 at time t=0
-            ResistanceChn2Paragraph.Inlines.Add(new Run("R2 at time t=0:            " + dataSource.retT2Rise() + " C\n"));
+            ResistanceChn2Paragraph.Inlines.Add(new Run("R2 at time t=0:            " + ReportStringFormater.resistanceFormater(dataSource.retT2Rise()) + " \n"));
             //Temp Rise at time t=0
-            ResistanceChn2Paragraph.Inlines.Add(new Run("Temp Rise at time t=0:     " + dataSource.retT2T0() + " C\n"));
+            ResistanceChn2Paragraph.Inlines.Add(new Run("Temp Rise at time t=0:     " + ReportStringFormater.temperatureFormater(dataSource.retT2T0()) + " \n"));
 
             flowDocument.Blocks.Add(ResistanceChn2Paragraph);
         }
