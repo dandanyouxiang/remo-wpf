@@ -269,6 +269,7 @@ namespace PresentationLayer
             if (startTempMeasDcColdButton.IsChecked == false)
             {
                 ds.stopTempMeasurenments();
+                save();
             }
         }
 
@@ -297,6 +298,7 @@ namespace PresentationLayer
             acHotTimer.Stop();
             acTimeToNextSample = new TimeSpan(0, 0, datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempSampleRateCurrentState);
             AcTimeToNextSample.Text = getAcTimeToNextSampleString(acTimeToNextSample);
+            save();
         }
 
         /// <summary>
@@ -329,6 +331,7 @@ namespace PresentationLayer
             {
                 ds.stopRessistanceMeasurenments();
                 CurrentProcessState = ProcessStatesEnum.Idle;
+                save();
             }
         }
         delegate void d();
@@ -350,6 +353,7 @@ namespace PresentationLayer
             TNullButton.IsChecked = false;
             TNullButton.IsEnabled = true;
             CurrentProcessState = ProcessStatesEnum.Idle;
+            save();
         }
 
         private void ChannelsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -421,6 +425,7 @@ namespace PresentationLayer
                 //pri testiranje
                 ds.IsTempMeasStopped = true;
                 CurrentProcessState = ProcessStatesEnum.Idle;
+                save();
             }
         }
 
@@ -556,6 +561,10 @@ namespace PresentationLayer
         {
             ResssistanceCalibration r = new ResssistanceCalibration();
             r.ShowDialog();
+        }
+        private void save()
+        {
+            this.CommandBindings[2].Command.Execute(null);
         }
         
     }

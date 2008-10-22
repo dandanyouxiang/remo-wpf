@@ -94,12 +94,12 @@ namespace DataAccessLayer
                 //x <= најмалиот елемент
                 if (index == 0)
                 {
-                    y += list[0].Delta;
+                    y += y * list[0].Delta / list[0].X;
                 }
                 //x > најголемиот елемент
                 else if (index == -1)
                 {
-                    y += list[list.Count - 1].Delta;
+                    y += y * list[list.Count - 1].Delta / list[list.Count - 1].X;
                 }
                 //најмалиот елемент <= x <= најголемиот елемент
                 else

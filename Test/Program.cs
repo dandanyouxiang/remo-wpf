@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using DataAccessLayer;
+using EntityLayer;
 namespace Test
 {
     class Program
@@ -59,8 +60,10 @@ namespace Test
         }
         static void Main(string[] args)
         {
+            EntityLayer.XmlServices x = new XmlServices();
+            x.readXml("C:\\test 1.remo");
             //new Program();
-            new InterpolationCal().test();
+            //new InterpolationCal().test();
             //Console.WriteLine(new CoolingCurveCalc().calcTHot(20.2, 0.82293996, 0.985137, 234.5));
             // double r;
             //Double.TryParse("+1.67899100E-02",System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.CurrentCulture, out r);

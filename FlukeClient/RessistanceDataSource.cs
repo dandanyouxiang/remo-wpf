@@ -70,7 +70,7 @@ namespace FlukeClient
         private void measure1()
         {
             meas1End = false;
-            meas1 = new FlukeMeasurenmentClient(_ipAddress1, _port1, 2 * _numberOfSamples);
+            meas1 = new FlukeMeasurenmentClient(_ipAddress1, _port1,  _numberOfSamples);
             meas1.MeasFinished += new FlukeMeasurenmentClient.MeasFinishedEvent(meas1_MeasFinished);
             meas1.MeasEnd += new FlukeMeasurenmentClient.MeasEndEvent(meas1_MeasEnd);
             meas1.MeasError+=new FlukeMeasurenmentClient.MeasErrorEvent(meas_MeasError);
@@ -79,7 +79,7 @@ namespace FlukeClient
         private void measure2()
         {
             meas2End = false;
-            meas2 = new FlukeMeasurenmentClient(_ipAddress2, _port2, 2 * _numberOfSamples);
+            meas2 = new FlukeMeasurenmentClient(_ipAddress2, _port2,  _numberOfSamples);
             meas2.MeasFinished += new FlukeMeasurenmentClient.MeasFinishedEvent(meas2_MeasFinished);
             meas2.MeasEnd += new FlukeMeasurenmentClient.MeasEndEvent(meas2_MeasEnd);
             meas2.MeasError += new FlukeMeasurenmentClient.MeasErrorEvent(meas_MeasError);

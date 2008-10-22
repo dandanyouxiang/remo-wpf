@@ -28,7 +28,7 @@ namespace FlukeClient
         private enum NPlc { _1 = 0, _10, _100 };
 
         private const int TRIGGER_COUNT = 1;
-        private const int SAMPLE_COUNT = 2;
+        private const int SAMPLE_COUNT = 8;
 
         private TcpClient client;
         private string _ipAddress;
@@ -74,7 +74,16 @@ namespace FlukeClient
                     //Читање на податоци од input stream штом ќе станат достапни
                     //Оваа метода ќе врати по читањето на сите податоци
                     string measStr = readData(stream, TRIGGER_COUNT * SAMPLE_COUNT);
-
+                    /*sendReadErrorCommand(stream);
+                    Thread.Sleep(500);
+                    while (stream.DataAvailable)
+                    {
+                        ASCIIEncoding encoder = new ASCIIEncoding();
+                        byte[] readBuffer = new byte[4096];
+                        int bytesRead = stream.Read(readBuffer, 0, 4096);
+                        string readString = encoder.GetString(readBuffer, 0, bytesRead);
+                        Console.WriteLine("ERROR:" + readString);
+                    }*/
                     //Пресметување на средна вредност од сите читања
                     double mean = parseStringAndCalcMean(measStr);
 
@@ -115,7 +124,6 @@ namespace FlukeClient
             setTriggerDelay(stream);
             setTriggerSource(stream, TriggerSource.EXTERNAL);
             IsStop = false;
-            //System.Threading.Thread.Sleep(100);
         }
         private double parseStringAndCalcMean(string measStr)
         {
@@ -255,6 +263,13 @@ namespace FlukeClient
         {
             ASCIIEncoding encoder = new ASCIIEncoding();
             byte[] buffer = encoder.GetBytes("READ?\n");
+            clientStream.Write(buffer, 0, buffer.Length);
+        }
+        //Read Error Queue command
+        private void sendReadErrorCommand(NetworkStream clientStream)
+        {
+            ASCIIEncoding encoder = new ASCIIEncoding();
+            byte[] buffer = encoder.GetBytes("SYST:ERR?\n");
             clientStream.Write(buffer, 0, buffer.Length);
         }
         #endregion

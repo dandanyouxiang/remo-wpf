@@ -111,14 +111,6 @@ namespace PresentationLayer
                 WPFGraphDataPoint point = new DNBSoft.WPF.WPFGraph.WPFGraphDataPoint();
                 point.X = (double)t.Time.Ticks;
                 point.Y = meanOilTemp;
-                if (point.Y > maxY)
-                    maxY = point.Y;
-                if (point.Y < minY)
-                    minY = point.Y;
-                if (point.X > maxX)
-                    maxX = point.X + 0.1;
-                if (point.X < minX)
-                    minX = point.X - 0.1;
                 seriesOilTemp.Points.Add(point);
             }
 
@@ -132,14 +124,6 @@ namespace PresentationLayer
                 WPFGraphDataPoint point = new DNBSoft.WPF.WPFGraph.WPFGraphDataPoint();
                 point.X = (double)t.Time.Ticks;
                 point.Y = meanOilTemp;
-                if (point.Y > maxY)
-                    maxY = point.Y;
-                if (point.Y < minY)
-                    minY = point.Y;
-                if (point.X > maxX)
-                    maxX = point.X + 0.1;
-                if (point.X < minX) 
-                    minX = point.X - 0.1;
                 seriesAmbTemp.Points.Add(point);
             }
 
@@ -166,7 +150,6 @@ namespace PresentationLayer
             AcGraph.MinXRange = minX;
             AcGraph.IntervalYRange = (maxY - minY) / 20;
             AcGraph.IntervalXRange = (AcGraph.MaxXRange - AcGraph.MinXRange) / 10;
-
             AcGraph.Refresh();
             Console.WriteLine("End");
         }
@@ -209,7 +192,6 @@ namespace PresentationLayer
             T2Graph.MinXRange = 0;
             T2Graph.IntervalYRange = (T2Graph.MaxYRange - T2Graph.MinYRange) / 10;
             T2Graph.IntervalXRange = (T2Graph.MaxXRange - T2Graph.MinXRange) / 10;
-
             T1Graph.Refresh();
             T2Graph.Refresh();
         }

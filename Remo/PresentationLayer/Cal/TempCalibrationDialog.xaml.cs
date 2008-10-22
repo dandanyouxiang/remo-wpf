@@ -25,6 +25,7 @@ namespace PresentationLayer
         private EntityLayer.TempCalMeasurenment _tempCalMeasurenment;
         public EntityLayer.TempCalMeasurenment TempCalMeasurenment { get { return _tempCalMeasurenment; } }
 
+        private bool IS_TEST = Convert.ToBoolean(System.Configuration.ConfigurationSettings.AppSettings["IS_TEST"]);
         private EntityLayer.TempMeasurenementConfiguration _tempMeasurenementConfiguration;
 
         private DataSourceServices dataSourceServices;
@@ -35,7 +36,7 @@ namespace PresentationLayer
             _tempMeasurenementConfiguration.TempMeasurenments = new EntityLayer.ListWithChangeEvents<EntityLayer.TempMeasurenment>();
 
             dataSourceServices = new DataSourceServices();
-            dataSourceServices.start_TempMeasurenment(_tempMeasurenementConfiguration, true, false);
+            dataSourceServices.start_TempMeasurenment(_tempMeasurenementConfiguration, IS_TEST, false);
             dataSourceServices.TempMeasurenmentFinished+=new DataSourceServices.TempMeasurenmentFinishedEvent(dataSourceServices_TempMeasurenmentFinished);
             
             T1Meas.DataContext = this;
@@ -65,7 +66,7 @@ namespace PresentationLayer
             T4Meas.DataContext = t;
             _tempMeasurenementConfiguration.TempSampleRateCurrentState = 1;
             _tempMeasurenementConfiguration.TempNoOfSamplesCurrentState = 2;
-            dataSourceServices.start_TempMeasurenment(_tempMeasurenementConfiguration, true, false);    
+            dataSourceServices.start_TempMeasurenment(_tempMeasurenementConfiguration, IS_TEST, false);    
         }
 
         private void okButton_Click(object sender, RoutedEventArgs e)

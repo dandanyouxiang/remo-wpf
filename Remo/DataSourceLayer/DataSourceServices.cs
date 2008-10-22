@@ -119,7 +119,7 @@ namespace DataSourceLayer
         public void start_RessistanceMeasurenment(EntityLayer.RessistanceTransformerChannel ressistanceTransformerChannel, bool isTest, bool isColdMeas)
         {
             _sampleRate = ressistanceTransformerChannel.RessistanceSampleRateCurrentState;
-            _numberOfSamples = 2 * ressistanceTransformerChannel.RessistanceNoOfSamplesCurrentState;
+            _numberOfSamples =  2 * ressistanceTransformerChannel.RessistanceNoOfSamplesCurrentState;
             _current = ressistanceTransformerChannel.TestCurrent;
             _ressistanceTransformerChannel = ressistanceTransformerChannel;
             this.isTest = isTest;
@@ -156,8 +156,8 @@ namespace DataSourceLayer
         }
         public void rsd_MeasurenmentDone(double voltage, double current, int measNumber)
         {
-            if (!isFirstMeasurenment)
-            {
+            //if (!isFirstMeasurenment)
+            //{
                 double ressMeasured = voltage / (current * CURRENT_ODNOS);
                 double ressCorrected = intCal.interpolateRessistance(ressMeasured);
                 lock (_ressistanceTransformerChannel.RessistanceMeasurenments)
@@ -174,8 +174,8 @@ namespace DataSourceLayer
                     channelNo = 2;
                 else
                     channelNo = 1;
-            }
-            isFirstMeasurenment = !isFirstMeasurenment;
+            //}
+            //isFirstMeasurenment = !isFirstMeasurenment;
         }
        
 
