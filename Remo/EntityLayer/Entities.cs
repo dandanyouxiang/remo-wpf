@@ -52,9 +52,6 @@ namespace EntityLayer
                 {
                     XmlSerializer xmlFormat = new XmlSerializer(typeof(Root), types);
                     root = (Root)xmlFormat.Deserialize(fStream);
-                    root.DcColdMeasurenments.RessistanceTransformerChannels.RemoveAt(0);
-                    root.DcColdMeasurenments.RessistanceTransformerChannels.RemoveAt(0);
-                    root.DcColdMeasurenments.RessistanceTransformerChannels.RemoveAt(0);
                 }
                 return root;
             }

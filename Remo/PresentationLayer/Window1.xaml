@@ -533,7 +533,7 @@
                                             <Label Margin="5 0" Name="R2AtAOTLabel">R at AOT</Label>
                                             <TextBox Margin="10 0" Name="R2AtAOTTextBox" Text="{Binding Path=R2AtAOT,Converter={StaticResource OhmConvertor}}" IsReadOnly="True"/>
                                             <Label Margin="5 0" Name="FT2Label">f(t)</Label>
-                                            <TextBox Margin="10 0" Name="FT2TextBox" Text="{Binding Path=F_T2}" IsReadOnly="True" />
+                                            <TextBox Margin="10 0"  Name="FT2TextBox" Text="{Binding Path=F_T2}" IsReadOnly="True" Height="50"  />
                                         </StackPanel>
                                     </GroupBox>
                                     <Label Height="28" Margin="327.24,64.539,409.05,0" Name="T1Label" VerticalAlignment="Top">T1</Label>
