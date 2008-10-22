@@ -85,7 +85,7 @@ namespace DataAccessLayer
         /// <returns></returns>
         public double retR1ColdAtDcCool()
         {
-            return evalR1ColdAtDcCool();
+            return R1ColdAtDcCool;
         }
         /// <summary>
         /// R2 Cold Resistance
@@ -93,7 +93,7 @@ namespace DataAccessLayer
         /// <returns></returns>
         public double retR2ColdAtDcCool()
         {
-            return evalR2ColdAtDcCool();
+            return R2ColdAtDcCool;
         }
         /// <summary>
         /// R1 at time t=0.
@@ -118,6 +118,38 @@ namespace DataAccessLayer
         public string retFT1()
         {
             return F_T1;
+        }
+        /// <summary>
+        /// AOT1
+        /// </summary>
+        /// <returns></returns>
+        public double retAOT1()
+        {
+            return AOT1;
+        }
+        /// <summary>
+        /// R1 at AOT
+        /// </summary>
+        /// <returns></returns>
+        public double retR1AtAOT()
+        {
+            return R1AtAOT;
+        }
+        /// <summary>
+        /// AOT2
+        /// </summary>
+        /// <returns></returns>
+        public double retAOT2()
+        {
+            return AOT2;
+        }
+        /// <summary>
+        /// R2 at AOT
+        /// </summary>
+        /// <returns></returns>
+        public double retR2AtAOT()
+        {
+            return R2AtAOT;
         }
         /// <summary>
         /// R2 at time t=0.

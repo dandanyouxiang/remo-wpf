@@ -211,10 +211,6 @@
                                         </StackPanel>
                                     </GroupBox>
                                     <ListView Margin="54,0,375.957,42.723" Name="DCColdTemperatureTable" SourceUpdated="DCColdTemperatureTable_SourceUpdated" HorizontalContentAlignment="Stretch" VerticalAlignment="Bottom" Height="300" >
-                                        <ListView.Resources>
-                                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Yellow" />
-                                        </ListView.Resources>
-
                                         <ListView.ItemContainerStyle>
                                             <Style TargetType="{x:Type ListViewItem}"  >
                                                 <Setter Property="Height" Value="24" />
@@ -226,8 +222,8 @@
                                                         <Setter Property="Background">
                                                             <Setter.Value>
                                                                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                                                    <GradientStop Color="LightBlue" Offset="0.986"/>
-                                                                    <GradientStop Color="AliceBlue"  Offset="0.5"/>
+                                                                    <GradientStop Color="LightGray" Offset="0.986"/>
+                                                                    <GradientStop Color="WhiteSmoke"  Offset="0.5"/>
                                                                 </LinearGradientBrush>
                                                             </Setter.Value>
                                                         </Setter>

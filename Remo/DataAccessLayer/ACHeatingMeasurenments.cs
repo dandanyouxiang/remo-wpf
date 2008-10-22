@@ -162,10 +162,10 @@ namespace DataAccessLayer
 
             return Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempSampleRateCurrentState % 60;
         }
-        //Todo 
+        //mislam deka e vo red
         private int evalSamplesDone() 
         {
-            return -1;
+            return Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Count;
         }
 
         #endregion

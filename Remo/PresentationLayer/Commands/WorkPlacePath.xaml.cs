@@ -36,7 +36,7 @@ namespace PresentationLayer
             // Process open file dialog box results
             if (System.Windows.Forms.DialogResult.OK == fd.ShowDialog())
             {
-                //Todo da se napravi da se odeluva samo patekata.
+                //da se napravi da se odeluva samo patekata.
                 WorkPlaceTextBox.Text = fd.SelectedPath; 
             }
         }

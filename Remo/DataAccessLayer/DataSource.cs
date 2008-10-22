@@ -141,6 +141,7 @@ namespace DataAccessLayer
                 {
                     case FileCommand.New:
                         Root = new EntityLayer.Root();
+                        serv.writeToXml(path, Root);
                         break;
                     case FileCommand.Open:
                         Root = serv.readXml(path); 
