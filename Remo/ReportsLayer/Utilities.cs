@@ -71,5 +71,21 @@ namespace ReportsLayer
                 return String.Format("{0:0.0 s}", value);
             }
         }
+        /// <summary>
+        /// Статичка метода за форматирање на проценти.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string percentFormater(object value)
+        {
+            if (value.ToString() == "NaN")
+            {
+                return "---";
+            }
+            else
+            {
+                return String.Format("{0:0.000 %}", value);
+            }
+        }
     }
 }

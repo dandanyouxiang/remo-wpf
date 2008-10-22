@@ -207,6 +207,7 @@
     <Compile Include="ReportsLayer\GenerateReports.xaml.cs">
       <DependentUpon>GenerateReports.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ReportsLayer\Utilities.cs" />
     <Compile Include="ReportsLayer\XMLElement.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

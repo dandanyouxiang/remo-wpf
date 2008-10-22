@@ -190,7 +190,7 @@ namespace PresentationLayer
             datasource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel.RessistanceMeasurenments.PropertyChanged += new PropertyChangedEventHandler(DcCoolingRessistanceMeasurenments_PropertyChanged);
             datasource.PropertyChanged += new PropertyChangedEventHandler(datasource_PropertyChanged);
 
-            datasource.SelectedChannel = 1;
+            datasource.SelectedChannel = 0;
             DCColdRessistanceTable.ItemsSource = datasource.DCColdRessistanceTable(datasource.SelectedChannel);
             DCColdRessistanceTable.DataContext = datasource;
 

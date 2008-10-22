@@ -189,7 +189,7 @@ namespace DataAccessLayer
             private double r2AtT0;
             private double t2AtT0;
             private double t2Rise;
-            private string ff2;
+            private string ft2;
             private double aot2;
             private double r2AtAOT;
 
@@ -320,12 +320,12 @@ namespace DataAccessLayer
             }
             public string F_T2
             {
-                get { return ff2; }
+                get { return ft2; }
                 set
                 {
-                    if (ff2 != value)
+                    if (ft2 != value)
                     {
-                        ff2 = value;
+                        ft2 = value;
                         OnPropertyChanged(new PropertyChangedEventArgs("F_T2"));
                     }
                 }
@@ -388,7 +388,51 @@ namespace DataAccessLayer
                 R2AtT0 = c2.RAOT;
                 TempMeasurenments2 = c2.TempMeasurenments;
             }
+        //todo da se vidi dali kje ostane bidejki ke rabotam so privatni elementi
+            public void evalResults()
+            {
+                //Channel 1
+                List<MeasurenmentEntity> ressMeasurenments1 = new List<MeasurenmentEntity>();
+                DateTime tNullTime = Root.DcCoolingMeasurenments.TNullTime;
+                foreach (EntityLayer.RessistanceMeasurenment m in Root.DcCoolingMeasurenments.RessistanceTransformerChannel.RessistanceMeasurenments)
+                    if (m.ChannelNo == 1)
+                        ressMeasurenments1.Add(new MeasurenmentEntity((m.Time - tNullTime).TotalSeconds, m.Voltage / m.Current));
+                CoolingCurveCalc c1 = new CoolingCurveCalc();
+                c1.TCold = TCold;
+                c1.RCold = R1ColdAtDcCool;
+                c1.TempCoeff = this.Root.TransformerProperties.HvTempCoefficient;
+                c1.RessMeasurenments = ressMeasurenments1;
+                c1.calculate();
 
+                ft1 = c1.Func;
+                t1AtT0 = c1.TAtT0;
+                t1Rise = c1.TAtT0 - c1.TCold;
+                r1AtAOT = c1.RAtT0;
+                aot1 = c1.AOT;
+                r1AtAOT = c1.RAOT;
+                TempMeasurenments1 = c1.TempMeasurenments;
+
+                //Channel 2
+                List<MeasurenmentEntity> ressMeasurenments2 = new List<MeasurenmentEntity>();
+                foreach (EntityLayer.RessistanceMeasurenment m in Root.DcCoolingMeasurenments.RessistanceTransformerChannel.RessistanceMeasurenments)
+                    if (m.ChannelNo == 2)
+                        ressMeasurenments2.Add(new MeasurenmentEntity((m.Time - tNullTime).TotalSeconds, m.Voltage / m.Current));
+                CoolingCurveCalc c2 = new CoolingCurveCalc();
+                c2.TCold = TCold;
+                c2.RCold = R2ColdAtDcCool;
+                c2.TempCoeff = this.Root.TransformerProperties.LvTempCoefficient;
+                c2.RessMeasurenments = ressMeasurenments2;
+
+                c2.calculate();
+
+                ft2 = c2.Func;
+                t2AtT0 = c2.TAtT0;
+                t2AtT0 = c2.TAtT0 - c2.TCold;
+                r2AtAOT = c2.RAtT0;
+                aot2 = c2.AOT;
+                r2AtAOT = c2.RAOT;
+                TempMeasurenments2 = c2.TempMeasurenments;
+            }
         #endregion
         #endregion
     }
