@@ -481,35 +481,33 @@ namespace ReportsLayer
             acGraphInit(ref ACHotGraph, ref seriesOilTemp, ref seriesAmbTemp, ref seriesTempRise);
             acGraphRefresh(ref ACHotGraph, ref seriesOilTemp, ref seriesAmbTemp, ref seriesTempRise);
             */
-            stackPanel.Width = 700;
+            stackPanel.Width = 900;
             stackPanel.Children.Add(ACHotGraph);
 
             myInlineUIContainer.Child = stackPanel;
             graphParagraph.Inlines.Add(myInlineUIContainer);
 
             flowDocument.Blocks.Add(graphParagraph);
+            flowDocument.Blocks.Last().FontSize = 10;
 
 
         }
 
+     
         private void copyGraph(ref WPFScatterGraph newGraph, WPFScatterGraph oldGraph) 
         {
             newGraph = new WPFScatterGraph();
-            newGraph.InitializeComponent();
+
             newGraph.Margin = oldGraph.Margin;
             newGraph.XAxisType = oldGraph.XAxisType;
             newGraph.XAxisTitle = oldGraph.XAxisTitle;
             newGraph.YAxisTitle = oldGraph.YAxisTitle;
-
-            
-            newGraph.MaxYRange = oldGraph.MaxYRange;
-            newGraph.MinYRange = oldGraph.MinYRange;
-
-            newGraph.MinXRange = oldGraph.MinXRange;
-            newGraph.MaxXRange = oldGraph.MaxXRange;
-
+            newGraph.MinYRange = oldGraph.MinXRange;
+            newGraph.MaxYRange = oldGraph.MinYRange;
             newGraph.IntervalYRange = oldGraph.IntervalYRange;
-            newGraph.IntervalXRange = oldGraph.IntervalXRange;
+            newGraph.FontSize = 8;
+            //newGraph.AxisFontSize = 8;
+            newGraph.Margin = new Thickness(0);
 
             WPFGraphSeries seriesOilTemp = new WPFGraphSeries();
             WPFGraphSeries seriesAmbTemp = new WPFGraphSeries();
@@ -525,9 +523,11 @@ namespace ReportsLayer
                 newGraph.Series.Add(seriesAmbTemp);
                 newGraph.Series.Add(seriesTempRise);
             }
+            newGraph.InitializeComponent();
             newGraph.Refresh();
         }
 
+     
         private FlowDocument makeAcHotMeasurenmentsDocument(FlowDocument flowDocument)
         {
             flowDocument.Blocks.Clear();
@@ -629,7 +629,7 @@ namespace ReportsLayer
             acGraphInit(ref ACHotGraph,ref seriesOilTemp,ref seriesAmbTemp,ref seriesTempRise);
             acGraphRefresh(ref ACHotGraph, ref seriesOilTemp, ref seriesAmbTemp, ref seriesTempRise);
             */
-            stackPanel.Width = 900;
+            stackPanel.Width = 700;
             //stackPanel.Height = 500;
             stackPanel.Children.Add(ACHotGraph);
 
