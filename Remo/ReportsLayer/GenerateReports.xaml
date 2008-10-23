@@ -23,7 +23,7 @@
             <Button HorizontalAlignment="Left" Margin="194,20.964,0,0" Name="button1" Width="75" VerticalAlignment="Top" Height="27.313" Click="button1_Click">Print</Button>
         </Grid>
         <FlowDocumentScrollViewer Name="flowDocumentScrollViewer"  Grid.Row="1" BorderThickness="5" BorderBrush="Gray">
-            <FlowDocument Name="flowExample">
+            <FlowDocument Name="flowExample" >
                 <Paragraph>Text.</Paragraph>
             </FlowDocument>
         </FlowDocumentScrollViewer>
