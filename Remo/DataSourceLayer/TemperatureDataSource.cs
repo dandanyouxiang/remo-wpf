@@ -77,30 +77,35 @@ namespace DataSourceLayer
            }
             numberOfTempsRead++;
             //Измерени се сите 4 канали
-            if (numberOfTempsRead == 4)
+            if (numberOfTempsRead == 4 )
             {
-                OnMeasurenmentDone(t1, t2, t3, t4);
-                DateTime now = DateTime.Now;
-                TimeSpan elapsed = now - time;
-                if (elapsed.TotalSeconds <= sampleRate)
-                    System.Threading.Thread.Sleep((int)(sampleRate - elapsed.TotalSeconds) * 1000);
-                time = DateTime.Now;
-                numberOfTempsRead = 0;
-                samplesMeasured++;
-
-                //Крај на мерењата
-                if (samplesMeasured == numberOfSamples)
+                if ((t1 != 0) && (t2 != 0) && (t3 != 0) && (t4 != 0))
                 {
-                    OnMesurenmentEnd();
-                    pm.stop();
+                    OnMeasurenmentDone(t1, t2, t3, t4);
+                    DateTime now = DateTime.Now;
+                    TimeSpan elapsed = now - time;
+                    if (elapsed.TotalSeconds <= sampleRate)
+                        System.Threading.Thread.Sleep((int)(sampleRate - elapsed.TotalSeconds) * 1000);
+                    time = DateTime.Now;
+                    numberOfTempsRead = 0;
+                    samplesMeasured++;
+
+                    //Крај на мерењата
+                    if (samplesMeasured == numberOfSamples)
+                    {
+                        OnMesurenmentEnd();
+                        pm.stop();
+                    }
+                    else
+                    {
+                        pm.addPlcTask(temp1);
+                        pm.addPlcTask(temp2);
+                        pm.addPlcTask(temp3);
+                        pm.addPlcTask(temp4);
+                    }
                 }
                 else
-                {
-                    pm.addPlcTask(temp1);
-                    pm.addPlcTask(temp2);
-                    pm.addPlcTask(temp3);
-                    pm.addPlcTask(temp4);
-                }
+                    numberOfTempsRead = 0;
             }
         }
         /// <summary>

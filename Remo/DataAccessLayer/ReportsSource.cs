@@ -99,7 +99,7 @@ namespace DataAccessLayer
         /// R1 at time t=0.
         /// </summary>
         /// <returns></returns>
-        public double retT1T0()
+        public double retR1T0()
         {
             return R1AtT0;
         }
@@ -155,9 +155,9 @@ namespace DataAccessLayer
         /// R2 at time t=0.
         /// </summary>
         /// <returns></returns>
-        public double retT2T0()
+        public double retR2T0()
         {
-            return T2AtT0;
+            return R2AtT0;
         }
         /// <summary>
         /// Temp Rise at time t=0.

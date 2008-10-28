@@ -14,9 +14,12 @@ namespace DataAccessLayer
             private int _selectedChannelDcCool;
             private double _r1ColdAtDcCool;
             private double _r2ColdAtDcCool;
-            private double EndAcTmp = double.NaN;
-            private double KDropInOl = double.NaN;
-
+            private double _endAcTemp = double.NaN;
+            private double _kDropInOil = double.NaN;
+            private double _tColdAtDcCooling = double.NaN;
+            private int _noOfSamplesDcCooling = 1;
+            private int _sampleRateDcCooling = 6;
+            private double _testCurrentDcCooling = 1;
         #endregion
         #region Public Members
 
@@ -33,6 +36,42 @@ namespace DataAccessLayer
                         _selectedChannelDcCool = value;
                         R1ColdAtDcCool = evalR1Cold(_selectedChannelDcCool);
                         R2ColdAtDcCool = evalR2Cold(_selectedChannelDcCool);
+                    }
+                }
+            }
+            public double TestCurrentDcCooling
+            {
+                get { return _testCurrentDcCooling; }
+                set
+                {
+                    if (_testCurrentDcCooling != value)
+                    {
+                        _testCurrentDcCooling = value;
+                        OnPropertyChanged(new PropertyChangedEventArgs("TestCurrentDcCooling"));
+                    }
+                }
+            }
+            public int NoOfSamplesDcCooling
+            {
+                get { return _noOfSamplesDcCooling; }
+                set
+                {
+                    if (_noOfSamplesDcCooling != value)
+                    {
+                        _noOfSamplesDcCooling = value;
+                        OnPropertyChanged(new PropertyChangedEventArgs("NoOfSamplesDcCooling"));
+                    }
+                }
+            }
+            public int SampleRateDcCooling
+            {
+                get { return _sampleRateDcCooling; }
+                set
+                {
+                    if (_sampleRateDcCooling != value)
+                    {
+                        _sampleRateDcCooling = value;
+                        OnPropertyChanged(new PropertyChangedEventArgs("SampleRateDcCooling"));
                     }
                 }
             }
@@ -60,32 +99,45 @@ namespace DataAccessLayer
                     }
                 }
             }
+            public double TColdAtDcCooling
+            {
+                get { return _tColdAtDcCooling; }
+                set
+                {
+                    if (_tColdAtDcCooling != value)
+                    {
+                        _tColdAtDcCooling = value;
+                        OnPropertyChanged(new PropertyChangedEventArgs("TColdAtDcCooling"));
+                    }
+                }
+            }
             public double EndAcTemp 
             {
-                get { return EndAcTmp; }
+                get { return _endAcTemp; }
                 set 
                 {
-                    if (EndAcTmp != value) 
+                    if (_endAcTemp != value) 
                     {
-                        EndAcTmp = value;
+                        _endAcTemp = value;
                         OnPropertyChanged(new PropertyChangedEventArgs("EndAcTemp"));
                     }
                 }
             }
             public double KDropInOil
             {
-                get{return KDropInOl;}
+                get{return _kDropInOil;}
                 set
                 {
-                    if(KDropInOl!=value) 
+                    if(_kDropInOil!=value) 
                     {
-                        KDropInOl=value;
+                        _kDropInOil=value;
                         OnPropertyChanged(new PropertyChangedEventArgs("KDropInOil"));
                     }
                 }
             }
         #endregion
             #region Functions
+            //Todo da se trgne
             public IEnumerable DCCoolingTable()
             {
                 EntityLayer.ListWithChangeEvents<EntityLayer.RessistanceMeasurenment> meas = Root.DcCoolingMeasurenments.RessistanceTransformerChannel.RessistanceMeasurenments;
@@ -109,7 +161,7 @@ namespace DataAccessLayer
                                        };
                 return DCValues;
             }
-            private double evalKDropInOil() 
+            public double evalKDropInOil() 
             {
                 EntityLayer.TempMeasurenementConfiguration tempch = Root.AcHotMeasurenments.TempMeasurenementConfiguration;
                 EntityLayer.TempMeasurenment reducedTempMeasurenment = Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Find(Utils.isReduced);
@@ -146,7 +198,7 @@ namespace DataAccessLayer
                     return Double.NaN;
                 }
             }
-            private double evalEndAcTemp() 
+            public double evalEndAcTemp() 
             {
                 int n = Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Count;
                 if (n > 0)
@@ -165,33 +217,32 @@ namespace DataAccessLayer
                 }
                 return Double.NaN;
             }
-            public double evalR1ColdAtDcCool() 
+
+            public double evalTColdAtDcCooling()
             {
-                return -1;
+                return TCold;
             }
-            public double evalR2ColdAtDcCool()
-            {
-                return -1;
-            }
+
             #endregion
         #endregion
         #region Results
 
         #region Private Members
 
-            private double r1AtT0;
-            private double t1AtT0;
-            private double t1Rise;
+            private double r1AtT0 = double.NaN;
+            private double t1AtT0 = double.NaN;
+            private double t1Rise = double.NaN;
             private string ft1;
-            private double aot1;
-            private double r1AtAOT;
+            private double aot1 = double.NaN;
+            private double r1AtAOT = double.NaN;
 
-            private double r2AtT0;
-            private double t2AtT0;
-            private double t2Rise;
+            private double r2AtT0 = double.NaN;
+            private double t2AtT0 = double.NaN;
+            private double t2Rise = double.NaN;
             private string ft2;
-            private double aot2;
-            private double r2AtAOT;
+            private double aot2 = double.NaN;
+            private double r2AtAOT = double.NaN;
+            private bool? isTempMeasured = null;
 
         #endregion
 
@@ -342,6 +393,25 @@ namespace DataAccessLayer
                     }
                 }
             }
+
+            public bool? IsTempMeasured
+            {
+                get { return isTempMeasured; }
+                set
+                {
+                    if (isTempMeasured != value)
+                    {
+                        isTempMeasured = value;
+                        if (isTempMeasured == true)
+                        {
+                            TColdAtDcCooling = evalTColdAtDcCooling();
+                            EndAcTemp = evalEndAcTemp();
+                            KDropInOil = evalKDropInOil();
+                        }
+                        OnPropertyChanged(new PropertyChangedEventArgs("IsTempMeasured"));
+                    }
+                }
+            }
             public List<MeasurenmentEntity> TempMeasurenments2 { get; private set; }
         #endregion
         #region Functions
@@ -354,17 +424,19 @@ namespace DataAccessLayer
                     if (m.ChannelNo == 1)
                         ressMeasurenments1.Add(new MeasurenmentEntity((m.Time - tNullTime).TotalSeconds, m.Voltage / m.Current));
                 CoolingCurveCalc c1 = new CoolingCurveCalc();
-                c1.TCold = TCold;
-                c1.RCold = R1ColdAtDcCool;
+                c1.TCold = Root.DcCoolingMeasurenments.TCold.Value;
+                c1.RCold = Root.DcCoolingMeasurenments.R1Cold.Value;
                 c1.TempCoeff = this.Root.TransformerProperties.HvTempCoefficient;
                 c1.RessMeasurenments = ressMeasurenments1;
+                
                 c1.calculate();
+                
                 F_T1 = c1.Func;
                 T1AtT0 = c1.TAtT0;
                 T1_Rise = c1.TAtT0 - c1.TCold;
                 R1AtT0 = c1.RAtT0;
                 AOT1 = c1.AOT;
-                R1AtT0 = c1.RAOT;
+                R1AtAOT = c1.RAOT;
                 TempMeasurenments1 = c1.TempMeasurenments;
 
                 //Channel 2
@@ -385,52 +457,7 @@ namespace DataAccessLayer
                 T2_Rise = c2.TAtT0 - c2.TCold;
                 R2AtT0 = c2.RAtT0;
                 AOT2 = c2.AOT;
-                R2AtT0 = c2.RAOT;
-                TempMeasurenments2 = c2.TempMeasurenments;
-            }
-        //todo da se vidi dali kje ostane bidejki ke rabotam so privatni elementi
-            public void evalResults()
-            {
-                //Channel 1
-                List<MeasurenmentEntity> ressMeasurenments1 = new List<MeasurenmentEntity>();
-                DateTime tNullTime = Root.DcCoolingMeasurenments.TNullTime;
-                foreach (EntityLayer.RessistanceMeasurenment m in Root.DcCoolingMeasurenments.RessistanceTransformerChannel.RessistanceMeasurenments)
-                    if (m.ChannelNo == 1)
-                        ressMeasurenments1.Add(new MeasurenmentEntity((m.Time - tNullTime).TotalSeconds, m.Voltage / m.Current));
-                CoolingCurveCalc c1 = new CoolingCurveCalc();
-                c1.TCold = TCold;
-                c1.RCold = R1ColdAtDcCool;
-                c1.TempCoeff = this.Root.TransformerProperties.HvTempCoefficient;
-                c1.RessMeasurenments = ressMeasurenments1;
-                c1.calculate();
-
-                ft1 = c1.Func;
-                t1AtT0 = c1.TAtT0;
-                t1Rise = c1.TAtT0 - c1.TCold;
-                r1AtAOT = c1.RAtT0;
-                aot1 = c1.AOT;
-                r1AtAOT = c1.RAOT;
-                TempMeasurenments1 = c1.TempMeasurenments;
-
-                //Channel 2
-                List<MeasurenmentEntity> ressMeasurenments2 = new List<MeasurenmentEntity>();
-                foreach (EntityLayer.RessistanceMeasurenment m in Root.DcCoolingMeasurenments.RessistanceTransformerChannel.RessistanceMeasurenments)
-                    if (m.ChannelNo == 2)
-                        ressMeasurenments2.Add(new MeasurenmentEntity((m.Time - tNullTime).TotalSeconds, m.Voltage / m.Current));
-                CoolingCurveCalc c2 = new CoolingCurveCalc();
-                c2.TCold = TCold;
-                c2.RCold = R2ColdAtDcCool;
-                c2.TempCoeff = this.Root.TransformerProperties.LvTempCoefficient;
-                c2.RessMeasurenments = ressMeasurenments2;
-
-                c2.calculate();
-
-                ft2 = c2.Func;
-                t2AtT0 = c2.TAtT0;
-                t2AtT0 = c2.TAtT0 - c2.TCold;
-                r2AtAOT = c2.RAtT0;
-                aot2 = c2.AOT;
-                r2AtAOT = c2.RAOT;
+                R2AtAOT = c2.RAOT;
                 TempMeasurenments2 = c2.TempMeasurenments;
             }
         #endregion

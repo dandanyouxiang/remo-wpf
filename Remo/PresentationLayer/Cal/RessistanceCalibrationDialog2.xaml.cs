@@ -25,7 +25,9 @@ namespace PresentationLayer
         public EntityLayer.RessistanceCalMeasurenment RessistanceCalMeasurenment { get; set; }
         private bool IS_TEST = Convert.ToBoolean(System.Configuration.ConfigurationSettings.AppSettings["IS_TEST"]);
         DataSourceLayer.DataSourceServices s;
-        EntityLayer.RessistanceTransformerChannel ch;
+        EntityLayer.RessistanceTransformerChannel ressistanceTransformerChannel;
+        private List<double> ressistances;
+
         public RessistanceCalibrationDialog2(EntityLayer.RessistanceCalMeasurenment ressistanceCalMeasurenment)
         {
             InitializeComponent();
@@ -33,39 +35,34 @@ namespace PresentationLayer
             RessistanceCalMeasurenment = ressistanceCalMeasurenment;
 
             s = new DataSourceLayer.DataSourceServices();
-            ch = new EntityLayer.RessistanceTransformerChannel();
-            ch.TestCurrent = ressistanceCalMeasurenment.Current;
-            ch.RessistanceNoOfSamplesCurrentState = 4;
-            ch.RessistanceMeasurenments = new EntityLayer.ListWithChangeEvents<EntityLayer.RessistanceMeasurenment>();
+            ressistanceTransformerChannel = new EntityLayer.RessistanceTransformerChannel();
+            ressistances = new List<double>();
+            ressistanceTransformerChannel.TestCurrent = ressistanceCalMeasurenment.Current;
+            ressistanceTransformerChannel.SampleRate = 5;
+            ressistanceTransformerChannel.NoOfSamples = 4;
+            s.RessistanceMeasurenmentDone += new DataSourceLayer.DataSourceServices.RessistanceMeasurenmentDoneEvent(s_RessistanceMeasurenmentDone);
             s.RessistanceMeasurenmentFinished += new DataSourceLayer.DataSourceServices.RessistanceMeasurenmentFinishedEvent(s_RessistanceMeasurenmentFinished);
+            //Стартувај го мерењето на отпор
+            s.start_RessistanceMeasurenment(ressistanceTransformerChannel, IS_TEST, false);
         }
-        
+        private void s_RessistanceMeasurenmentFinished()
+        {
+            double rMeas = 0;
+            foreach (double meas in ressistances)
+                rMeas += meas;
+            rMeas /= ressistances.Count;
+            RessistanceCalMeasurenment.RMeas = rMeas;
+            this.DialogResult = true;
+        }
         private void cancelButton_Click(object sender, RoutedEventArgs e)
         {
             s.stopRessistanceMeasurenments();
             this.DialogResult = false;
         }
-        public void s_RessistanceMeasurenmentFinished()
+        public void s_RessistanceMeasurenmentDone(int channelNo, double correctedRess, double realRess)
         {
-            double rMeas = 0;
-            double n = 0;
-            foreach (EntityLayer.RessistanceMeasurenment meas in ch.RessistanceMeasurenments)
-            {
-                if (meas.ChannelNo == 1)
-                {
-                    rMeas += meas.Voltage / meas.Current;
-                    n++;
-                }
-            }
-            rMeas /= n;
-            RessistanceCalMeasurenment.RMeas = rMeas;
-            this.DialogResult = true;
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            //Започни го мерењто на отпор
-            s.start_RessistanceMeasurenment(ch, IS_TEST, false);
+            if (channelNo == 1)
+                ressistances.Add(realRess);
         }
 
     }

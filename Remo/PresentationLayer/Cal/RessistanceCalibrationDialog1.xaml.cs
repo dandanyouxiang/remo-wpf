@@ -35,10 +35,10 @@ namespace PresentationLayer
             list = new List<StdRessistorCurrent>();
             list.Add(new StdRessistorCurrent { Current = 0.3, RStd = 100.0 });
             list.Add(new StdRessistorCurrent { Current = 0.3, RStd = 10.0 });
-            list.Add(new StdRessistorCurrent { Current = 0.5, RStd = 1.0 });
-            list.Add(new StdRessistorCurrent { Current = 1.0, RStd = 0.1 });
-            list.Add(new StdRessistorCurrent { Current = 2.0, RStd = 0.01 });
-            list.Add(new StdRessistorCurrent { Current = 10.0, RStd = 0.001 });
+            list.Add(new StdRessistorCurrent { Current = 0.8, RStd = 1.0 });
+            list.Add(new StdRessistorCurrent { Current = 2.0, RStd = 0.1 });
+            list.Add(new StdRessistorCurrent { Current = 8.0, RStd = 0.01 });
+            list.Add(new StdRessistorCurrent { Current = 15.0, RStd = 0.001 });
 
             StdRessistorsCurrentList.ItemsSource = list;
         }

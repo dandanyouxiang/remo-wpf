@@ -29,6 +29,7 @@ namespace PresentationLayer
         DNBSoft.WPF.WPFGraph.WPFGraphSeries series2;
         DNBSoft.WPF.WPFGraph.WPFGraphSeries series3;
         DNBSoft.WPF.WPFGraph.WPFGraphSeries series4;
+        string baseDir;
         public TempCalibration()
         {
             InitializeComponent();
@@ -37,7 +38,8 @@ namespace PresentationLayer
 
             tempCalibrationService = new TempCalibrationService();
             tempCalibrationService.TempCalibrationEntity = new EntityLayer.TempCalibration();
-            tempCalibrationService.TempCalibrationEntity.readXml(TemperatureCalibrationFilePath);
+            baseDir = System.AppDomain.CurrentDomain.BaseDirectory.ToString();
+            tempCalibrationService.TempCalibrationEntity.readXml(baseDir + TemperatureCalibrationFilePath);
             
             tempCalibrationService.TempCalibrationEntity.TempCalMeasurenments.PropertyChanged += tempCalibrationService.TempCalMeasurenments_PropertyChanged;
             tempCalibrationService.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(tempCalibrationService_PropertyChanged);
@@ -59,7 +61,7 @@ namespace PresentationLayer
             {
                 tempCalibrationService.TempCalibrationEntity.TempCalMeasurenments.Add(tempCalDialog.TempCalMeasurenment);
                 this.refreshGraph();
-                tempCalibrationService.TempCalibrationEntity.writeToXml(TemperatureCalibrationFilePath);
+                tempCalibrationService.TempCalibrationEntity.writeToXml(baseDir + TemperatureCalibrationFilePath);
             }
         }
 

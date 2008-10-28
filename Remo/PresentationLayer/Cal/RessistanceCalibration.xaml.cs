@@ -26,12 +26,14 @@ namespace PresentationLayer
 
         DNBSoft.WPF.WPFGraph.WPFGraphSeries series1;
         private EntityLayer.RessistanceCalibration r;
+        string baseDir;
         public ResssistanceCalibration()
         {
             InitializeComponent();
 
             r = new EntityLayer.RessistanceCalibration();
-            r.readXml(RessistanceCalibrationFilePath);
+            baseDir = System.AppDomain.CurrentDomain.BaseDirectory.ToString();
+            r.readXml(baseDir + RessistanceCalibrationFilePath);
             r.RessistanceCalMeasurenments.PropertyChanged += new System.ComponentModel.PropertyChangedEventHandler(tempCalibrationService_PropertyChanged);
 
             MeasurenmentListView.ItemsSource = r.RessistanceCalMeasurenments;
@@ -52,8 +54,7 @@ namespace PresentationLayer
             {
                 r.RessistanceCalMeasurenments.Add(d.RessistanceCalMeasurenment);
                 refreshGraph();
-
-                r.writeToXml(RessistanceCalibrationFilePath);
+                r.writeToXml(baseDir + RessistanceCalibrationFilePath);
             }
         }
 
@@ -62,7 +63,8 @@ namespace PresentationLayer
             if (MeasurenmentListView.SelectedItem != null)
             {
                 r.RessistanceCalMeasurenments.Remove((EntityLayer.RessistanceCalMeasurenment)MeasurenmentListView.SelectedItem);
-                r.writeToXml(RessistanceCalibrationFilePath);
+                refreshGraph();
+                r.writeToXml(baseDir + RessistanceCalibrationFilePath);
             }
         }
 

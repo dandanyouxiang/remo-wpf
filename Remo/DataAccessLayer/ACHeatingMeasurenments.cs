@@ -121,31 +121,13 @@ namespace DataAccessLayer
                                        T4 = ac.T4,
                                        TAmb = (((!acch.IsChannel1Oil && acch.IsChannel1On) ? ac.T1 : 0) + ((!acch.IsChannel2Oil && acch.IsChannel2On) ? ac.T2 : 0) + ((!acch.IsChannel3Oil && acch.IsChannel3On) ? ac.T3 : 0) + ((!acch.IsChannel4Oil && acch.IsChannel4On) ? ac.T4 : 0)) / (((!acch.IsChannel1Oil && acch.IsChannel1On) ? 1 : 0) + ((!acch.IsChannel2Oil && acch.IsChannel2On) ? 1 : 0) + ((!acch.IsChannel3Oil && acch.IsChannel3On) ? 1 : 0) + ((!acch.IsChannel4Oil && acch.IsChannel4On) ? 1 : 0)),
                                        TOil = (((acch.IsChannel1Oil && acch.IsChannel1On) ? ac.T1 : 0) + ((acch.IsChannel2Oil && acch.IsChannel2On) ? ac.T2 : 0) + ((acch.IsChannel3Oil && acch.IsChannel3On) ? ac.T3 : 0) + ((acch.IsChannel4Oil && acch.IsChannel4On) ? ac.T4 : 0)) / (((acch.IsChannel1Oil && acch.IsChannel1On) ? 1 : 0) + ((acch.IsChannel2Oil && acch.IsChannel2On) ? 1 : 0) + ((acch.IsChannel3Oil && acch.IsChannel3On) ? 1 : 0) + ((acch.IsChannel4Oil && acch.IsChannel4On) ? 1 : 0)),
-                                       TempRise = (((!acch.IsChannel1Oil && acch.IsChannel1On) ? ac.T1 : 0) + ((!acch.IsChannel2Oil && acch.IsChannel2On) ? ac.T2 : 0) + ((!acch.IsChannel3Oil && acch.IsChannel3On) ? ac.T3 : 0) + ((!acch.IsChannel4Oil && acch.IsChannel4On) ? ac.T4 : 0)) / (((!acch.IsChannel1Oil && acch.IsChannel1On) ? 1 : 0) + ((!acch.IsChannel2Oil && acch.IsChannel2On) ? 1 : 0) + ((!acch.IsChannel3Oil && acch.IsChannel3On) ? 1 : 0) + ((!acch.IsChannel4Oil && acch.IsChannel4On) ? 1 : 0)) - (((acch.IsChannel1Oil && acch.IsChannel1On) ? ac.T1 : 0) + ((acch.IsChannel2Oil && acch.IsChannel2On) ? ac.T2 : 0) + ((acch.IsChannel3Oil && acch.IsChannel3On) ? ac.T3 : 0) + ((acch.IsChannel4Oil && acch.IsChannel4On) ? ac.T4 : 0)) / (((acch.IsChannel1Oil && acch.IsChannel1On) ? 1 : 0) + ((acch.IsChannel2Oil && acch.IsChannel2On) ? 1 : 0) + ((acch.IsChannel3Oil && acch.IsChannel3On) ? 1 : 0) + ((acch.IsChannel4Oil && acch.IsChannel4On) ? 1 : 0)),
-                                       Reduced=ac.IsSampleReduced,
+                                       TempRise = (((acch.IsChannel1Oil && acch.IsChannel1On) ? ac.T1 : 0) + ((acch.IsChannel2Oil && acch.IsChannel2On) ? ac.T2 : 0) + ((acch.IsChannel3Oil && acch.IsChannel3On) ? ac.T3 : 0) + ((acch.IsChannel4Oil && acch.IsChannel4On) ? ac.T4 : 0)) / (((acch.IsChannel1Oil && acch.IsChannel1On) ? 1 : 0) + ((acch.IsChannel2Oil && acch.IsChannel2On) ? 1 : 0) + ((acch.IsChannel3Oil && acch.IsChannel3On) ? 1 : 0) + ((acch.IsChannel4Oil && acch.IsChannel4On) ? 1 : 0)) - (((!acch.IsChannel1Oil && acch.IsChannel1On) ? ac.T1 : 0) + ((!acch.IsChannel2Oil && acch.IsChannel2On) ? ac.T2 : 0) + ((!acch.IsChannel3Oil && acch.IsChannel3On) ? ac.T3 : 0) + ((!acch.IsChannel4Oil && acch.IsChannel4On) ? ac.T4 : 0)) / (((!acch.IsChannel1Oil && acch.IsChannel1On) ? 1 : 0) + ((!acch.IsChannel2Oil && acch.IsChannel2On) ? 1 : 0) + ((!acch.IsChannel3Oil && acch.IsChannel3On) ? 1 : 0) + ((!acch.IsChannel4Oil && acch.IsChannel4On) ? 1 : 0)),
+                                       Reduced = ac.IsSampleReduced,
                                    };
 
             return ACValues;
         }
-        /*
-        public string[] ACHeatingTableHeader()
-        {
-            string[] strRet = new string[9];
-            var acch = root.AcHotMeasurenments.TempMeasurenementConfiguration;
 
-            strRet[0] = "Time";
-            strRet[1] = "No";
-            strRet[2] = "T1" + ((acch.IsChannel1Oil) ? "(Oil)" : "(Amb)");
-            strRet[3] = "T2" + ((acch.IsChannel2Oil) ? "(Oil)" : "(Amb)");
-            strRet[4] = "T3" + ((acch.IsChannel3Oil) ? "(Oil)" : "(Amb)");
-            strRet[5] = "T4" + ((acch.IsChannel4Oil) ? "(Oil)" : "(Amb)");
-            strRet[6] = "T Amb";
-            strRet[7] = "T Oil";
-            strRet[8] = "Temp Rise";
-
-            return strRet;
-        }
-         */
         private ACTableHeader evalACHeatingTableHeader() 
         {
             var acch = Root.AcHotMeasurenments.TempMeasurenementConfiguration;

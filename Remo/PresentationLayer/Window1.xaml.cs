@@ -95,21 +95,14 @@ namespace PresentationLayer
         public Window1()
         {
             InitializeComponent();
-
+            
             IS_TEST = Convert.ToBoolean(System.Configuration.ConfigurationSettings.AppSettings["IS_TEST"]);
-            fileStoring = XmlFileServices.readXml(@"Ref\file.info");
+            string baseDir = System.AppDomain.CurrentDomain.BaseDirectory.ToString();
+            fileStoring = XmlFileServices.readXml(baseDir + @"Ref\file.info");
             WorkPlacePath = fileStoring.WorkplacePath;
             FileName = fileStoring.FileName;
 
             this.Title = "Remo - " + FileName;
-            /*
-            Binding binding = new Binding();
-            binding.Source = FileName;
-            binding.Path = new PropertyPath("FileName");
-            binding.Mode = BindingMode.TwoWay;
-            this.SetBinding(this.TitleProperty, binding);
-            */
-            
 
             //Todo Da se vidi dali e vo red na ovoj nacin da se cita prethodno zacuvanata programa.
             datasource = new DataSource(FileName, FileCommand.New);
@@ -118,12 +111,11 @@ namespace PresentationLayer
             this.graphsInit();
             try
             {
-                //datasource.Root.TransformerProperties.TransformatorSerialNo;
                 datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration.PropertyChanged += new PropertyChangedEventHandler(DCColdTemperatureTable_PropertyChanged);
                 datasource.Root.DcColdMeasurenments.RessistanceTransformerChannels.PropertyChanged += new PropertyChangedEventHandler(DCColdRessistanceTable_PropertyChanged);
                 datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.PropertyChanged += new PropertyChangedEventHandler(ACTempMeasurenments_PropertyChanged);
                 datasource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel.RessistanceMeasurenments.PropertyChanged += new PropertyChangedEventHandler(DcCoolingRessistanceMeasurenments_PropertyChanged);
-                datasource.PropertyChanged+=new PropertyChangedEventHandler(datasource_PropertyChanged);
+                datasource.PropertyChanged += new PropertyChangedEventHandler(datasource_PropertyChanged);
 
                 DCColdRessistanceTable.ItemsSource = datasource.DCColdRessistanceTable(datasource.SelectedChannel);
                 DCColdRessistanceTable.DataContext = datasource;
@@ -133,7 +125,6 @@ namespace PresentationLayer
 
                 TestCurrentTempTextBox.DataContext = datasource.Root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel];
                 NoOFSamplesTempTextBox.DataContext = datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration;
-                //SampleRateRessTextBox.DataContext = datasource.root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel];
 
                 DCColdTemperatureTable.ItemsSource = datasource.DCColdTemperatureTable();
                 DCColdTemperatureTable.DataContext = datasource;
@@ -142,18 +133,6 @@ namespace PresentationLayer
 
                 ACTable.ItemsSource = datasource.ACHeatingTable();
 
-                //thermometerChannel1.DataContext = datasource;
-                //cooling
-                TestCurrentTextBox.DataContext = datasource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel;
-                NoOfSamplesTextBox.DataContext = datasource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel;
-
-                //postavuvanje na datakontest na kanalite vo vtoriot tab
-                /*
-                thermometerChannelAC1.DataContext = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last<EntityLayer.TempMeasurenment>();
-                thermometerChannelAC2.DataContext = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last<EntityLayer.TempMeasurenment>();
-                thermometerChannelAC3.DataContext = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last<EntityLayer.TempMeasurenment>();
-                thermometerChannelAC4.DataContext = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last<EntityLayer.TempMeasurenment>();
-                */
                 statusTextBlock.DataContext = this;
 
                 if (datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Count > 0)
@@ -191,11 +170,7 @@ namespace PresentationLayer
         public void DCColdTemperatureTable_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             DCColdTemperatureTable.ItemsSource = datasource.DCColdTemperatureTable();
-            //Promena na vrednostite na termometrite
-            //thermometerChannel1.Value = datasource.T1MeanDCColdTempTable;
-            //thermometerChannel2.Value = datasource.T2MeanDCColdTempTable;
-            //thermometerChannel3.Value = datasource.T3MeanDCColdTempTable;
-            //thermometerChannel4.Value = datasource.T4MeanDCColdTempTable;
+            
         }
 
         public void DCColdRessistanceTable_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -219,6 +194,7 @@ namespace PresentationLayer
                 thermometerChannelAC3.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T3;
                 thermometerChannelAC4.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T4;
             }
+            this.acGraphRefresh();
         }
         /// <summary>
         /// OnPropertyChanged Handler за мерењата на отпор при ладење - DcCooling
@@ -276,7 +252,7 @@ namespace PresentationLayer
         /// <summary>
         /// Завршено е едно температурно мерење
         /// </summary>
-        public void ds_TempMeasurenmentDone()
+        public void ds_TempMeasurenmentDone(List<double> correctedTemps, List<double> realTemps)
         {
             //Рестарт на тајмерот
             if (currentProcessState == ProcessStatesEnum.ACHotTemp)
@@ -313,6 +289,7 @@ namespace PresentationLayer
                     CurrentProcessState = ProcessStatesEnum.DcColdRes;
                     datasource.Root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel].IsChannel1On = true;
                     datasource.Root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel].IsChannel2On = true;
+                    datasource.Root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel].SampleRate = 5;
                     //Стартувај го мерењето на отпор
                     ds = new DataSourceLayer.DataSourceServices();
                     ds.RessistanceMeasurenmentFinished += new DataSourceLayer.DataSourceServices.RessistanceMeasurenmentFinishedEvent(ds_ColdRessistanceMeasurenmentFinished);
@@ -339,9 +316,8 @@ namespace PresentationLayer
         {
             MessageBox.Show("Се појави грешки при поврзување со инструментите.\nПробајте пак. Ако проблемот не се реши рестартирајте ги инструментите.", "Грешка", MessageBoxButton.OK, MessageBoxImage.Error);
             ds.stopRessistanceMeasurenments();
-
-            d dd = delegate() { CurrentProcessState = ProcessStatesEnum.Idle; startResMeasDcColdButton.IsChecked = false; };
-            this.Dispatcher.BeginInvoke( dd );
+            CurrentProcessState = ProcessStatesEnum.Idle;
+            startResMeasDcColdButton.IsChecked = false;
         }
         /// <summary>
         /// Handler за крај на мерењето на отпор.
@@ -371,16 +347,7 @@ namespace PresentationLayer
             else 
             {
                 DCColdRessistanceTable.ItemsSource = null;
-                //NoOfSamplesRessTextBox.DataContext = null;
-                //SampleRateRessTextBox.DataContext = null;
-
-                //TestCurrentTempTextBox.DataContext = null;
-                //NoOFSamplesTempTextBox.DataContext = null;
             }
-        }
-        private void DCColdTemperatureTable_SourceUpdated(object sender, DataTransferEventArgs e)
-        {
-          //  thermometerChannelAC1.Value = datasource.root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last<EntityLayer.TempMeasurenment>().T1;
         }
 
         private void startAcButton_Checked(object sender, RoutedEventArgs e)
@@ -455,15 +422,39 @@ namespace PresentationLayer
                 CurrentProcessState = ProcessStatesEnum.DcCoolRes;
                 datasource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel.IsChannel1On = true;
                 datasource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel.IsChannel2On = true;
+
+                //Update-увај ги оние properties за конфигурирање на мерењата
+                datasource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel.TestCurrent = datasource.TestCurrentDcCooling;
+                datasource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel.NoOfSamples = datasource.NoOfSamplesDcCooling;
+                datasource.Root.DcCoolingMeasurenments.SelectedDcColdChannel.Value = datasource.SelectedChannel;
+                datasource.Root.DcCoolingMeasurenments.R1Cold.Value = datasource.R1ColdAtDcCool;
+                datasource.Root.DcCoolingMeasurenments.R2Cold.Value = datasource.R2ColdAtDcCool;
+                datasource.Root.DcCoolingMeasurenments.TCold.Value = datasource.TColdAtDcCooling;
+                datasource.Root.DcCoolingMeasurenments.EndAcTemp.Value = datasource.EndAcTemp;
+                datasource.Root.DcCoolingMeasurenments.KDropInOil.Value = datasource.KDropInOil;
+                datasource.Root.DcCoolingMeasurenments.IsTempDataMeasured.Value = datasource.IsTempMeasured;
+                datasource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel.SampleRate = datasource.SampleRateDcCooling;
+                //
+
                 //Стартувај го мерењето на отпор
                 ds = new DataSourceLayer.DataSourceServices();
                 ds.RessistanceMeasurenmentFinished += new DataSourceLayer.DataSourceServices.RessistanceMeasurenmentFinishedEvent(ds_CoolRessistanceMeasurenmentFinished);
                 ds.RessistanceMeasurenmentsError += new DataSourceLayer.DataSourceServices.RessistanceMeasurenmentsErrorEvent(ds_RessistanceMeasurenmentsError);
                 ds.start_RessistanceMeasurenment(datasource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel, IS_TEST, false);
+                save();
             }
             else
             {
                 StartDcCoolResButton.IsChecked = false;
+            }
+        }
+        private void StartDcCoolResButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!StartDcCoolResButton.IsChecked == true && currentProcessState == ProcessStatesEnum.DcCoolRes)
+            {
+                ds.stopRessistanceMeasurenments();
+                CurrentProcessState = ProcessStatesEnum.Idle;
+                save();
             }
         }
         public void ds_CoolRessistanceMeasurenmentFinished()
@@ -471,6 +462,7 @@ namespace PresentationLayer
             datasource.calculateResults();
             this.ds_ColdRessistanceMeasurenmentFinished();
             dcCoolingGraphsRefresh();
+            save();
         }
 
         private void reduceButton_Checked(object sender, RoutedEventArgs e)
@@ -538,7 +530,7 @@ namespace PresentationLayer
         /// </summary>
         private void Window_ContentRendered(object sender, EventArgs e)
         {
-            /*StartUpWindow stp = new StartUpWindow();
+            StartUpWindow stp = new StartUpWindow();
             if ((bool)stp.ShowDialog())
             {
                 int i = 0;
@@ -551,7 +543,7 @@ namespace PresentationLayer
                 this.CommandBindings[6].Command.Execute(null);
             }
             else
-                this.Close();*/
+                this.Close();
         }
 
         private void CalibrateTemperatureMenuItem_Click(object sender, RoutedEventArgs e)
@@ -565,10 +557,52 @@ namespace PresentationLayer
             ResssistanceCalibration r = new ResssistanceCalibration();
             r.ShowDialog();
         }
+        
+        /// <summary>
+        /// Се користи за автоматско зачувување (при мерења и сл.) на тековниот фајл.
+        /// </summary>
         private void save()
         {
             this.CommandBindings[2].Command.Execute(null);
         }
+
+        /// <summary>
+        /// Refresh на сите графици и полиња кои се пресметуваат.
+        /// Се користи при open на remo документ.
+        /// </summary>
+        private void refreshAllDependentForms()
+        {
+            acGraphRefresh();
+            dcCoolingGraphsRefresh();
+            
+        }
+
+        private void MeasuredRadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            if (datasource != null)
+            {
+                datasource.IsTempMeasured = true;
+            }
+        }
+
+        private void ManuelRadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            if (datasource != null)
+            {
+                datasource.IsTempMeasured = false;
+            }
+        }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            if (ds != null)
+            {
+                ds.stopRessistanceMeasurenments();
+                System.Threading.Thread.Sleep(1000);
+            }
+        }
+
+        
         
     }
    

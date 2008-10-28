@@ -58,6 +58,8 @@ namespace FlukeClient
 
             meas1Thread = new Thread(measure1);
             meas2Thread = new Thread(measure2);
+            meas1Thread.IsBackground = true;
+            meas2Thread.IsBackground = true;
             meas1Thread.Start();
             meas2Thread.Start();
         }

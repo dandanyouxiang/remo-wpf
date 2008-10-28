@@ -129,13 +129,32 @@ namespace FlukeClient
         {
             string[] split = measStr.Split(',');
             List<double> measurenments = new List<double>();
+            double max = double.MinValue;
+            double min = double.MaxValue;
             foreach (string str in split)
             {
                 double result;
                 if (Double.TryParse(str.Replace('.',','), out result))
                     measurenments.Add(result);
-                Console.Write("parsed result:" + result);
+               
+                //Console.Write("parsed result:" + result);
             }
+            //Се отстрануваат првите 3 мерења заради промена на напонски канал
+            measurenments.RemoveAt(0);
+            measurenments.RemoveAt(0);
+            measurenments.RemoveAt(0);
+            measurenments.RemoveAt(0);
+            foreach (double result in measurenments)
+            {
+                if (result > max)
+                    max = result;
+                if (result < min)
+                    min = result;
+            }
+            //Отстрани ги мин и макс
+            measurenments.Remove(max);
+            measurenments.Remove(min);
+
             double mean = 0;
             foreach (double meas in measurenments)
                 mean += meas;

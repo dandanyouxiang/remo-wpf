@@ -32,9 +32,6 @@ namespace ReportsLayer
 
             //dataSource.Root.TransformerProperties = new EntityLayer.TransformerProperties("12345", "6789", "Gjore", "Nesto", EntityLayer.TransformerProperties.ConnectionType.D, EntityLayer.TransformerProperties.ConnectionType.Y, EntityLayer.TransformerProperties.Material.Aluminium, EntityLayer.TransformerProperties.Material.Aluminium, 20, 20);
             flowDocumentReport = new FlowDocumentReport(dataSource,ACHotGraph,GraphT1,GraphT2);
-            
-           
-
             flowDocumentScrollViewer.Document = flowDocumentReport.returnDocument(FlowDocumentReportType.DcColdMeasurenments);
         }
         public GenerateReports(DataSource dataSource)
@@ -68,7 +65,7 @@ namespace ReportsLayer
                 case "DCCooling": flowDocumentReportType = FlowDocumentReportType.DcCoolingMeasurenments; break;
             }
             if(flowDocumentScrollViewer!=null)
-            flowDocumentScrollViewer.Document = flowDocumentReport.returnDocument(flowDocumentReportType);
+                flowDocumentScrollViewer.Document = flowDocumentReport.returnDocument(flowDocumentReportType);
         }
 
         private void button1_Click(object sender, RoutedEventArgs e)
@@ -94,10 +91,6 @@ namespace ReportsLayer
                 "A Flow Document");
                 
             }
-            /*
-            if (flowDocumentScrollViewer != null)
-                flowDocumentScrollViewer.Document = flowDocumentReport.returnDocument(flowDocumentReportType);
-             */
         }
     }
 }

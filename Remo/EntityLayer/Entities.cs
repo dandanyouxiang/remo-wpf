@@ -23,7 +23,13 @@ namespace EntityLayer
                         typeof(DateTime),
                         typeof(ListWithChangeEvents<TempMeasurenment>),
                         typeof(TempMeasurenementConfiguration),
-                        typeof(TempMeasurenment)
+                        typeof(TempMeasurenment),
+                        typeof(Property<int>),
+                        typeof(Property<double>),
+                        typeof(Property),
+                        typeof(int),
+                        typeof(bool),
+                        typeof(double)
                      };
 
         public void writeToXml(string path, Root root)
@@ -33,7 +39,7 @@ namespace EntityLayer
                 using (Stream fStream = new FileStream(path,
                                 FileMode.Create, FileAccess.ReadWrite, FileShare.None))
                 {
-                    XmlSerializer xmlFormat = new XmlSerializer(typeof(Root), types);
+                     XmlSerializer xmlFormat = new XmlSerializer(typeof(Root), types);
                     xmlFormat.Serialize(fStream, root);
                 }
             }
@@ -200,6 +206,15 @@ namespace EntityLayer
     [Serializable]
     public class DcCoolingMeasurenments
     {
+        //Results Data
+        public Property<double> EndAcTemp { get; set; }
+        public Property<double> KDropInOil { get; set; }
+        public Property<double> TCold { get; set; }
+        public Property<double> R1Cold { get; set; }
+        public Property<double> R2Cold { get; set; }
+        public Property<bool?> IsTempDataMeasured { get; set; }
+        public Property<int> SelectedDcColdChannel { get; set; }
+
         //Отпори
         /// <summary>
         /// Каналот за кој се врши мерење на ладно.
@@ -210,11 +225,26 @@ namespace EntityLayer
         /// </summary>
         public DateTime TNullTime { get; set; }
 
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(PropertyChangedEventArgs e)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, e);
+        }
+
         public DcCoolingMeasurenments(RessistanceTransformerChannel ressistanceTransformerChannels)
         {
             RessistanceTransformerChannel = ressistanceTransformerChannels;
+            EndAcTemp = new Property<double>("EndAcTemp", double.NaN);
+            KDropInOil = new Property<double>("EndAcTemp", double.NaN);
+            TCold = new Property<double>("TCold", double.NaN);
+            R1Cold = new Property<double>("R1Cold", double.NaN);
+            R2Cold = new Property<double>("R2Cold", double.NaN);
+            IsTempDataMeasured = new Property<bool?>("IsTempDataMeasured", null);
+            SelectedDcColdChannel = new Property<int>("SelectedDcColdChannel", -1);
         }
-        public DcCoolingMeasurenments() : this(new RessistanceTransformerChannel()) { }
+        public DcCoolingMeasurenments() : this(new RessistanceTransformerChannel(1, double.NaN, -1, -1, true, true, new ListWithChangeEvents<RessistanceMeasurenment>())) { }
     }
 
     public class TransformerProperties : INotifyPropertyChanged
@@ -430,35 +460,35 @@ namespace EntityLayer
                 }
             }
         }
-        private int _ressistanceSampleRateCurrentState;
+        private int _sampleRate;
         /// <summary>
-        /// Тековна состојба на SampleRate за мерење на отпор
+        /// SampleRate за мерење на отпор
         /// </summary>
-        public int RessistanceSampleRateCurrentState
+        public int SampleRate
         {
-            get { return _ressistanceSampleRateCurrentState; }
+            get { return _sampleRate; }
             set
             {
-                if (_ressistanceSampleRateCurrentState != value)
+                if (_sampleRate != value)
                 {
-                    _ressistanceSampleRateCurrentState = value;
+                    _sampleRate = value;
                     OnPropertyChanged(new PropertyChangedEventArgs("RessistanceSampleRateCurrentState"));
                 }
             }
         }
 
-        private int _ressistanceNoOfSamplesCurrentState;
+        private int _noOfSamples;
         /// <summary>
-        /// Тековна состојба на NoOfSamples за мерење на отпор
+        /// NoOfSamples за мерење на отпор
         /// </summary>
-        public int RessistanceNoOfSamplesCurrentState
+        public int NoOfSamples
         {
-            get { return _ressistanceNoOfSamplesCurrentState; }
+            get { return _noOfSamples; }
             set
             {
-                if (_ressistanceNoOfSamplesCurrentState != value)
+                if (_noOfSamples != value)
                 {
-                    _ressistanceNoOfSamplesCurrentState = value;
+                    _noOfSamples = value;
                     OnPropertyChanged(new PropertyChangedEventArgs("RessistanceNoOfSamplesCurrentState"));
                 }
             }
@@ -514,23 +544,22 @@ namespace EntityLayer
         }
         public RessistanceTransformerChannel(
             int channelNo, 
-            int testCurrent,
-            int ressistanceSampleRateCurrentState, 
-            int ressistanceNoOfSamplesCurrentState,
+            double testCurrent,
+            int sampleRate, 
+            int noOfSamples,
             bool isChannel1On,
             bool isChannel2On,
             ListWithChangeEvents<RessistanceMeasurenment> ressistanceMeasurenments)
         {
             ChannelNo = channelNo;
             TestCurrent = testCurrent;
-            RessistanceSampleRateCurrentState = ressistanceSampleRateCurrentState;
-            RessistanceNoOfSamplesCurrentState = ressistanceNoOfSamplesCurrentState;
+            SampleRate = sampleRate;
+            NoOfSamples = noOfSamples;
             this.IsChannel1On = isChannel1On;
             this.IsChannel2On = isChannel2On;
 
             RessistanceMeasurenments = ressistanceMeasurenments;
             RessistanceMeasurenments.PropertyChanged+=new PropertyChangedEventHandler(RessistanceMeasurenments_PropertyChanged);
-
         }
         public RessistanceTransformerChannel() : this(1, 1, 1, 1, true, true, new ListWithChangeEvents<RessistanceMeasurenment>()) { }
     }
@@ -625,9 +654,6 @@ namespace EntityLayer
     [Serializable]
     public class TempMeasurenementConfiguration : INotifyPropertyChanged
     {
-
-
-
         private int _tempSampleRateCurrentState = 1;
         /// <summary>
         /// Тековна состојба на SampleRate за температурни мерења

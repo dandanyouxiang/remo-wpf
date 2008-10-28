@@ -106,14 +106,9 @@ namespace DataAccessLayer
             public void AcHotMeasurenments_TempMeasurenementConfiguration_PropertyChanged(object sender, PropertyChangedEventArgs e)
             {
                 ACHeatingTableHeader = evalACHeatingTableHeader();
-                //MinutesSampleRate = evalMinutesSampleRate();
-                //SecondesSampleRate = evalSecondesSampleRate();
-                //Todo: Najverojatno ova treba da se trgne.
-                SamplesDone=evalSamplesDone();
+                SamplesDone = evalSamplesDone();
                 EndAcTemp = evalEndAcTemp();
                 KDropInOil = evalKDropInOil();
-
-
             }
             /// <summary>
             /// Во DcCoolingMeasurenments Ако се смени некој прочитан податок, одново да се пресметаат вредностите на полињата што се добиваат преку некако функција.
@@ -122,8 +117,6 @@ namespace DataAccessLayer
             /// <param name="e"></param>
             public void DcCoolingMeasurenments_RessistanceTransformerChannels_PropertyChanged(object sender, PropertyChangedEventArgs e) 
             {
-                //Todo dali treba?
-                TCold = evalTCold();
             }
 
             public void TransformerProperties_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -166,6 +159,7 @@ namespace DataAccessLayer
                 Root.TransformerProperties.PropertyChanged += new PropertyChangedEventHandler(TransformerProperties_PropertyChanged);
 
                 Root.DcColdMeasurenments.TempMeasurenementConfiguration.OnPropertyChanged(new PropertyChangedEventArgs(null));
+                IsTempMeasured = Root.DcCoolingMeasurenments.IsTempDataMeasured.Value;
             }
             public DataSource(string path,bool newSource)
             {
@@ -190,6 +184,8 @@ namespace DataAccessLayer
                 Root.TransformerProperties.PropertyChanged += new PropertyChangedEventHandler(TransformerProperties_PropertyChanged);
 
                 Root.DcColdMeasurenments.TempMeasurenementConfiguration.OnPropertyChanged(new PropertyChangedEventArgs(null));
+
+                IsTempMeasured = Root.DcCoolingMeasurenments.IsTempDataMeasured.Value;
             }
             
             public void saveData(string path)

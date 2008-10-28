@@ -78,7 +78,7 @@ namespace DataAccessLayer
             switch (ConversionType)
             {
                 case ConversionTypesEnum._double: return double.IsNaN((double)o) ? "- - -" : Math.Round((double)o, Decimals).ToString("F"+Decimals, culture);
-                case ConversionTypesEnum._int: return o.ToString();
+                case ConversionTypesEnum._int: return (int)o != -1 ? o.ToString(): "- - -";
                 case ConversionTypesEnum._decimal: return Math.Round((decimal)o, Decimals).ToString("F" + Decimals, culture);
             }
             return "";
@@ -107,6 +107,48 @@ namespace DataAccessLayer
             return DateTime.Parse(s);
         }
     }
+
+    [ValueConversion(typeof(int), typeof(string))]
+    public class SelectedChannelConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            string str = "";
+            int selectedChannel = (int)value;
+            if (selectedChannel == 0)
+                str = "A - B";
+            else if (selectedChannel == 1)
+                str = "B - C";
+            else if (selectedChannel == 2)
+                str = "C - A";
+            else if (selectedChannel == -1)
+                str = "- - -";
+                
+            return str;
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    [ValueConversion(typeof(int), typeof(string))]
+    public class SourceConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if(value == null)
+                return "- - -";
+            else if ((bool?)value == true)
+                return "Measured";
+            else
+                return "Manual";
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     public enum ConversionType 
     {
         Milimetar,

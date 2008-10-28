@@ -303,31 +303,6 @@ namespace DataAccessLayer
             return exp;
         }
 
-        //Todo: Da se napravi properti za hederot
-        /// <summary>
-        /// Хедерот за табелата со температури во табот DCColdMeasurenment во подтабот TemperatureMeasurenment
-        /// </summary>
-        /// <param name="channelIndex"></param>
-        /// <returns></returns>
-        /*
-        public string[] DCColdTemperatureTableHeader()
-        {
-            string[] strRet = new string[8];
-
-            var tempch = root.DcColdMeasurenments.TempMeasurenementConfiguration;
-
-            strRet[0] = "Date";
-            strRet[1] = "Time";
-            strRet[2] = "T1" + ((tempch.IsChannel1Oil) ? "(Oil)" : "(Amb)");
-            strRet[3] = "T2" + ((tempch.IsChannel2Oil) ? "(Oil)" : "(Amb)");
-            strRet[4] = "T3" + ((tempch.IsChannel3Oil) ? "(Oil)" : "(Amb)");
-            strRet[5] = "T4" + ((tempch.IsChannel4Oil) ? "(Oil)" : "(Amb)");
-            strRet[6] = "T Amb";
-            strRet[7] = "T Oil";
-
-            return strRet;
-        }*/
-
         public TableTempHeader evalDCColdTemperatureTableHeader()
         {
             var tempch = Root.DcColdMeasurenments.TempMeasurenementConfiguration;

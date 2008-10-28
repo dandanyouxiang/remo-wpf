@@ -49,6 +49,7 @@ namespace PresentationLayer
                 MainGrid.ClearValue(Grid.DataContextProperty);
 
                 setDataContext();
+                updateGraphsAndFields();
 
                 MainGrid.UpdateLayout();
             }
@@ -81,7 +82,7 @@ namespace PresentationLayer
                 MainGrid.ClearValue(Grid.DataContextProperty);
 
                 setDataContext();
-
+                updateGraphsAndFields();
                 MainGrid.UpdateLayout();
             }
 
@@ -118,7 +119,9 @@ namespace PresentationLayer
             {
                 //System.Reflection.Assembly.GetExecutingAssembly().Location
                 fileStoring.WorkplacePath = workPlacePath.Path;
-                XmlFileServices.writeToXml(@"Ref\file.info", fileStoring);
+                string baseDir = System.AppDomain.CurrentDomain.BaseDirectory.ToString();
+                XmlFileServices.writeToXml(baseDir+@"Ref\file.info", fileStoring);
+                WorkPlacePath = fileStoring.WorkplacePath;
             }
         }
         /// <summary>
@@ -133,6 +136,7 @@ namespace PresentationLayer
 
             if ((bool)gr.ShowDialog())
             {
+                
             }
                 
         }
@@ -149,6 +153,7 @@ namespace PresentationLayer
             if ((bool)tp.ShowDialog())
             {
             }
+            save();
 
         }
 
@@ -175,10 +180,11 @@ namespace PresentationLayer
 
         #endregion Commands
 
-        #region Others Functions
+        #region Other Functions
 
         /// <summary>
         /// Поставување на датаконтекст на контролите.
+        /// Се користи при open.
         /// </summary>
         private void setDataContext()
         {
@@ -194,14 +200,11 @@ namespace PresentationLayer
             DCColdRessistanceTable.ItemsSource = datasource.DCColdRessistanceTable(datasource.SelectedChannel);
             DCColdRessistanceTable.DataContext = datasource;
 
-            
-
             NoOfSamplesRessTextBox.DataContext = datasource.Root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel];
             SampleRateTempTextBox.DataContext = datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration;
 
             TestCurrentTempTextBox.DataContext = datasource.Root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel];
             NoOFSamplesTempTextBox.DataContext = datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration;
-            //SampleRateRessTextBox.DataContext = datasource.root.DcColdMeasurenments.RessistanceTransformerChannels[datasource.SelectedChannel];
 
             DCColdTemperatureTable.ItemsSource = datasource.DCColdTemperatureTable();
             DCColdTemperatureTable.DataContext = datasource;
@@ -209,16 +212,20 @@ namespace PresentationLayer
             DCCoolTable.ItemsSource = datasource.DCCoolingTable();
 
             ACTable.ItemsSource = datasource.ACHeatingTable();
-
-            //thermometerChannel1.DataContext = datasource;
-            //cooling
-            TestCurrentTextBox.DataContext = datasource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel;
-            NoOfSamplesTextBox.DataContext = datasource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel;
-
             
             statusTextBlock.DataContext = this;
         }
+        /// <summary>
+        /// Се користи при open 
+        /// </summary>
+        private void updateGraphsAndFields()
+        {
+            this.acGraphRefresh();
 
-        #endregion Others Functions
+            datasource.calculateResults();
+            this.dcCoolingGraphsRefresh();
+
+        }
+        #endregion
     }
 }

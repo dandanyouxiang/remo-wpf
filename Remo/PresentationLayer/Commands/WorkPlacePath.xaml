@@ -4,7 +4,7 @@
     Title="WorkPlacePath" Height="180" Width="500" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Grid>
         <StackPanel>
-            <Label Margin="5,15,5,5" Content="WorkPlace"></Label>
+            <Label Margin="15,15,5,5" Content="Workspace"></Label>
             <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
                 <TextBox Margin="20,5,5,5" Name="WorkPlaceTextBox" Width="400"></TextBox>
                 <Button  Margin="5" Content="..." Width="40" Click="Button_Click"></Button>

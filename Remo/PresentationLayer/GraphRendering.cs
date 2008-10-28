@@ -88,7 +88,7 @@ namespace PresentationLayer
             series1Temp.PointRenderer = series1PointRenderer;
             series2Temp.PointRenderer = series1PointRenderer;
             WPFGraphLineRenderers.DashedLine series1LineRenderer = new WPFGraphLineRenderers.DashedLine();
-            series1LineRenderer.LineBrush = Brushes.Pink;
+            series1LineRenderer.LineBrush = Brushes.Transparent;
             series1Temp.LineRenderer = series1LineRenderer;
             series2Temp.LineRenderer = series1LineRenderer;
         }

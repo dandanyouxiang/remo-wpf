@@ -18,7 +18,7 @@
             <StackPanel Grid.Column="0">
                 <Label Margin="40,20,0,0" Name="label1">Transf. Series</Label>
                 <TextBox Margin="40,5,30,5" Name="textBox1" >
-                    <Binding Path="TransformatorSeries" Converter="{StaticResource IntegerConvertor}" NotifyOnValidationError="True">
+                    <Binding Path="TransformatorSeries" NotifyOnValidationError="True">
                         <Binding.ValidationRules>
                             <data:RegexValidator RegularExpression="^\s*\d*\s*$"></data:RegexValidator>
                         </Binding.ValidationRules>
@@ -26,7 +26,7 @@
                 </TextBox>
                 <Label Margin="40,0,30,0" Name="TransfSerialNoLabel">Transf. Serial No.</Label>
                 <TextBox Margin="40,5,30,5" Name="TransfSerialNotextBox" >
-                    <Binding Path="TransformatorSerialNo" Converter="{StaticResource IntegerConvertor}" NotifyOnValidationError="True">
+                    <Binding Path="TransformatorSerialNo" NotifyOnValidationError="True">
                         <Binding.ValidationRules>
                             <data:RegexValidator RegularExpression="^\s*\d*\s*$"></data:RegexValidator>
                         </Binding.ValidationRules>

@@ -37,6 +37,17 @@ namespace DataAccessLayer
         public double rSqr { get; private set; }
         //f(t) = RAOT + a*exp(b*t)
         public string Func { get; private set; }
+        
+        public CoolingCurveCalc()
+        {
+            RAOT = double.NaN;
+            TAtT0 = double.NaN;
+            AOT = double.NaN;
+            a = double.NaN;
+            b = double.NaN;
+            rSqr = double.NaN;
+        }
+
 
         public void calculate()
         {
@@ -47,27 +58,29 @@ namespace DataAccessLayer
                 TempMeasurenments.Add(
                     new MeasurenmentEntity(m.TimeSeconds, thot));
             }
-
-            //<rSqr,aot> вредности сортирани по rSqr
-            SortedList<double, double> aotList = new SortedList<double, double>();
-            //Барање на AOT со една децимала
-            for (int i = (int)(TCold * 10); i <= 1500; i++)
+            if (!double.IsNaN(TCold))
             {
-                if (i == 700)
-                    rSqr = rSqr;
-                double aot = i;
-                aot /= 10;
-                double rsqr = calcEq(aot);
-                if (!aotList.ContainsKey(rsqr))
-                    aotList.Add(rsqr, aot);
+                //<rSqr,aot> вредности сортирани по rSqr
+                SortedList<double, double> aotList = new SortedList<double, double>();
+                //Барање на AOT со една децимала
+                for (int i = (int)(TCold * 10); i <= 1500; i++)
+                {
+                    if (i == 700)
+                        rSqr = rSqr;
+                    double aot = i;
+                    aot /= 10;
+                    double rsqr = calcEq(aot);
+                    if (!aotList.ContainsKey(rsqr))
+                        aotList.Add(rsqr, aot);
+                }
+                rSqr = aotList.Keys[aotList.Count - 1];
+                AOT = aotList.Values[aotList.Count - 1];
+                calcEq(AOT);
+                TAtT0 = a + AOT;
+                RAtT0 = calcRHot(TCold, TAtT0, RCold, TempCoeff);
+                RAOT = calcRHot(TCold, AOT, RCold, TempCoeff);
+                Func = Math.Round(a, 6) + " * Exp(" + Math.Round(b, 6) + "*t)";
             }
-            rSqr = aotList.Keys[aotList.Count - 1];
-            AOT = aotList.Values[aotList.Count - 1];
-            calcEq(AOT);
-            TAtT0 = a + AOT;
-            RAtT0 = calcRHot(TCold, TAtT0, RCold, TempCoeff);
-            RAOT = calcRHot(TCold, AOT, RCold, TempCoeff);
-            Func = Math.Round(a, 6) + " * Exp(" + Math.Round(b, 6) + "*t)";
         }
         private double calcEq(double aot)
         {

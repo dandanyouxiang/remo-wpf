@@ -84,12 +84,7 @@ namespace ReportsLayer
             copyGraph(ref ACHotGraph, aCHotGraph);
             copyGraph(ref GraphT1, graphT1);
             copyGraph(ref GraphT2, graphT2);
-            //Поставување на графиците
-            /*
-            this.ACHotGraph = ACHotGraph;
-            this.GraphT1 = GraphT1;
-            this.GraphT2 = GraphT2;
-            */
+
             DcColdMeasurenmentsDocument = new FlowDocument();
             AcHotMeasurenmentsDocument = new FlowDocument();
             DcCoolingMeasurenmentsDocument = new FlowDocument();
@@ -400,31 +395,30 @@ namespace ReportsLayer
                 //Време на мерењето
                 tempRow.Cells.Add(new TableCell(new Paragraph(new Run(tm.Time.ToString("hh:mm:ss")))));
 
-                //if (!tm.IsSampleReduced)
-                //{
-                    //Т1
-                    tempRow.Cells.Add(new TableCell(new Paragraph(new Run(ReportStringFormater.temperatureFormater(tm.T1)))));
-                    //Т2
-                    tempRow.Cells.Add(new TableCell(new Paragraph(new Run(ReportStringFormater.temperatureFormater(tm.T2)))));
-                    //Т3
-                    tempRow.Cells.Add(new TableCell(new Paragraph(new Run(ReportStringFormater.temperatureFormater(tm.T3)))));
-                    //Т4
-                    tempRow.Cells.Add(new TableCell(new Paragraph(new Run(ReportStringFormater.temperatureFormater(tm.T4)))));
-                    //TAmb
-                    tempRow.Cells.Add(new TableCell(new Paragraph(new Run(ReportStringFormater.temperatureFormater(((((!tc.IsChannel1Oil && tc.IsChannel1On) ? tm.T1 : 0) + ((!tc.IsChannel2Oil && tc.IsChannel2On) ? tm.T2 : 0) + ((!tc.IsChannel3Oil && tc.IsChannel3On) ? tm.T3 : 0) + ((!tc.IsChannel4Oil && tc.IsChannel4On) ? tm.T4 : 0)) / (((!tc.IsChannel1Oil && tc.IsChannel1On) ? 1 : 0) + ((!tc.IsChannel2Oil && tc.IsChannel2On) ? 1 : 0) + ((!tc.IsChannel3Oil && tc.IsChannel3On) ? 1 : 0) + ((!tc.IsChannel4Oil && tc.IsChannel4On) ? 1 : 0))))))));
-                    //TOil
-                    tempRow.Cells.Add(new TableCell(new Paragraph(new Run(ReportStringFormater.temperatureFormater((((tc.IsChannel1Oil && tc.IsChannel1On) ? tm.T1 : 0) + ((tc.IsChannel2Oil && tc.IsChannel2On) ? tm.T2 : 0) + ((tc.IsChannel3Oil && tc.IsChannel3On) ? tm.T3 : 0) + ((tc.IsChannel4Oil && tc.IsChannel4On) ? tm.T4 : 0)) / (((tc.IsChannel1Oil && tc.IsChannel1On) ? 1 : 0) + ((tc.IsChannel2Oil && tc.IsChannel2On) ? 1 : 0) + ((tc.IsChannel3Oil && tc.IsChannel3On) ? 1 : 0) + ((tc.IsChannel4Oil && tc.IsChannel4On) ? 1 : 0)))))));
-                    //Разлика во температурите во воздух и во масло.
-                    tempRow.Cells.Add(new TableCell(new Paragraph(new Run(ReportStringFormater.temperatureFormater((((!tc.IsChannel1Oil && tc.IsChannel1On) ? tm.T1 : 0) + ((!tc.IsChannel2Oil && tc.IsChannel2On) ? tm.T2 : 0) + ((!tc.IsChannel3Oil && tc.IsChannel3On) ? tm.T3 : 0) + ((!tc.IsChannel4Oil && tc.IsChannel4On) ? tm.T4 : 0)) / (((!tc.IsChannel1Oil && tc.IsChannel1On) ? 1 : 0) + ((!tc.IsChannel2Oil && tc.IsChannel2On) ? 1 : 0) + ((!tc.IsChannel3Oil && tc.IsChannel3On) ? 1 : 0) + ((!tc.IsChannel4Oil && tc.IsChannel4On) ? 1 : 0)) - (((tc.IsChannel1Oil && tc.IsChannel1On) ? tm.T1 : 0) + ((tc.IsChannel2Oil && tc.IsChannel2On) ? tm.T2 : 0) + ((tc.IsChannel3Oil && tc.IsChannel3On) ? tm.T3 : 0) + ((tc.IsChannel4Oil && tc.IsChannel4On) ? tm.T4 : 0)) / (((tc.IsChannel1Oil && tc.IsChannel1On) ? 1 : 0) + ((tc.IsChannel2Oil && tc.IsChannel2On) ? 1 : 0) + ((tc.IsChannel3Oil && tc.IsChannel3On) ? 1 : 0) + ((tc.IsChannel4Oil && tc.IsChannel4On) ? 1 : 0)))))));
-                //}
-                //Ако е редуцирано.
-                //else
-                if(tm.IsSampleReduced)
+                //Т1
+                tempRow.Cells.Add(new TableCell(new Paragraph(new Run(ReportStringFormater.temperatureFormater(tm.T1)))));
+                //Т2
+                tempRow.Cells.Add(new TableCell(new Paragraph(new Run(ReportStringFormater.temperatureFormater(tm.T2)))));
+                //Т3
+                tempRow.Cells.Add(new TableCell(new Paragraph(new Run(ReportStringFormater.temperatureFormater(tm.T3)))));
+                //Т4
+                tempRow.Cells.Add(new TableCell(new Paragraph(new Run(ReportStringFormater.temperatureFormater(tm.T4)))));
+                //TAmb
+                double tAmb = ((((!tc.IsChannel1Oil && tc.IsChannel1On) ? tm.T1 : 0) + ((!tc.IsChannel2Oil && tc.IsChannel2On) ? tm.T2 : 0) + ((!tc.IsChannel3Oil && tc.IsChannel3On) ? tm.T3 : 0) + ((!tc.IsChannel4Oil && tc.IsChannel4On) ? tm.T4 : 0)) / (((!tc.IsChannel1Oil && tc.IsChannel1On) ? 1 : 0) + ((!tc.IsChannel2Oil && tc.IsChannel2On) ? 1 : 0) + ((!tc.IsChannel3Oil && tc.IsChannel3On) ? 1 : 0) + ((!tc.IsChannel4Oil && tc.IsChannel4On) ? 1 : 0)));
+                tempRow.Cells.Add(new TableCell(new Paragraph(new Run(ReportStringFormater.temperatureFormater(tAmb)))));
+                double tOil = (((tc.IsChannel1Oil && tc.IsChannel1On) ? tm.T1 : 0) + ((tc.IsChannel2Oil && tc.IsChannel2On) ? tm.T2 : 0) + ((tc.IsChannel3Oil && tc.IsChannel3On) ? tm.T3 : 0) + ((tc.IsChannel4Oil && tc.IsChannel4On) ? tm.T4 : 0)) / (((tc.IsChannel1Oil && tc.IsChannel1On) ? 1 : 0) + ((tc.IsChannel2Oil && tc.IsChannel2On) ? 1 : 0) + ((tc.IsChannel3Oil && tc.IsChannel3On) ? 1 : 0) + ((tc.IsChannel4Oil && tc.IsChannel4On) ? 1 : 0));
+                //TOil
+                tempRow.Cells.Add(new TableCell(new Paragraph(new Run(ReportStringFormater.temperatureFormater(tOil)))));
+                double tRise = tOil = tAmb;
+                //Разлика во температурите во воздух и во масло.
+                tempRow.Cells.Add(new TableCell(new Paragraph(new Run(ReportStringFormater.temperatureFormater(tRise)))));
+
+                if (tm.IsSampleReduced)
                 {
                     tempTable.RowGroups[0].Rows.Add(new TableRow());
                     tempRow = tempTable.RowGroups[0].Rows.Last<TableRow>();
                     tempRow.Cells.Add(new TableCell(new Paragraph(new Run("-"))));
-                    for (int i = 0; i < 8; i++) 
+                    for (int i = 0; i < 8; i++)
                     {
                         tempRow.Cells.Add(new TableCell(new Paragraph(new Run("Reduced"))));
                     }
@@ -435,15 +429,8 @@ namespace ReportsLayer
         private void insertMeanTempFields(FlowDocument flowDocument)
         {
             Paragraph meanTempFieldsParagraph = new Paragraph();
-
-            double temp = 1.1234;
-
-            if(dataSource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Count>0)
-            temp = dataSource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T1 + dataSource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T2 + dataSource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T3 + dataSource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T4;
-
-            meanTempFieldsParagraph.Inlines.Add(new Run("End Amb Temp:       " + ReportStringFormater.temperatureFormater( temp) + " \n"));
-            meanTempFieldsParagraph.Inlines.Add(new Run("Avg Oil Temp (AOT): " +ReportStringFormater.temperatureFormater( dataSource.EndAcTemp) + " \n"));
-            meanTempFieldsParagraph.Inlines.Add(new Run("K drop in Oil:      " +ReportStringFormater.temperatureFormater( dataSource.KDropInOil) + "\n"));
+            meanTempFieldsParagraph.Inlines.Add(new Run("Avg Oil Temp (AOT): " + ReportStringFormater.temperatureFormater(dataSource.EndAcTemp) + " \n"));
+            meanTempFieldsParagraph.Inlines.Add(new Run("K drop in Oil:      " + ReportStringFormater.temperatureFormater(dataSource.KDropInOil) + "\n"));
             flowDocument.Blocks.Add(meanTempFieldsParagraph);
         }
 
@@ -490,39 +477,36 @@ namespace ReportsLayer
             flowDocument.Blocks.Add(graphParagraph);
             flowDocument.Blocks.Last().FontSize = 10;
 
-
         }
 
-     
         private void copyGraph(ref WPFScatterGraph newGraph, WPFScatterGraph oldGraph) 
         {
             newGraph = new WPFScatterGraph();
-
+            newGraph.InitializeComponent();
             newGraph.Margin = oldGraph.Margin;
             newGraph.XAxisType = oldGraph.XAxisType;
             newGraph.XAxisTitle = oldGraph.XAxisTitle;
             newGraph.YAxisTitle = oldGraph.YAxisTitle;
-            newGraph.MinYRange = oldGraph.MinXRange;
-            newGraph.MaxYRange = oldGraph.MinYRange;
+
+
+            newGraph.MaxYRange = oldGraph.MaxYRange;
+            newGraph.MinYRange = oldGraph.MinYRange;
+
+            newGraph.MinXRange = oldGraph.MinXRange;
+            newGraph.MaxXRange = oldGraph.MaxXRange;
+
             newGraph.IntervalYRange = oldGraph.IntervalYRange;
-            newGraph.FontSize = 8;
-            //newGraph.AxisFontSize = 8;
-            newGraph.Margin = new Thickness(0);
+            newGraph.IntervalXRange = oldGraph.IntervalXRange;
 
             WPFGraphSeries seriesOilTemp = new WPFGraphSeries();
             WPFGraphSeries seriesAmbTemp = new WPFGraphSeries();
             WPFGraphSeries seriesTempRise = new WPFGraphSeries();
-            
-            if (oldGraph.Series.Count > 2)
-            {
-                seriesOilTemp = oldGraph.Series[0];
-                seriesAmbTemp = oldGraph.Series[1];
-                seriesTempRise=oldGraph.Series[2];
 
-                newGraph.Series.Add(seriesOilTemp);
-                newGraph.Series.Add(seriesAmbTemp);
-                newGraph.Series.Add(seriesTempRise);
+            foreach (WPFGraphSeries series in oldGraph.Series)
+            {
+                newGraph.Series.Add(series);
             }
+
             newGraph.InitializeComponent();
             newGraph.Refresh();
         }
@@ -897,9 +881,9 @@ namespace ReportsLayer
 
             DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("\n"));
             //Температура
-            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Total Samples:      " + dataSource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel.RessistanceNoOfSamplesCurrentState + " \n"));
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Total Samples:      " + dataSource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel.NoOfSamples + " \n"));
             //Струја со која се тестира.
-            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Sample Rate:        " + ReportStringFormater.secondFormater(Convert.ToDouble(dataSource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel.RessistanceSampleRateCurrentState)) + "\n"));
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Sample Rate:        " + ReportStringFormater.secondFormater(Convert.ToDouble(dataSource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel.SampleRate)) + "\n"));
 
 
             flowDocument.Blocks.Add(DcColdMeasurenmentsHeaderParagraph);
@@ -989,9 +973,9 @@ namespace ReportsLayer
             //Exponential Curve
             ResistanceChn1Paragraph.Inlines.Add(new Run("Exponential Curve f(t):    " + ReportStringFormater.temperatureFormater(dataSource.retFT1()) + " \n"));
             //R1 at time t=0
-            ResistanceChn1Paragraph.Inlines.Add(new Run("R1 at time t=0:            " + ReportStringFormater.resistanceFormater(dataSource.retT1Rise()) + " \n"));
+            ResistanceChn1Paragraph.Inlines.Add(new Run("R1 at time t=0:            " + ReportStringFormater.resistanceFormater(dataSource.retR1T0()) + " \n"));
             //Temp Rise at time t=0 
-            ResistanceChn1Paragraph.Inlines.Add(new Run("Temp Rise at time t=0:     " + ReportStringFormater.temperatureFormater( dataSource.retT1T0()) + " \n"));
+            ResistanceChn1Paragraph.Inlines.Add(new Run("Temp Rise at time t=0:     " + ReportStringFormater.temperatureFormater(dataSource.retT1Rise()) + " \n"));
             //AOT
             ResistanceChn1Paragraph.Inlines.Add(new Run("AOT:                       " + ReportStringFormater.temperatureFormater(dataSource.retAOT1()) + " \n"));
             //R at AOT
@@ -1007,9 +991,9 @@ namespace ReportsLayer
             //Exponential Curve
             ResistanceChn2Paragraph.Inlines.Add(new Run("Exponential Curve f(t):    " + ReportStringFormater.temperatureFormater(dataSource.retFT2()) + " \n"));
             //R1 at time t=0
-            ResistanceChn2Paragraph.Inlines.Add(new Run("R2 at time t=0:            " + ReportStringFormater.resistanceFormater(dataSource.retT2Rise()) + " \n"));
+            ResistanceChn2Paragraph.Inlines.Add(new Run("R2 at time t=0:            " + ReportStringFormater.resistanceFormater(dataSource.retR2T0()) + " \n"));
             //Temp Rise at time t=0
-            ResistanceChn2Paragraph.Inlines.Add(new Run("Temp Rise at time t=0:     " + ReportStringFormater.temperatureFormater(dataSource.retT2T0()) + " \n"));
+            ResistanceChn2Paragraph.Inlines.Add(new Run("Temp Rise at time t=0:     " + ReportStringFormater.temperatureFormater(dataSource.retT2Rise()) + " \n"));
             //AOT
             ResistanceChn2Paragraph.Inlines.Add(new Run("AOT:                       " + ReportStringFormater.temperatureFormater(dataSource.retAOT2()) + " \n"));
             //R at AOT
@@ -1137,9 +1121,9 @@ namespace ReportsLayer
 
             DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("\n"));
             //Температура
-            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Total Samples:      " + dataSource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel.RessistanceNoOfSamplesCurrentState + "\n"));
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Total Samples:      " + dataSource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel.NoOfSamples + "\n"));
             //Струја со која се тестира.
-            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Sample Rate:        " + Math.Round(Convert.ToDouble(dataSource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel.RessistanceSampleRateCurrentState), 1) + " S\n"));
+            DcColdMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Sample Rate:        " + Math.Round(Convert.ToDouble(dataSource.Root.DcCoolingMeasurenments.RessistanceTransformerChannel.SampleRate), 1) + " S\n"));
 
 
             flowDocument.Blocks.Add(DcColdMeasurenmentsHeaderParagraph);
@@ -1174,7 +1158,7 @@ namespace ReportsLayer
             //R1 at time t=0
             ResistanceChn1Paragraph.Inlines.Add(new Run("R1 at time t=0:            " + dataSource.retT1Rise() + " C\n"));
             //Temp Rise at time t=0
-            ResistanceChn1Paragraph.Inlines.Add(new Run("Temp Rise at time t=0:     " + dataSource.retT1T0() + " C\n"));
+            ResistanceChn1Paragraph.Inlines.Add(new Run("Temp Rise at time t=0:     " + dataSource.retR1T0() + " C\n"));
 
             flowDocument.Blocks.Add(ResistanceChn1Paragraph);
         }
@@ -1188,7 +1172,7 @@ namespace ReportsLayer
             //R1 at time t=0
             ResistanceChn2Paragraph.Inlines.Add(new Run("R2 at time t=0:            " + dataSource.retT2Rise() + " C\n"));
             //Temp Rise at time t=0
-            ResistanceChn2Paragraph.Inlines.Add(new Run("Temp Rise at time t=0:     " + dataSource.retT2T0() + " C\n"));
+            ResistanceChn2Paragraph.Inlines.Add(new Run("Temp Rise at time t=0:     " + dataSource.retR2T0() + " C\n"));
 
             flowDocument.Blocks.Add(ResistanceChn2Paragraph);
         }

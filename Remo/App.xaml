@@ -17,7 +17,11 @@
         <sys:String x:Key="NoOfSamplesRegExp">
            ^\s*[1-9][0-9]?\s*$
         </sys:String>
-        
+        <!-- 6-99-->
+        <sys:String x:Key="SampleRateRessRegExp">
+            ^\s*([1-9][0-9]|[6-9])\s*$
+        </sys:String>
+
         <DataTemplate x:Key="BlueHeader">
             <StackPanel Orientation="Horizontal" Margin="-5,-5,-5,-5" MinWidth="120" MaxWidth="200" HorizontalAlignment="Stretch" >
                 <StackPanel.Background>
@@ -50,13 +54,16 @@
         <data:PrePostFixConverter x:Key="CelsiusConverter" Postfix="C" Decimals="1" ConversionType="_double"/>
         <data:PrePostFixConverter x:Key="PercConverter" Postfix="%" Decimals="3" ConversionType="_double"/>
         <data:PrePostFixConverter x:Key="SecondConvertor" Postfix="sec"  ConversionType="_int"/>
-        <data:PrePostFixConverter x:Key="SecondConverter1" Postfix="s"  ConversionType="_int"/>
+        <data:PrePostFixConverter x:Key="SecondConverter1" Postfix="sec"/>
         <data:PrePostFixConverter x:Key="MinuteConvertor" Postfix="min" ConversionType="_int"/>
         <data:PrePostFixConverter x:Key="IntegerConvertor" ConversionType="_int"/>
         <data:PrePostFixConverter x:Key="PrePostFixConvertor"/>
+        <data:SourceConverter x:Key="SourceConverter"/>
+        <data:DateTimeConverter x:Key="DateTimeConverter"/>
+        <data:SelectedChannelConverter x:Key="SelectedChannelConverter" />
         <data:ColorConvertor x:Key="ColorConvertor"/>
         <data:RegexValidator x:Key="CelsiusValidator" RegularExpression="^\s*[0-5]?\d\s*[C|c]?\s*$"/>
-
+        
         <!--Brushes for the Toggle Buttons -->
         <LinearGradientBrush x:Key="NormalBrush" StartPoint="0,0" EndPoint="0,1">
             <GradientBrush.GradientStops>

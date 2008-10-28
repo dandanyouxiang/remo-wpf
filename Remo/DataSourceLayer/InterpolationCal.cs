@@ -15,19 +15,38 @@ namespace DataAccessLayer
     {
         private string TemperatureCalibrationFilePath;
         private string RessistanceCalibrationFilePath;
+        private string RessistanceBaseCalibrationFilePath;
         private List<InterpolationEntity> t1List;
         private List<InterpolationEntity> t2List;
         private List<InterpolationEntity> t3List;
         private List<InterpolationEntity> t4List;
         private List<InterpolationEntity> ressistanceList;
+        private List<InterpolationEntity> ressistanceBaseList;
+
         public InterpolationCal()
         {
-            TemperatureCalibrationFilePath = Convert.ToString(System.Configuration.ConfigurationSettings.AppSettings["TemperatureCalibrationFile"]);
-            RessistanceCalibrationFilePath = Convert.ToString(System.Configuration.ConfigurationSettings.AppSettings["RessistanceCalibrationFile"]);
+            string baseDir = System.AppDomain.CurrentDomain.BaseDirectory.ToString();
+            TemperatureCalibrationFilePath = baseDir + Convert.ToString(System.Configuration.ConfigurationSettings.AppSettings["TemperatureCalibrationFile"]);
+            RessistanceBaseCalibrationFilePath = baseDir + Convert.ToString(System.Configuration.ConfigurationSettings.AppSettings["RessistanceBaseCalibrationFile"]);
+            RessistanceCalibrationFilePath = baseDir + Convert.ToString(System.Configuration.ConfigurationSettings.AppSettings["RessistanceCalibrationFile"]);
+            
             //Читај фајл со температурните калибрирања
             readTemperatureFile();
             //Читај фајл со отпорничките калибрирања
             readRessistanceFile();
+            //Читај фајл со основните отпорнички калибрирања
+            readBaseRessistanceFile();
+        }
+
+        public void readBaseRessistanceFile()
+        {
+            RessistanceCalibration r = new EntityLayer.RessistanceCalibration();
+            r.readXml(RessistanceBaseCalibrationFilePath);
+            ressistanceBaseList = new List<InterpolationEntity>();
+            foreach (EntityLayer.RessistanceCalMeasurenment meas in r.RessistanceCalMeasurenments)
+            {
+                ressistanceBaseList.Add(new InterpolationEntity() { X = meas.RMeas, Delta = meas.RRef - meas.RMeas });
+            }
         }
         public void readRessistanceFile()
         {
@@ -57,6 +76,7 @@ namespace DataAccessLayer
                 t4List.Add(new InterpolationEntity() { X = meas.T4, Delta = meas.T4Ref - meas.T4 });
             }
         }
+
         public double interpolateT1(double temperature)
         {
             return interpolateY(temperature, temperature, t1List);
@@ -72,6 +92,11 @@ namespace DataAccessLayer
         public double interpolateT4(double temperature)
         {
             return interpolateY(temperature, temperature, t4List);
+        }
+
+        public double interpolateBaseRessistance(double ressistance)
+        {
+            return interpolateY(ressistance, ressistance, ressistanceBaseList);
         }
         public double interpolateRessistance(double ressistance)
         {
@@ -109,6 +134,7 @@ namespace DataAccessLayer
             }
             return y;
         }
+        
         public void test()
         {
             List<InterpolationEntity> list = new List<InterpolationEntity>();

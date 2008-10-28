@@ -8,7 +8,6 @@
         <dal:PrePostFixConverter x:Key="CurrentConverter" Decimals="1" Postfix="A" ConversionType="_double"/>
         <dal:PrePostFixConverter x:Key="ResConverter"     Decimals="6" Postfix="Ohm" ConversionType="_double"/>
         <dal:PrePostFixConverter x:Key="PercConverter"     Decimals="2" Postfix="%" ConversionType="_double"/>
-        <dal:DateTimeConverter   x:Key="DateTimeConverter" FormatString="G"/>
     </Window.Resources>
     <Grid Margin="0 0 0 20">
         <Grid.Resources>
