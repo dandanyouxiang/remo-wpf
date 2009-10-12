@@ -22,7 +22,7 @@ namespace PresentationLayer
     /// <summary>
     /// Interaction logic for Window1.xaml
     /// </summary>
-    public partial class Window1 : Window, INotifyPropertyChanged
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
         /// <summary>
         /// Поле кое чува кој е работниот директориум.
@@ -92,7 +92,7 @@ namespace PresentationLayer
         /// </summary>
         FileStoring fileStoring;
 
-        public Window1()
+        public MainWindow()
         {
             InitializeComponent();
             
@@ -530,7 +530,8 @@ namespace PresentationLayer
         /// </summary>
         private void Window_ContentRendered(object sender, EventArgs e)
         {
-            StartUpWindow stp = new StartUpWindow();
+            /*
+             StartUpWindow stp = new StartUpWindow();
             if ((bool)stp.ShowDialog())
             {
                 int i = 0;
@@ -543,7 +544,7 @@ namespace PresentationLayer
                 this.CommandBindings[6].Command.Execute(null);
             }
             else
-                this.Close();
+                this.Close();*/
         }
 
         private void CalibrateTemperatureMenuItem_Click(object sender, RoutedEventArgs e)

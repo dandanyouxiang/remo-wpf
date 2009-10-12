@@ -5,7 +5,7 @@
             xmlns:data="clr-namespace:DataAccessLayer"
             xmlns:s="clr-namespace:System;assembly=mscorlib"
             xmlns:mwt="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Luna"
-            StartupUri="PresentationLayer\Window1.xaml">
+            StartupUri="PresentationLayer\MainWindow.xaml">
             <!--StartupUri="ReportsLayer\GenerateReports.xaml">-->
   
     <Application.Resources>

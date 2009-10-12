@@ -18,7 +18,7 @@ using System.IO;
 
 namespace PresentationLayer
 {
-    public partial class Window1 : Window, INotifyPropertyChanged
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
         #region Commands
 

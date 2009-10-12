@@ -18,7 +18,7 @@ using DNBSoft.WPF.WPFGraph;
 
 namespace PresentationLayer
 {
-    public partial class Window1 : Window, INotifyPropertyChanged
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
         private void graphsInit()
         {
