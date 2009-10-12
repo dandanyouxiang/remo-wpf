@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{8D83A4D9-2053-4A10-A76F-6BA7448A7157}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -66,7 +66,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="ThermometerChannel.xaml">
+    <Page Include="ThermometerChannelTest.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -78,8 +78,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ThermometerChannel.xaml.cs">
-      <DependentUpon>ThermometerChannel.xaml</DependentUpon>
+    <Compile Include="ThermometerChannelTest.xaml.cs">
+      <DependentUpon>ThermometerChannelTest.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

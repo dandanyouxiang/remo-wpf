@@ -18,16 +18,18 @@ namespace WpfCustomControlLibrary
 {
     public class MyTickBarWithNumbers : TickBar
     {
+        public int Decimals { get; set; }
+
         protected override void OnRender(DrawingContext dc)
         {
             base.OnRender(dc);
             
             FormattedText minText = null;
-            minText = new FormattedText(Minimum.ToString(), CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), 8,  Brushes.Black);
+            minText = new FormattedText(Minimum.ToString("F" + Decimals), CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), 8, Brushes.Black);
             minText.TextAlignment = TextAlignment.Right;
             dc.DrawText(minText, new Point(-3, base.ActualHeight - 5)  );
             FormattedText maxText = null;
-            maxText = new FormattedText(Maximum.ToString(), CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), 8, Brushes.Black);
+            maxText = new FormattedText(Maximum.ToString("F" + Decimals), CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface("Verdana"), 8, Brushes.Black);
             maxText.TextAlignment = TextAlignment.Right;
             dc.DrawText(maxText, new Point(-3, - 5 ));
         }

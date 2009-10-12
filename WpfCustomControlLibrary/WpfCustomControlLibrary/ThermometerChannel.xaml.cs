@@ -20,6 +20,9 @@ namespace WpfCustomControlLibrary
     /// </summary>
     public partial class ThermometerChannel : UserControl
     {
+
+        public string Header { get { return header.Text; } set { header.Text = value; } }
+
         public bool IsOil
         {
             get
@@ -41,7 +44,40 @@ namespace WpfCustomControlLibrary
             set { thermometer.Value = value; }  
         }
 
-        public string Header { get { return header.Text; } set { header.Text = value; } }
+        public double Maximum
+        {
+            get { return thermometer.Maximum; }
+            set { thermometer.Maximum = value; }
+        }
+
+        public double Minimum
+        {
+            get { return thermometer.Minimum; }
+            set { thermometer.Minimum = value; }
+        }
+
+        public int DecimalsOnTicks
+        {
+            get { return thermometer.Decimals; }
+            set { thermometer.Decimals = value; }
+        }
+
+        public int TickCount
+        {
+            get { return thermometer.Ticks.Count; }
+            set
+            {
+                double tickCount = value;
+                double dt = (Maximum - Minimum) / tickCount;
+                DoubleCollection ticks = new DoubleCollection();
+                for (int i = 0; i <= tickCount; i++)
+                {
+                    double tick = Math.Round(Minimum + i * dt, DecimalsOnTicks);
+                    ticks.Add(tick);
+                }
+                thermometer.Ticks = ticks;
+            }
+        }
 
         public ThermometerChannel()
         {

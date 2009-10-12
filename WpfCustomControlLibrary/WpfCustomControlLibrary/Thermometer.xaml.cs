@@ -23,6 +23,7 @@ namespace WpfCustomControlLibrary
         public static DependencyProperty MaximumProperty; 
         public static DependencyProperty ValueProperty;
         public static DependencyProperty TicksProperty;
+        public static DependencyProperty DecimalsProperty;
 
 
         public double EclipseHeight { get { return (this.Width - 30) / 2; } }
@@ -49,6 +50,11 @@ namespace WpfCustomControlLibrary
             metadataValue.AffectsRender = true;
             ValueProperty = DependencyProperty.Register("ValueProperty",
                 typeof(double), typeof(Thermometer), metadataValue);
+
+            FrameworkPropertyMetadata metadataDecimals = new FrameworkPropertyMetadata(0);
+            metadataDecimals.AffectsRender = true;
+            DecimalsProperty = DependencyProperty.Register("DecimalsProperty",
+                typeof(int), typeof(Thermometer), metadataDecimals);
         }
         public Thermometer()
         {
@@ -62,25 +68,25 @@ namespace WpfCustomControlLibrary
             
             for (int i = Ticks.Count - 1; i >= 1; i--)
             {
-                MyTickBarWithNumbers tick1 = new MyTickBarWithNumbers();
-                tick1.Minimum = Ticks[i - 1];
-                tick1.Maximum = Ticks[i];
-                tick1.HorizontalAlignment = HorizontalAlignment.Right;
+                MyTickBarWithNumbers tick = new MyTickBarWithNumbers();
+                tick.Decimals = Decimals;
+                tick.Minimum = Ticks[i - 1];
+                tick.Maximum = Ticks[i];
+                tick.HorizontalAlignment = HorizontalAlignment.Right;
                
                 //Ne se primeneti Marginite
                 if(TickBarsStackPanel.ActualHeight == this.ActualHeight)
-                    tick1.Height = (TickBarsStackPanel.ActualHeight - 2* EclipseHeight) / (Ticks.Count - 1);
+                    tick.Height = (TickBarsStackPanel.ActualHeight - 2* EclipseHeight) / (Ticks.Count - 1);
                 if(TickBarsStackPanel.ActualHeight == this.ActualHeight - 2* EclipseHeight)
-                    tick1.Height = (TickBarsStackPanel.ActualHeight) / (Ticks.Count - 1);
-                tick1.Width = TickBarsStackPanel.ActualWidth * 0.4;
+                    tick.Height = (TickBarsStackPanel.ActualHeight) / (Ticks.Count - 1);
+                tick.Width = TickBarsStackPanel.ActualWidth * 0.4;
 
                 double step = Ticks[i] - Ticks[i - 1];
-                tick1.Ticks = new DoubleCollection() { Ticks[i - 1] + step / 4, Ticks[i - 1] + step / 2, Ticks[i - 1] + 3 * step / 4 };
+                tick.Ticks = new DoubleCollection() { Ticks[i - 1] + step / 4, Ticks[i - 1] + step / 2, Ticks[i - 1] + 3 * step / 4 };
+                tick.Fill = Brushes.Black;
+                tick.Placement = System.Windows.Controls.Primitives.TickBarPlacement.Left;
 
-                tick1.Fill = Brushes.Black;
-                tick1.Placement = System.Windows.Controls.Primitives.TickBarPlacement.Left;
-
-                TickBarsStackPanel.Children.Add(tick1);
+                TickBarsStackPanel.Children.Add(tick);
             }
             base.OnRender(drawingContext); 
         }
@@ -125,6 +131,18 @@ namespace WpfCustomControlLibrary
             {
                 SetValue(ValueProperty, value);
                 refreshFill();
+            }
+        }
+
+        public int Decimals
+        {
+            get
+            {
+                return (int)GetValue(DecimalsProperty);
+            }
+            set
+            {
+                SetValue(DecimalsProperty, value);
             }
         }
 

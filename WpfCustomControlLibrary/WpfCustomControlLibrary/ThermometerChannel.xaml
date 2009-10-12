@@ -1,8 +1,7 @@
 ﻿<UserControl x:Class="WpfCustomControlLibrary.ThermometerChannel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:my="clr-namespace:WpfCustomControlLibrary"
-    Height="330" Width="178">
+             xmlns:my="clr-namespace:WpfCustomControlLibrary" Width="150">
     <UserControl.Resources>
         <LinearGradientBrush x:Key="NormalBrush" StartPoint="0,0" EndPoint="0,1">
             <GradientBrush.GradientStops>
@@ -97,31 +96,45 @@
             </ControlTemplate.Triggers>
         </ControlTemplate>
     </UserControl.Resources>
-
-        <Border BorderThickness="2" BorderBrush="AliceBlue" >
-        <Grid>
+    
+    
+        <Grid ShowGridLines="True">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="12*"></RowDefinition>
-                <RowDefinition Height="15*"></RowDefinition>
-                <RowDefinition Height="73*"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <!-- 
+                Zameni Height so broj, na primer 200 ako sakas da ja vidis control-ata vo designer-ot,
+                no potoa vrati na * za da mzoe termometarot da se resize-uva
+                -->
+                <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
-            <TextBlock Margin="50,10,28,11.526" Name="header" Grid.ColumnSpan="2" FontSize="16" 
-                       Text="Channel 1"/>
+            <TextBlock Margin="0 10" 
+                       HorizontalAlignment="Center"
+                       Name="header" 
+                       Grid.ColumnSpan="2" 
+                       FontSize="16" 
+                       Text="Channel X"/>
             
-            <Line Grid.ColumnSpan="2" X1="30" X2="140" Y1="32" Y2="32" StrokeThickness="1" Stroke="Gray"/>
-            <ToggleButton Name="OnOffButton" Template="{StaticResource OnOffTemplate}" Grid.Row="1" Margin="15,10" FontSize="14">ON</ToggleButton>
-            <ComboBox Grid.Row="1" Grid.Column="1" Name="comboBox" Margin="5,10" SelectedIndex="0" FontSize="14" 
+            <Line Grid.ColumnSpan="2" X1="0" X2="90" Y1="32" Y2="32"  StrokeThickness="1" Stroke="Gray" HorizontalAlignment="Center"/>
+            <ToggleButton Width="50" Name="OnOffButton" Template="{StaticResource OnOffTemplate}" Grid.Row="1" Margin="15,10" FontSize="14">ON</ToggleButton>
+            <ComboBox Grid.Row="1" Grid.Column="1" Width="60" Name="comboBox" Margin="5,10" SelectedIndex="0" FontSize="14" 
                       IsEnabled="{Binding ElementName=OnOffButton, Path=IsChecked}">
                 <ComboBoxItem Name="Amb">Amb</ComboBoxItem>
                 <ComboBoxItem Name="Oil">Oil</ComboBoxItem>
             </ComboBox>
-            <my:Thermometer  x:Name="thermometer" Grid.Row="2" Grid.ColumnSpan="2" Margin="50 0 0 5" HorizontalAlignment="Left" Width="50" Height="230" Ticks="0 10 20 30 40 50 60 70 80 90 100"
-                             IsEnabled="{Binding ElementName=OnOffButton, Path=IsChecked}"></my:Thermometer>
+        <my:Thermometer  x:Name="thermometer" 
+                         Grid.Row="2" 
+                         Grid.ColumnSpan="2" 
+                         Margin="0 0 0 5" 
+                         HorizontalAlignment="Center" 
+                         Width="50"
+                         Height="{Binding Path=Height}"
+                         Ticks="0 10 20 30 40 50 60 70 80 90 100"
+                         IsEnabled="{Binding ElementName=OnOffButton, Path=IsChecked}"/>
 
-        </Grid>
-    </Border>
+    </Grid>
 </UserControl>

@@ -17,9 +17,9 @@ namespace WpfCustomControlsClient
     /// <summary>
     /// Interaction logic for Window1.xaml
     /// </summary>
-    public partial class Window1 : Window
+    public partial class ThermometerChannelTest : Window
     {
-        public Window1()
+        public ThermometerChannelTest()
         {
             InitializeComponent();
         }
@@ -28,18 +28,23 @@ namespace WpfCustomControlsClient
         {
             double _max;
             if (double.TryParse(Max.Text, out _max))
-                Thermometer.Maximum = _max;
+                ThChannel.Maximum = _max;
+
             double _min;
             if (double.TryParse(Min.Text, out _min))
-                Thermometer.Minimum = _min;
+                ThChannel.Minimum = _min;
+
+            int _decimals;
+            if (int.TryParse(Decimals.Text, out _decimals))
+                ThChannel.DecimalsOnTicks = _decimals;
+
             double _value;
             if (double.TryParse(Value.Text, out _value))
-            {
-                Thermometer.Value = _value;
                 ThChannel.Value = _value;
-            }
-        
-        }
 
+            int _tickCount;
+            if (int.TryParse(TickCount.Text, out _tickCount))
+                ThChannel.TickCount = _tickCount;
+        }
     }
 }
