@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using FlukeClient;
 
-namespace FlukeClient
+namespace DataSourceLayer
 {
     public class RessistanceDataSourceTest
     {
@@ -31,5 +32,14 @@ namespace FlukeClient
         {
             rds.stopRessistanceMeasurenments();
         }
+
+        static void Main(String[] args)
+        {
+            RessistanceDataSourceTest rdsTest = new RessistanceDataSourceTest();
+            Console.ReadKey();
+            rdsTest.stopMeas();
+            Console.ReadKey();
+        }
+       
     }
 }

@@ -97,10 +97,10 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="EntityLayer.XmlServices" Collapsed="true">
+  <Class Name="EntityLayer.XmlServices">
     <Position X="18.5" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAEAAgAAAAAAAAAAAAAAAAAAAAgAAAAAAAQIAAAA=</HashCode>
       <FileName>EntityLayer\Entities.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -260,17 +260,13 @@
   </Class>
   <Class Name="PresentationLayer.TempCalibration">
     <Position X="21.75" Y="2.5" Width="3.25" />
-    <AssociationLine Name="tempCalibrationService" Type="DataAccessLayer.TempCalibrationService" FixedFromPoint="true">
-      <Path>
-        <Point X="23.625" Y="5.462" />
-        <Point X="23.625" Y="7" />
-      </Path>
+    <AssociationLine Name="tempCalibrationService" Type="DataAccessLayer.TempCalibrationService">
       <MemberNameLabel ManuallyPlaced="true">
         <Position X="-1.667" Y="0.633" />
       </MemberNameLabel>
     </AssociationLine>
     <TypeIdentifier>
-      <HashCode>8AAACAABAAAAAAAAAAAABAAMAAAAAAAQBAAAAAAAAAA=</HashCode>
+      <HashCode>8AAACAABAAAAAAAAAAAABAAMAQAAAAAQBAAAAAAAAAA=</HashCode>
       <FileName>PresentationLayer\Cal\TempCalibration.xaml.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using FlukeClient;
 
-namespace FlukeClient
+namespace DataSourceLayer
 {
     public class RessistanceDataSource
     {

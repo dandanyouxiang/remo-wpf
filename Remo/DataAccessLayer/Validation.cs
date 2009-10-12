@@ -130,7 +130,7 @@ namespace DataAccessLayer
         /// </summary>
         double Min = Double.MinValue;
         /// <summary>
-        /// Минимална вредност што може даја има.
+        /// Максимална вредност што може да ја има.
         /// </summary>
         double Max = Double.MaxValue;
         /// <summary>

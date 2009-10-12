@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using EntityLayer;
+using DataAccessLayer;
 
-namespace DataAccessLayer
+namespace DataSourceLayer
 {
     class InterpolationEntity
     {

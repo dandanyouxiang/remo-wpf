@@ -47,7 +47,10 @@ namespace FlukeClient
                 Console.ReadKey();
         }
 
-        
+        static void Main(String[] args)
+        {
+            new FlukeMeasurenmentClientTest();
+        }
 
     }
 }
