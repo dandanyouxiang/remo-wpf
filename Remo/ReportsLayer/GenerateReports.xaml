@@ -1,31 +1,29 @@
 ﻿<Window x:Class="ReportsLayer.GenerateReports"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="GenerateReports" Height="800" Width="800" WindowStartupLocation="CenterScreen">
-    <Window.Resources>
-        <ResourceDictionary>
-        <LinearGradientBrush x:Key="BorderColor">
-            <GradientStop Color="Gray" Offset="0.7"/>
-            <GradientStop Color="White" Offset="0.9" />
-        </LinearGradientBrush>
-            </ResourceDictionary>
-    </Window.Resources>
+    Title="Reports" Height="700" Width="800" WindowStartupLocation="CenterScreen">
+    
     <Grid Name="MainGrid">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="6*"></RowDefinition>
         </Grid.RowDefinitions >
-        <Grid Name="ControlGrid" Grid.Row="0" Background="LightGray">
-            <Label Name="typeDocumentLabel">Type of report:</Label>
-            <RadioButton Margin="25,35,5,5" Name="DCCold" VerticalAlignment="Top" GroupName="DocumentTypeButtons" IsChecked="True" Checked="DCCold_Checked">DCCold</RadioButton>
-            <RadioButton Margin="25,60,5,5" Name="ACHot"  VerticalAlignment="Top" GroupName="DocumentTypeButtons" Checked="DCCold_Checked">ACHot</RadioButton>
-            <RadioButton Margin="25,85,5,5" Name="DCCooling" VerticalAlignment="Top"  GroupName="DocumentTypeButtons" Checked="DCCold_Checked">DCCooling</RadioButton>
-            <Button HorizontalAlignment="Left" Margin="194,20.964,0,0" Name="button1" Width="75" VerticalAlignment="Top" Height="27.313" Click="button1_Click">Print</Button>
-        </Grid>
+        
+        <StackPanel Background="LightGray" Orientation="Horizontal">
+            <StackPanel Name="ControlGrid" Grid.Row="0" Margin="0 0 0 15">
+                <Label Name="typeDocumentLabel" Margin="30 5 0 0">Type of report:</Label>
+                <RadioButton Name="DCCold"      GroupName="DocumentTypeButtons" Margin="40 5 0 0"  IsChecked="True" Checked="DCCold_Checked" FontSize="13">DCCold</RadioButton>
+                <RadioButton Name="ACHot"       GroupName="DocumentTypeButtons" Margin="40 5 0 0"  Checked="DCCold_Checked" FontSize="13">ACHot</RadioButton>
+                <RadioButton Name="DCCooling"   GroupName="DocumentTypeButtons" Margin="40 5 0 0"  Checked="DCCold_Checked" FontSize="13">DCCooling</RadioButton>
+            </StackPanel>
+            <Button Name="button1" Grid.Column="1" Margin="30 37 0 0" Width="75" Height="30" VerticalAlignment="Top" Click="button1_Click">Print</Button>
+        </StackPanel>
+        
         <FlowDocumentScrollViewer Name="flowDocumentScrollViewer"  Grid.Row="1" BorderThickness="5" BorderBrush="Gray">
             <FlowDocument Name="flowExample" >
                 <Paragraph>Text.</Paragraph>
             </FlowDocument>
         </FlowDocumentScrollViewer>
+        
     </Grid>
 </Window>

@@ -132,14 +132,9 @@ namespace PresentationLayer
         private void Command_Print_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             ReportsLayer.GenerateReports gr = new ReportsLayer.GenerateReports(datasource, AcGraph, T1Graph, T2Graph);
-
-
-            if ((bool)gr.ShowDialog())
-            {
-                
-            }
-                
+            gr.ShowDialog();
         }
+
         /// <summary>
         /// Команда за подесување на податоците за трансформаторот.
         /// </summary>
@@ -147,14 +142,9 @@ namespace PresentationLayer
         /// <param name="e"></param>
         private void Command_TransformatorProperties_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            
             TransformatorProperties tp = new TransformatorProperties(datasource);
-
-            if ((bool)tp.ShowDialog())
-            {
-            }
+            tp.ShowDialog();
             save();
-
         }
 
         private void Command_SaveAs_Executed(object sender, ExecutedRoutedEventArgs e)

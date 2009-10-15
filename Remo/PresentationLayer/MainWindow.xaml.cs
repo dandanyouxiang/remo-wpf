@@ -131,10 +131,10 @@ namespace PresentationLayer
 
                 DCCoolTable.ItemsSource = datasource.DCCoolingTable();
 
-                ACTable.ItemsSource = datasource.ACHeatingTable();
+                //ACTable.ItemsSource = datasource.ACHeatingTable();
 
                 statusTextBlock.DataContext = this;
-
+                
                 if (datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Count > 0)
                 {
                     thermometerChannelAC1.Value = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Last().T1;
@@ -228,7 +228,7 @@ namespace PresentationLayer
 
                     //Стартувај го мерењето на температура
                     ds = new DataSourceLayer.DataSourceServices();
-                    ds.TempMeasurenmentDone+=new DataSourceLayer.DataSourceServices.TempMeasurenmentDoneEvent(ds_TempMeasurenmentDone);
+                    ds.TempMeasurenmentDone += new DataSourceLayer.DataSourceServices.TempMeasurenmentDoneEvent(ds_TempMeasurenmentDone);
                     ds.TempMeasurenmentFinished += new DataSourceLayer.DataSourceServices.TempMeasurenmentFinishedEvent(ds_TempMeasurenmentFinished);
                     ds.start_TempMeasurenment(datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration, IS_TEST, true);
                     //

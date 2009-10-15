@@ -1,10 +1,12 @@
 ﻿<Window x:Class="PresentationLayer.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:my="clr-namespace:WpfCustomControlLibrary;assembly=WpfCustomControlLibrary"
         xmlns:graph="clr-namespace:DNBSoft.WPF.WPFGraph;assembly=WPFGraph"
         xmlns:data="clr-namespace:DataAccessLayer"
         xmlns:pres="clr-namespace:DataAccessLayer.Properties"
         xmlns:present="clr-namespace:PresentationLayer"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
         Title="Window1" MinHeight="700" MinWidth="1100" Validation.Error="OnValidationError" Closing="Window_Closing"  ContentRendered="Window_ContentRendered" WindowStartupLocation="CenterScreen" WindowState="Maximized">
     
     <!-- Definiranje na komandi -->
@@ -18,6 +20,9 @@
         <CommandBinding Command="present:TrasformatorPropertiesCommand.Command" Executed="Command_TransformatorProperties_Executed"/>
         <CommandBinding Command="ApplicationCommands.SaveAs" Executed="Command_SaveAs_Executed"/>
     </Window.CommandBindings>
+    <Window.Resources>
+        <system:Int32 x:Key="DecimalsThermometers">1</system:Int32>
+    </Window.Resources>
 
     <Grid Name="MainGrid" IsHitTestVisible="True">
         <DockPanel>
@@ -250,10 +255,10 @@
                                         </GroupBox>
                                         <!-- Thermometers panel -->
                                         <StackPanel Orientation="Horizontal">
-                                            <my:ThermometerChannel Name="thermometerChannel1" xmlns:my="clr-namespace:WpfCustomControlLibrary;assembly=WpfCustomControlLibrary" Header="Channel 1" Height="330"/>
-                                            <my:ThermometerChannel Name="thermometerChannel2" xmlns:my="clr-namespace:WpfCustomControlLibrary;assembly=WpfCustomControlLibrary" Header="Channel 2" Height="330" />
-                                            <my:ThermometerChannel Name="thermometerChannel3" xmlns:my="clr-namespace:WpfCustomControlLibrary;assembly=WpfCustomControlLibrary" Header="Channel 3" Height="330" />
-                                            <my:ThermometerChannel Name="thermometerChannel4" xmlns:my="clr-namespace:WpfCustomControlLibrary;assembly=WpfCustomControlLibrary" Header="Channel 4" Height="330" />
+                                            <my:ThermometerChannel Name="thermometerChannel1" Header="Channel 1" Height="330" DecimalsOnTicks="{StaticResource DecimalsThermometers}" />
+                                            <my:ThermometerChannel Name="thermometerChannel2" Header="Channel 2" Height="330" DecimalsOnTicks="{StaticResource DecimalsThermometers}" />
+                                            <my:ThermometerChannel Name="thermometerChannel3" Header="Channel 3" Height="330" DecimalsOnTicks="{StaticResource DecimalsThermometers}" />
+                                            <my:ThermometerChannel Name="thermometerChannel4" Header="Channel 4" Height="330" DecimalsOnTicks="{StaticResource DecimalsThermometers}" />
                                         </StackPanel>
                                     </StackPanel>
 
@@ -306,11 +311,18 @@
                     </TabItem>
                     
                     <!-- AC Heating Measurenment tab -->
-                    <TabItem Header="AC Heating Measurenment">
+                    <TabItem Header="AC Heating Measurenment">                     
                         <TabControl Name="HeatingTab" SelectedIndex="0">
+                            
+                            <!-- AC-Heating Settings -->
                             <TabItem Header="Settings">
-                                <Grid>
-                                    <GroupBox Header="Settings" Height="195.773" Margin="150,45,0,0" Name="groupBox4" VerticalAlignment="Top" HorizontalAlignment="Left" Width="309" >
+                                <Grid Margin="150 20 0 0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="200*"/>
+                                    </Grid.RowDefinitions>
+                                    <!-- Settings -->
+                                    <GroupBox Header="Settings" Name="groupBox4" HorizontalAlignment="Left" Width="310" >
                                         <StackPanel Height="170.051">
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
@@ -360,27 +372,45 @@
                                             </Grid>
                                         </StackPanel>
                                     </GroupBox>
-                                    <StackPanel Orientation="Horizontal" Margin="83,270,63.5,75">
-                                        <my:ThermometerChannel Header="Channel 1" Margin="20 0" Name="thermometerChannelAC1" Width="178" xmlns:my="clr-namespace:WpfCustomControlLibrary;assembly=WpfCustomControlLibrary" />
-                                        <my:ThermometerChannel Header="Channel 2" Margin="20 0" Name="thermometerChannelAC2" xmlns:my="clr-namespace:WpfCustomControlLibrary;assembly=WpfCustomControlLibrary"  />
-                                        <my:ThermometerChannel Header="Channel 3" Margin="20 0" Name="thermometerChannelAC3" xmlns:my="clr-namespace:WpfCustomControlLibrary;assembly=WpfCustomControlLibrary" />
-                                        <my:ThermometerChannel Header="Channel 4" Margin="20 0" Name="thermometerChannelAC4" xmlns:my="clr-namespace:WpfCustomControlLibrary;assembly=WpfCustomControlLibrary"  />
+                                    
+                                    <!-- Thermometers -->
+                                    <StackPanel Grid.Row="1" Margin="0 10 0 0"  Orientation="Horizontal" Height="350" VerticalAlignment="Top" >
+                                        <my:ThermometerChannel Header="Channel 1" Name="thermometerChannelAC1"
+                                                               DecimalsOnTicks="{StaticResource DecimalsThermometers}" />
+                                        <my:ThermometerChannel Header="Channel 2" Margin="20 0 0 0" Name="thermometerChannelAC2" 
+                                                               DecimalsOnTicks="{StaticResource DecimalsThermometers}" />
+                                        <my:ThermometerChannel Header="Channel 3" Margin="20 0 0 0" Name="thermometerChannelAC3"
+                                                               DecimalsOnTicks="{StaticResource DecimalsThermometers}" />
+                                        <my:ThermometerChannel Header="Channel 4" Margin="20 0 0 0" Name="thermometerChannelAC4" 
+                                                               DecimalsOnTicks="{StaticResource DecimalsThermometers}" />
                                     </StackPanel>
+                                    
                                 </Grid>
                             </TabItem>
+                            
+                            <!-- AC-Heating Results -->
                             <TabItem Header="Results">
-                                <Grid>
+                                <Grid HorizontalAlignment="Center">
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="50*"/>
-                                        <RowDefinition Height="50*"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="45*"/>
+                                        <RowDefinition Height="55*"/>
                                     </Grid.RowDefinitions>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label>AC Table</Label>
+                                        <Label Grid.Column="1" HorizontalAlignment="Right">Remaining time:</Label>
+                                        <TextBox Grid.Column="2" FontSize="16"  Height="25" Foreground="DarkRed" Text="{Binding ElementName=AcTimeToNextSample, Path=Text}" HorizontalContentAlignment="Center" IsReadOnly="True" Name="textBox1" Width="60"/>
+                                    </Grid>
+                                    
                                     <ListView 
+                                        Grid.Row="1"
                                         ItemContainerStyle="{StaticResource ItemContStyle}"
-                                        Height="292" 
-                                        Margin="50,50,50,0" 
-                                        Name="ACTable" 
-                                        VerticalAlignment="Top" 
-                                        HorizontalContentAlignment="Center">
+                                        Name="ACTable">
                                         <ListView.View>
                                             <GridView>
                                                 <GridViewColumn Header="Date" Width="100" >
@@ -401,37 +431,36 @@
                                                 <GridViewColumn Header="T Rise" DisplayMemberBinding="{Binding Path=TempRise, Converter={StaticResource CelsiusConverter}}" Width="130"/>
                                             </GridView>
                                         </ListView.View>
-                                    </ListView>
-                                    <Label Height="28" HorizontalAlignment="Left" Margin="50,18,0,0" Name="ACTableLabel" VerticalAlignment="Top" Width="120">AC Table</Label>
-                                    <graph:WPFScatterGraph Name="AcGraph" XAxisType="_time" Grid.Row="1" Margin="50,10,50,0"  MinWidth="200" MinHeight="200" YAxisTitle="Temperature" XAxisTitle="time" MinYRange="-0.001" MaxYRange="0.001" IntervalYRange="0.0002" GraphBackground="LightGray">
+                                    </ListView>                                    
+                                                                       
+                                    <graph:WPFScatterGraph Name="AcGraph" Grid.Row="2" XAxisType="_time" YAxisTitle="Temperature" XAxisTitle="time" MinYRange="-0.001" MaxYRange="0.001" IntervalYRange="0.0002" GraphBackground="LightGray">
                                         <graph:WPFScatterGraph.Resources>
                                             <Style TargetType="Label"/>
                                         </graph:WPFScatterGraph.Resources>
                                     </graph:WPFScatterGraph>
-                                    <StackPanel Orientation="Horizontal" Height="30" HorizontalAlignment="Right" Margin="0,18,50,0" VerticalAlignment="Top">
-                                        <Label Height="30">Remaining time:</Label>
-                                            <TextBox FontSize="16" Height="28" Foreground="DarkRed" Text="{Binding ElementName=AcTimeToNextSample, Path=Text}" HorizontalContentAlignment="Center" IsReadOnly="True" Name="textBox1" Width="70"/>
-                                    </StackPanel>
                                 </Grid>
                             </TabItem>
+                            
                         </TabControl>
                     </TabItem>
                     
                     <!-- DC Cooling Measurenment tab -->
                     <TabItem Header="DC Cooling Measurenment">
                         <TabControl Name="CoolingTabs" SelectedIndex="0">
+
+                            <!-- DC-Cooling Settings -->
                             <TabItem Name="SetingsCoolingTab" Header="Settings">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <!-- gap -->
-                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="20"/>
                                         <ColumnDefinition Width="300"/>
                                         <!-- gap -->
-                                        <ColumnDefinition Width="50"/>
+                                        <ColumnDefinition Width="25"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
                                     
-                                    <Grid Grid.Column="1">
+                                    <Grid Grid.Column="1" Margin="0 10 0 0">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="300"/>
                                             <RowDefinition Height="245"/>
@@ -441,7 +470,8 @@
                                             <ColumnDefinition/>
                                         </Grid.ColumnDefinitions>
 
-                                        <GroupBox Header="Settings" Name="ChannelGroupBOx">
+                                        <!-- Settings -->
+                                        <GroupBox Header="Settings" Margin="0 0 3 0">
                                             <StackPanel >
                                                 <Label Name="TestCurrentLabel" Margin="10 0">Test Current</Label>
                                                 <TextBox Name="TestCurrentTextBox" IsEnabled="True" Margin="10 0">
@@ -478,6 +508,7 @@
                                             </StackPanel>
                                         </GroupBox>
                                         
+                                        <!-- Channel -->
                                         <GroupBox Grid.Column="1" Header="Channel" Name="ChannelGroupBox">
                                             <StackPanel>
                                                 <Label Margin="5 0">Channel</Label>
@@ -495,15 +526,21 @@
                                             </StackPanel>
                                         </GroupBox>
                                         
-                                        <GroupBox Header="Temperature" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,0,0,10">
-                                            <StackPanel Margin="0 5 0 0" Orientation="Horizontal">
-                                                <GroupBox Header="Source" Width="145">
+                                        <GroupBox Header="Temperature" Grid.Row="1" Grid.ColumnSpan="2" Margin="0 3 0 10">
+                                            <Grid Margin="0 5 0 0">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition/>
+                                                </Grid.ColumnDefinitions>
+                                                <!-- Source -->
+                                                <GroupBox Header="Source" Margin="0 0 3 0">
                                                     <StackPanel Margin="10 10 10 0">
                                                         <RadioButton GroupName="GrName" Margin="5" Name="MeasuredRadioButton" IsChecked="{Binding Path=IsTempMeasured}" Checked="MeasuredRadioButton_Checked">Measured</RadioButton>
                                                         <RadioButton GroupName="GrName" Margin="5" Name="ManuelRadioButton" Checked="ManuelRadioButton_Checked">Manual</RadioButton>
                                                     </StackPanel>
                                                 </GroupBox>
-                                                <GroupBox Header="Data">
+                                                <!-- Data -->
+                                                <GroupBox Header="Data" Grid.Column="1">
                                                     <StackPanel>
                                                         <Label Name="EndAcTempLabel">End Ac Temp</Label>
                                                         <TextBox Margin="5 0" Name="EndAcTempTextBox" IsReadOnly="{Binding ElementName=MeasuredRadioButton, Path=IsChecked}" Validation.Error="EndAcTempTextBox_Error">
@@ -537,7 +574,7 @@
                                                         </TextBox>
                                                     </StackPanel>
                                                 </GroupBox>
-                                            </StackPanel>
+                                            </Grid>
                                         </GroupBox>
                                         
                                     </Grid>
@@ -548,7 +585,7 @@
                                             <RowDefinition Height="*"/>
                                         </Grid.RowDefinitions>
                                         <Label Name="DCCoolingTable">DC - Cooling Table</Label>
-                                        <ListView Name="DCCoolTable" Grid.Row="1">  
+                                        <ListView Name="DCCoolTable" Grid.Row="1" Width="650" HorizontalAlignment="Left">  
                                             <ListView.View>
                                                 <GridView>
                                                     <GridViewColumn Header="No" DisplayMemberBinding="{Binding Path=No}" Width="50"/>
@@ -565,16 +602,15 @@
                                 </Grid>
                             </TabItem>
                             
+                            <!-- DC-Cooling Results -->
                             <TabItem Name="Results" Header="Results">
-                                <Grid Name="DCCoolingGraphsPanel" VerticalAlignment="Top" Margin="0 40"  Height="650" Width="500">
+                                <Grid Name="DCCoolingGraphsPanel" VerticalAlignment="Top" Margin="0 40" Width="800">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="50*"/>
-                                        <ColumnDefinition Width="50*"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="40*"/>
-                                        <RowDefinition Height="60*"/>
-                                    </Grid.RowDefinitions>
                                     <GroupBox Header="Measurenments Settings" Margin="5">
                                         <StackPanel>
                                             <Label Margin="5 0">Dc Cold Channel</Label>
@@ -599,7 +635,7 @@
                                             <TextBox Margin="10 0" Name="SourceResultsTextBox" Text="{Binding Path=Root.DcCoolingMeasurenments.IsTempDataMeasured.Value,Converter={StaticResource SourceConverter}}" IsReadOnly="True"/>
                                         </StackPanel>
                                     </GroupBox>
-                                    <GroupBox Header="R1 Data" Grid.Row="1" Name="R1GroupData"  FontSize="16" Margin="5 0">
+                                    <GroupBox Header="R1 Data" Grid.Column="2" Name="R1GroupData"  FontSize="16" Margin="5 0">
                                         <StackPanel>
                                             <Label Margin="5 0">R1 Cold</Label>
                                             <TextBox Margin="10 0" Name="R1ColdResultsTextBox" Text="{Binding Path=Root.DcCoolingMeasurenments.R1Cold.Value, Converter={StaticResource OhmConvertor}}" IsReadOnly="True"/>
@@ -615,7 +651,7 @@
                                             <TextBox Margin="10 0" Height="50"  Name="FT1TextBox" Text="{Binding Path=F_T1}" IsReadOnly="True" TextWrapping="Wrap" />
                                         </StackPanel>
                                     </GroupBox>
-                                    <GroupBox Header="R2 Data" Grid.Row="1" Grid.Column="1" Name="R2GroupData" FontSize="16" Margin="5 0">
+                                    <GroupBox Header="R2 Data" Grid.Column="3" Name="R2GroupData" FontSize="16" Margin="5 0">
                                         <StackPanel>
                                             <Label Margin="5 0">R2 Cold</Label>
                                             <TextBox Margin="10 0"  Name="R2ColdResultsTextBox" Text="{Binding Path=Root.DcCoolingMeasurenments.R2Cold.Value, Converter={StaticResource OhmConvertor}}" IsReadOnly="True" />
@@ -635,6 +671,8 @@
                                     <Label Margin="327.24,0,409.05,345.818" Name="T2Label" Height="27.616" VerticalAlignment="Bottom">T2</Label>
                                 </Grid>
                             </TabItem>
+                            
+                            <!-- DC-Cooling Graphs -->
                             <TabItem Header="Graphs">
                                 <Grid>
                                     <Grid.RowDefinitions>
@@ -653,6 +691,7 @@
                                     </graph:WPFScatterGraph>
                                 </Grid>
                             </TabItem>
+                            
                         </TabControl>
                     </TabItem>
                     

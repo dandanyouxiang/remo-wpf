@@ -320,7 +320,9 @@ namespace DataSourceLayer
                     double t2Corrected = _tempMeasurenementConfiguration.IsChannel2On ? intCal.interpolateT2(t2) : Double.NaN;
                     double t3Corrected = _tempMeasurenementConfiguration.IsChannel3On ? intCal.interpolateT3(t3) : Double.NaN;
                     double t4Corrected = _tempMeasurenementConfiguration.IsChannel4On ? intCal.interpolateT4(t4) : Double.NaN;
+                    
                     fireEventOnTheRightThread(TempMeasurenmentDone, new List<double>() { t1Corrected, t2Corrected, t3Corrected, t4Corrected }, new List<double>() { t1, t2, t3, t4 });
+                    
                     for (int j = 0; j < _sampleRate && !IsTempMeasInterupted && !IsTempMeasStopped && i < _numberOfSamples - 1; j++)
                         Thread.Sleep(1000);
                     IsTempMeasInterupted = false;

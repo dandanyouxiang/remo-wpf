@@ -45,17 +45,17 @@ namespace PresentationLayer
             T3Meas.DataContext = this;
             T4Meas.DataContext = this;
         }
-        class Temps
+        class TemperaturesHolder
         {
             public double T1 { get; set; }
             public double T2 { get; set; }
             public double T3 { get; set; }
             public double T4 { get; set; }
         }
-        Temps t;
+        TemperaturesHolder t;
         private void dataSourceServices_TempMeasurenmentDone(List<double> correctedTemps, List<double> realTemps)
         {
-            t = new Temps {
+            t = new TemperaturesHolder {
                 T1 = realTemps[0],
                 T2 = realTemps[1],
                 T3 = realTemps[2],
@@ -88,7 +88,7 @@ namespace PresentationLayer
                 );
                 this.DialogResult = true;
             }
-            catch (FormatException ex) 
+            catch 
             {
                 this.DialogResult = false;
             }            

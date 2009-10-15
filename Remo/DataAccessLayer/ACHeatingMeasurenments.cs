@@ -124,7 +124,6 @@ namespace DataAccessLayer
                                        TempRise = (((acch.IsChannel1Oil && acch.IsChannel1On) ? ac.T1 : 0) + ((acch.IsChannel2Oil && acch.IsChannel2On) ? ac.T2 : 0) + ((acch.IsChannel3Oil && acch.IsChannel3On) ? ac.T3 : 0) + ((acch.IsChannel4Oil && acch.IsChannel4On) ? ac.T4 : 0)) / (((acch.IsChannel1Oil && acch.IsChannel1On) ? 1 : 0) + ((acch.IsChannel2Oil && acch.IsChannel2On) ? 1 : 0) + ((acch.IsChannel3Oil && acch.IsChannel3On) ? 1 : 0) + ((acch.IsChannel4Oil && acch.IsChannel4On) ? 1 : 0)) - (((!acch.IsChannel1Oil && acch.IsChannel1On) ? ac.T1 : 0) + ((!acch.IsChannel2Oil && acch.IsChannel2On) ? ac.T2 : 0) + ((!acch.IsChannel3Oil && acch.IsChannel3On) ? ac.T3 : 0) + ((!acch.IsChannel4Oil && acch.IsChannel4On) ? ac.T4 : 0)) / (((!acch.IsChannel1Oil && acch.IsChannel1On) ? 1 : 0) + ((!acch.IsChannel2Oil && acch.IsChannel2On) ? 1 : 0) + ((!acch.IsChannel3Oil && acch.IsChannel3On) ? 1 : 0) + ((!acch.IsChannel4Oil && acch.IsChannel4On) ? 1 : 0)),
                                        Reduced = ac.IsSampleReduced,
                                    };
-
             return ACValues;
         }
 
