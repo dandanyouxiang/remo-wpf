@@ -218,11 +218,6 @@ namespace DataAccessLayer
                 return Double.NaN;
             }
 
-            public double evalTColdAtDcCooling()
-            {
-                return TCold;
-            }
-
             #endregion
         #endregion
         #region Results
@@ -242,7 +237,7 @@ namespace DataAccessLayer
             private string ft2;
             private double aot2 = double.NaN;
             private double r2AtAOT = double.NaN;
-            private bool? isTempMeasured = null;
+            private bool? isTempMeasured = true;
 
         #endregion
 
@@ -255,7 +250,7 @@ namespace DataAccessLayer
                     if (r1AtT0 != value)
                     {
                         r1AtT0 = value;
-                        OnPropertyChanged(new PropertyChangedEventArgs("T1_T0"));
+                        OnPropertyChanged(new PropertyChangedEventArgs("R1AtT0"));
                     }
                 }
             }
@@ -319,6 +314,12 @@ namespace DataAccessLayer
                     }
                 }
             }
+
+            public double AT1Param { get; set; }
+
+            public double BT1Param { get; set; }
+
+
             public List<MeasurenmentEntity> TempMeasurenments1 { get; private set; }
 
             public double R2AtT0
@@ -393,6 +394,9 @@ namespace DataAccessLayer
                     }
                 }
             }
+            public double AT2Param { get; set; }
+
+            public double BT2Param { get; set; }
 
             public bool? IsTempMeasured
             {
@@ -402,19 +406,19 @@ namespace DataAccessLayer
                     if (isTempMeasured != value)
                     {
                         isTempMeasured = value;
-                        if (isTempMeasured == true)
-                        {
-                            TColdAtDcCooling = evalTColdAtDcCooling();
-                            EndAcTemp = evalEndAcTemp();
-                            KDropInOil = evalKDropInOil();
-                        }
+                        evaluateTemperatureSettingsDcCooling();
                         OnPropertyChanged(new PropertyChangedEventArgs("IsTempMeasured"));
                     }
                 }
             }
-            public List<MeasurenmentEntity> TempMeasurenments2 { get; private set; }
+            
+        public List<MeasurenmentEntity> TempMeasurenments2 { get; private set; }
+
         #endregion
-        #region Functions
+
+
+        #region Methods
+
             public void calculateResults()
             {
                 //Channel 1
@@ -437,6 +441,8 @@ namespace DataAccessLayer
                 R1AtT0 = c1.RAtT0;
                 AOT1 = c1.AOT;
                 R1AtAOT = c1.RAOT;
+                AT1Param = c1.a;
+                BT1Param = c1.b;
                 TempMeasurenments1 = c1.TempMeasurenments;
 
                 //Channel 2
@@ -458,8 +464,21 @@ namespace DataAccessLayer
                 R2AtT0 = c2.RAtT0;
                 AOT2 = c2.AOT;
                 R2AtAOT = c2.RAOT;
+                AT2Param = c2.a;
+                BT2Param = c2.b;
                 TempMeasurenments2 = c2.TempMeasurenments;
             }
+
+            public void evaluateTemperatureSettingsDcCooling()
+            {
+                if (isTempMeasured == true)
+                {
+                    TColdAtDcCooling = TCold;
+                    EndAcTemp = evalEndAcTemp();
+                    KDropInOil = evalKDropInOil();
+                }
+            }
+
         #endregion
         #endregion
     }

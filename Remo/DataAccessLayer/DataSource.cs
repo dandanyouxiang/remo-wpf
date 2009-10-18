@@ -68,9 +68,10 @@ namespace DataAccessLayer
 
                 R1ColdAtDcCool = evalR1Cold(SelectedChannelDcCool);
                 R2ColdAtDcCool = evalR2Cold(SelectedChannelDcCool);
+                this.evaluateTemperatureSettingsDcCooling();
             }
             /// <summary>
-            /// Во DcColdMeasurenments,во подтабот TemperatureMeasurenments Ако се смени некој прочитан податок, одново да се пресметаат вредностите на полињата што се добиваат преку некако функција.
+            /// Во DcColdMeasurenments,во подтабот TemperatureMeasurenments Ако се смени некој прочитан податок, одново да се пресметаат вредностите на полињата што се пресметани преку некоја функција.
             /// </summary>
             /// <param name="sender"></param>
             /// <param name="e"></param>
@@ -124,70 +125,44 @@ namespace DataAccessLayer
 
             }
 
-            public DataSource(string path,FileCommand fileCommand) 
+            public DataSource(string path, FileCommand fileCommand)
             {
                 //Citanje na podatocite
                 EntityLayer.XmlServices serv = new EntityLayer.XmlServices();
 
 
-                switch (fileCommand) 
+                switch (fileCommand)
                 {
                     case FileCommand.New:
                         Root = new EntityLayer.Root();
                         serv.writeToXml(path, Root);
                         break;
                     case FileCommand.Open:
-                        Root = serv.readXml(path); 
+                        Root = serv.readXml(path);
                         break;
                     case FileCommand.Save:
-                        serv.writeToXml(path,Root); 
+                        serv.writeToXml(path, Root);
                         break;
                     default: Root = new EntityLayer.Root(); break;
                 }
 
                 //new EntityLayer.XmlServices().writeToXmlTest(path);
                 //new EntityLayer.XmlServices().writeToXml(path, new EntityLayer.Root());
+
+                //DCCold
+                Root.DcColdMeasurenments.RessistanceTransformerChannels.PropertyChanged += new PropertyChangedEventHandler(DcColdMeasurenments_RessistanceTransformerChannels_PropertyChanged);
+                Root.DcColdMeasurenments.TempMeasurenementConfiguration.PropertyChanged += new PropertyChangedEventHandler(DcColdMeasurenments_TempMeasurenementConfiguration_PropertyChanged);
+                //ACHeating
+                Root.AcHotMeasurenments.TempMeasurenementConfiguration.PropertyChanged += new PropertyChangedEventHandler(AcHotMeasurenments_TempMeasurenementConfiguration_PropertyChanged);
+                //DCCooling
+                Root.DcCoolingMeasurenments.RessistanceTransformerChannel.PropertyChanged += new PropertyChangedEventHandler(DcCoolingMeasurenments_RessistanceTransformerChannels_PropertyChanged);
+                //TransformatorProperties
+                Root.TransformerProperties.PropertyChanged += new PropertyChangedEventHandler(TransformerProperties_PropertyChanged);
+
+                Root.DcColdMeasurenments.TempMeasurenementConfiguration.OnPropertyChanged(new PropertyChangedEventArgs(null));
+                IsTempMeasured = Root.DcCoolingMeasurenments.IsTempDataMeasured.Value;
+            }
     
-                //DCCold
-                Root.DcColdMeasurenments.RessistanceTransformerChannels.PropertyChanged += new PropertyChangedEventHandler(DcColdMeasurenments_RessistanceTransformerChannels_PropertyChanged);
-                Root.DcColdMeasurenments.TempMeasurenementConfiguration.PropertyChanged += new PropertyChangedEventHandler(DcColdMeasurenments_TempMeasurenementConfiguration_PropertyChanged);
-                //ACHeating
-                Root.AcHotMeasurenments.TempMeasurenementConfiguration.PropertyChanged += new PropertyChangedEventHandler(AcHotMeasurenments_TempMeasurenementConfiguration_PropertyChanged);
-                //DCCooling
-                Root.DcCoolingMeasurenments.RessistanceTransformerChannel.PropertyChanged += new PropertyChangedEventHandler(DcCoolingMeasurenments_RessistanceTransformerChannels_PropertyChanged);
-                //TransformatorProperties
-                Root.TransformerProperties.PropertyChanged += new PropertyChangedEventHandler(TransformerProperties_PropertyChanged);
-
-                Root.DcColdMeasurenments.TempMeasurenementConfiguration.OnPropertyChanged(new PropertyChangedEventArgs(null));
-                IsTempMeasured = Root.DcCoolingMeasurenments.IsTempDataMeasured.Value;
-            }
-            public DataSource(string path,bool newSource)
-            {
-                //Citanje na podatocite
-                EntityLayer.XmlServices serv = new EntityLayer.XmlServices();
-
-                new EntityLayer.XmlServices().writeToXmlNew(path);
-
-                Root = serv.readXml(path);
-
-                Root = new EntityLayer.XmlServices().readXml(path);
-
-
-                //DCCold
-                Root.DcColdMeasurenments.RessistanceTransformerChannels.PropertyChanged += new PropertyChangedEventHandler(DcColdMeasurenments_RessistanceTransformerChannels_PropertyChanged);
-                Root.DcColdMeasurenments.TempMeasurenementConfiguration.PropertyChanged += new PropertyChangedEventHandler(DcColdMeasurenments_TempMeasurenementConfiguration_PropertyChanged);
-                //ACHeating
-                Root.AcHotMeasurenments.TempMeasurenementConfiguration.PropertyChanged += new PropertyChangedEventHandler(AcHotMeasurenments_TempMeasurenementConfiguration_PropertyChanged);
-                //DCCooling
-                Root.DcCoolingMeasurenments.RessistanceTransformerChannel.PropertyChanged += new PropertyChangedEventHandler(DcCoolingMeasurenments_RessistanceTransformerChannels_PropertyChanged);
-                //TransformatorProperties
-                Root.TransformerProperties.PropertyChanged += new PropertyChangedEventHandler(TransformerProperties_PropertyChanged);
-
-                Root.DcColdMeasurenments.TempMeasurenementConfiguration.OnPropertyChanged(new PropertyChangedEventArgs(null));
-
-                IsTempMeasured = Root.DcCoolingMeasurenments.IsTempDataMeasured.Value;
-            }
-            
             public void saveData(string path)
             {
                 new EntityLayer.XmlServices().writeToXml(path, this.Root);

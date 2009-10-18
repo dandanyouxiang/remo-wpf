@@ -27,24 +27,10 @@ namespace PresentationLayer
         /// <summary>
         /// Поле кое чува кој е работниот директориум.
         /// </summary>
-        public string WorkPlacePath {get;set; }
-        /*
-        public string FileName {
-            get 
-            {
-                return fileStoring.FileName;
-            }
-            set 
-            {
-                if (fileStoring.FileName!=value)
-                {
-                    fileStoring.FileName = value;
-                    OnPropertyChanged(new PropertyChangedEventArgs("FileName"));
-                }
-            }
-        }
-        */
+        public string WorkPlacePath { get; set; }
+
         public string FileName { get; set; }
+
         /// <summary>
         /// Состојбите во кои апликацијата се наоѓа, во однос на мерењата.
         /// </summary>
@@ -239,6 +225,7 @@ namespace PresentationLayer
                 startTempMeasDcColdButton.IsChecked = false;
             }
         }
+
         private void startTempMeasDcColdButton_Click(object sender, RoutedEventArgs e)
         {
             //Стопирање на температурните мерења
@@ -311,7 +298,7 @@ namespace PresentationLayer
                 save();
             }
         }
-        delegate void d();
+
         public void ds_RessistanceMeasurenmentsError()
         {
             MessageBox.Show("Се појави грешки при поврзување со инструментите.\nПробајте пак. Ако проблемот не се реши рестартирајте ги инструментите.", "Грешка", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -319,6 +306,7 @@ namespace PresentationLayer
             CurrentProcessState = ProcessStatesEnum.Idle;
             startResMeasDcColdButton.IsChecked = false;
         }
+
         /// <summary>
         /// Handler за крај на мерењето на отпор.
         /// </summary>
@@ -392,6 +380,7 @@ namespace PresentationLayer
                 //pri testiranje
                 ds.IsTempMeasStopped = true;
                 CurrentProcessState = ProcessStatesEnum.Idle;
+                datasource.evaluateTemperatureSettingsDcCooling();
                 save();
             }
         }
@@ -429,7 +418,7 @@ namespace PresentationLayer
                 datasource.Root.DcCoolingMeasurenments.SelectedDcColdChannel.Value = datasource.SelectedChannel;
                 datasource.Root.DcCoolingMeasurenments.R1Cold.Value = datasource.R1ColdAtDcCool;
                 datasource.Root.DcCoolingMeasurenments.R2Cold.Value = datasource.R2ColdAtDcCool;
-                datasource.Root.DcCoolingMeasurenments.TCold.Value = datasource.TColdAtDcCooling;
+                datasource.evaluateTemperatureSettingsDcCooling();
                 datasource.Root.DcCoolingMeasurenments.EndAcTemp.Value = datasource.EndAcTemp;
                 datasource.Root.DcCoolingMeasurenments.KDropInOil.Value = datasource.KDropInOil;
                 datasource.Root.DcCoolingMeasurenments.IsTempDataMeasured.Value = datasource.IsTempMeasured;
@@ -453,8 +442,8 @@ namespace PresentationLayer
             if (!StartDcCoolResButton.IsChecked == true && currentProcessState == ProcessStatesEnum.DcCoolRes)
             {
                 ds.stopRessistanceMeasurenments();
-                CurrentProcessState = ProcessStatesEnum.Idle;
-                save();
+                // Call the finished handler manualy
+                ds_ColdRessistanceMeasurenmentFinished();
             }
         }
         public void ds_CoolRessistanceMeasurenmentFinished()
@@ -478,28 +467,24 @@ namespace PresentationLayer
             {
                 MessageBox.Show("Немате извршено мерење на отпори на ладно", "Грешка", MessageBoxButton.OK, MessageBoxImage.Error);
                 TNullButton.IsChecked = false;
-                
+                return;
+
             }
-            else if (Double.IsNaN(datasource.TCold))
+            if (Double.IsNaN(datasource.TCold))
             {
                 MessageBox.Show("Немате извршено мерење на температури на ладно", "Грешка", MessageBoxButton.OK, MessageBoxImage.Error);
                 TNullButton.IsChecked = false;
+                return;
             }
-            else if(Double.IsNaN(datasource.EndAcTemp) || Double.IsNaN(datasource.KDropInOil))
+            if (Double.IsNaN(datasource.EndAcTemp) || Double.IsNaN(datasource.KDropInOil))
             {
                 MessageBox.Show("Немате извршено мерење на температури при загревање", "Грешка", MessageBoxButton.OK, MessageBoxImage.Error);
                 TNullButton.IsChecked = false;
+                return;
             }
-            else
-            {
-                datasource.Root.DcCoolingMeasurenments.TNullTime = DateTime.Now;
-                TNullButton.IsEnabled = false;
-            }
-        }
 
-        private void EndAcTempTextBox_Error(object sender, ValidationErrorEventArgs e)
-        {
-           
+            datasource.Root.DcCoolingMeasurenments.TNullTime = DateTime.Now;
+            TNullButton.IsEnabled = false;
         }
 
         /// <summary>
@@ -575,7 +560,6 @@ namespace PresentationLayer
         {
             acGraphRefresh();
             dcCoolingGraphsRefresh();
-            
         }
 
         private void MeasuredRadioButton_Checked(object sender, RoutedEventArgs e)
@@ -602,9 +586,6 @@ namespace PresentationLayer
                 System.Threading.Thread.Sleep(1000);
             }
         }
-
-        
-        
     }
    
 }

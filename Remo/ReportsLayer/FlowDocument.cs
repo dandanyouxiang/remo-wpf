@@ -275,7 +275,7 @@ namespace ReportsLayer
             Paragraph AcHotMeasurenmentsHeaderParagraph = new Paragraph();
 
             //Total Samples
-            AcHotMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Total Samples: " + dataSource.SamplesDone + "\n"));
+            AcHotMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Total Samples: " + dataSource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.TempMeasurenments.Count + "\n"));
             //Sample Rate:
             AcHotMeasurenmentsHeaderParagraph.Inlines.Add(new Run("Sample Rate: " + dataSource.MinutesSampleRate + " min " + dataSource.SecondesSampleRate + " sec\n"));
 
@@ -359,6 +359,7 @@ namespace ReportsLayer
         /// <param name="tempTable">Табелата во документот.</param>
         private void insertTempMeasurenementConfiguration_TempMeasurenments_TableCell(TempMeasurenementConfiguration tc, List<TempMeasurenment> tempMeasurenments, Table tempTable)
         {
+            int rownum = 1;
             foreach (TempMeasurenment tm in tempMeasurenments)
             {
                 //Додавање на нова редица во табелата.
@@ -366,7 +367,7 @@ namespace ReportsLayer
                 TableRow tempRow = tempTable.RowGroups[0].Rows.Last<TableRow>();
 
                 //Реден број
-                tempRow.Cells.Add(new TableCell(new Paragraph(new Run(tempMeasurenments.IndexOf(tm).ToString()))));
+                tempRow.Cells.Add(new TableCell(new Paragraph(new Run(rownum + ""))));
                 //Време на мерењето
                 tempRow.Cells.Add(new TableCell(new Paragraph(new Run(tm.Time.ToString("hh:mm:ss")))));
 
@@ -384,7 +385,7 @@ namespace ReportsLayer
                 double tOil = (((tc.IsChannel1Oil && tc.IsChannel1On) ? tm.T1 : 0) + ((tc.IsChannel2Oil && tc.IsChannel2On) ? tm.T2 : 0) + ((tc.IsChannel3Oil && tc.IsChannel3On) ? tm.T3 : 0) + ((tc.IsChannel4Oil && tc.IsChannel4On) ? tm.T4 : 0)) / (((tc.IsChannel1Oil && tc.IsChannel1On) ? 1 : 0) + ((tc.IsChannel2Oil && tc.IsChannel2On) ? 1 : 0) + ((tc.IsChannel3Oil && tc.IsChannel3On) ? 1 : 0) + ((tc.IsChannel4Oil && tc.IsChannel4On) ? 1 : 0));
                 //TOil
                 tempRow.Cells.Add(new TableCell(new Paragraph(new Run(ReportStringFormater.temperatureFormater(tOil)))));
-                double tRise = tOil = tAmb;
+                double tRise = tOil - tAmb;
                 //Разлика во температурите во воздух и во масло.
                 tempRow.Cells.Add(new TableCell(new Paragraph(new Run(ReportStringFormater.temperatureFormater(tRise)))));
 
@@ -398,6 +399,7 @@ namespace ReportsLayer
                         tempRow.Cells.Add(new TableCell(new Paragraph(new Run("Reduced"))));
                     }
                 }
+                rownum++;
             }
         }
 

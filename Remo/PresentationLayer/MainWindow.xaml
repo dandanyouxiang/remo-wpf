@@ -543,7 +543,7 @@
                                                 <GroupBox Header="Data" Grid.Column="1">
                                                     <StackPanel>
                                                         <Label Name="EndAcTempLabel">End Ac Temp</Label>
-                                                        <TextBox Margin="5 0" Name="EndAcTempTextBox" IsReadOnly="{Binding ElementName=MeasuredRadioButton, Path=IsChecked}" Validation.Error="EndAcTempTextBox_Error">
+                                                        <TextBox Margin="5 0" Name="EndAcTempTextBox" IsReadOnly="{Binding ElementName=MeasuredRadioButton, Path=IsChecked}">
                                                             <TextBox.Text>
                                                                 <Binding Path="EndAcTemp" Converter="{StaticResource CelsiusConverter}" NotifyOnValidationError="True">
                                                                     <Binding.ValidationRules>
@@ -604,7 +604,7 @@
                             
                             <!-- DC-Cooling Results -->
                             <TabItem Name="Results" Header="Results">
-                                <Grid Name="DCCoolingGraphsPanel" VerticalAlignment="Top" Margin="0 40" Width="800">
+                                <Grid Name="DCCoolingGraphsPanel" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="160 40 0 0" Width="800">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition/>
                                         <ColumnDefinition/>
@@ -664,7 +664,7 @@
                                             <Label Margin="5 0" Name="R2AtAOTLabel">R at AOT</Label>
                                             <TextBox Margin="10 0" Name="R2AtAOTTextBox" Text="{Binding Path=R2AtAOT,Converter={StaticResource OhmConvertor}}" IsReadOnly="True"/>
                                             <Label Margin="5 0" Name="FT2Label">f(t)</Label>
-                                            <TextBox Margin="10 0"  Name="FT2TextBox" Text="{Binding Path=F_T2}" IsReadOnly="True" Height="50"  />
+                                            <TextBox Margin="10 0"  Name="FT2TextBox" Text="{Binding Path=F_T2}" IsReadOnly="True" Height="50" TextWrapping="Wrap"  />
                                         </StackPanel>
                                     </GroupBox>
                                     <Label Height="28" Margin="327.24,64.539,409.05,0" Name="T1Label" VerticalAlignment="Top">T1</Label>
@@ -697,14 +697,12 @@
                     
                 </TabControl>
                 
-                <!-- Status panel -->
-                <Grid VerticalAlignment="Top" HorizontalAlignment="Right" Grid.Column="1" Height="24.28" Width="346.8">
-                    <StackPanel Orientation="Horizontal" Margin="0 3 20 2" HorizontalAlignment="Right">
+                    <StackPanel Grid.Column="1" VerticalAlignment="Top" Orientation="Horizontal" Margin="0 3 20 2" HorizontalAlignment="Right">
                         <TextBlock FontSize="16">Status:</TextBlock>
                         <TextBlock Name="statusTextBlock" FontSize="16" Margin="10 0" TextAlignment="Center" Text="{Binding Path=StatusString}" />
                         <ProgressBar Name="progressBar1" Width="120" IsIndeterminate="False" IsEnabled="True" Maximum="24" />
                     </StackPanel>
-                </Grid>
+         
                 
             </Grid>
         </DockPanel>

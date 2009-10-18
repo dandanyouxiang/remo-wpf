@@ -50,6 +50,7 @@ namespace PresentationLayer
 
                 setDataContext();
                 updateGraphsAndFields();
+                updateThermometers();
 
                 MainGrid.UpdateLayout();
             }
@@ -83,6 +84,7 @@ namespace PresentationLayer
 
                 setDataContext();
                 updateGraphsAndFields();
+                updateThermometers();
                 MainGrid.UpdateLayout();
             }
 
@@ -205,17 +207,47 @@ namespace PresentationLayer
             
             statusTextBlock.DataContext = this;
         }
+
         /// <summary>
         /// Се користи при open 
         /// </summary>
         private void updateGraphsAndFields()
         {
             this.acGraphRefresh();
-
             datasource.calculateResults();
             this.dcCoolingGraphsRefresh();
-
         }
+
+        /// <summary>
+        /// Се користи при open 
+        /// </summary>
+        private void updateThermometers()
+        {
+            // DC-Cold
+            thermometerChannel1.IsChannelOn = datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel1On;
+            thermometerChannel2.IsChannelOn = datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel2On;
+            thermometerChannel3.IsChannelOn = datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel3On;
+            thermometerChannel4.IsChannelOn = datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel4On;
+
+            thermometerChannel1.IsOil = datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel1Oil;
+            thermometerChannel2.IsOil = datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel2Oil;
+            thermometerChannel3.IsOil = datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel3Oil;
+            thermometerChannel4.IsOil = datasource.Root.DcColdMeasurenments.TempMeasurenementConfiguration.IsChannel4Oil;
+            //
+            
+            // Ac-Hot
+            thermometerChannelAC1.IsChannelOn = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel1On;
+            thermometerChannelAC2.IsChannelOn = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel2On;
+            thermometerChannelAC3.IsChannelOn = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel3On;
+            thermometerChannelAC4.IsChannelOn = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel4On;
+
+            thermometerChannelAC1.IsOil = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel1Oil;
+            thermometerChannelAC2.IsOil = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel2Oil;
+            thermometerChannelAC3.IsOil = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel3Oil;
+            thermometerChannelAC4.IsOil = datasource.Root.AcHotMeasurenments.TempMeasurenementConfiguration.IsChannel4Oil;
+            //
+        }
+
         #endregion
     }
 }

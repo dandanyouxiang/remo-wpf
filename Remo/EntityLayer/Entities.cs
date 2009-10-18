@@ -241,10 +241,12 @@ namespace EntityLayer
             TCold = new Property<double>("TCold", double.NaN);
             R1Cold = new Property<double>("R1Cold", double.NaN);
             R2Cold = new Property<double>("R2Cold", double.NaN);
-            IsTempDataMeasured = new Property<bool?>("IsTempDataMeasured", null);
+            IsTempDataMeasured = new Property<bool?>("IsTempDataMeasured", true);
             SelectedDcColdChannel = new Property<int>("SelectedDcColdChannel", -1);
         }
+
         public DcCoolingMeasurenments() : this(new RessistanceTransformerChannel(1, double.NaN, -1, -1, true, true, new ListWithChangeEvents<RessistanceMeasurenment>())) { }
+    
     }
 
     public class TransformerProperties : INotifyPropertyChanged

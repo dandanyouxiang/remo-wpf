@@ -235,7 +235,7 @@ namespace DataAccessLayer
                         }
                     }
                     /// <summary>
-                    /// Средната температура во мосло.
+                    /// Средната температура во масло.
                     /// </summary>
                     public double OilDCColdTempTable 
                     {
@@ -480,7 +480,7 @@ namespace DataAccessLayer
 
             private TableRessHeader DCColdRessistanceTableHdr;    
 
-            private double TCld;
+            private double _tColdAtDcCold;
 
         #endregion
 
@@ -489,12 +489,14 @@ namespace DataAccessLayer
             ////////////////////////
             public double TCold
             {
-                get { return TCld; }
+                get { return _tColdAtDcCold; }
                 set
                 {
-                    if (TCld != value)
+                    if (_tColdAtDcCold != value)
                     {
-                        TCld = value;
+                        _tColdAtDcCold = value;
+                         if (isTempMeasured == true)
+                             TColdAtDcCooling = _tColdAtDcCold;
                         OnPropertyChanged(new PropertyChangedEventArgs("TCold"));
                     }
                 }

@@ -42,7 +42,7 @@ namespace DataSourceLayer
             this.numberOfSamples = numberOfSamples;
             numberOfTempsRead = 0;
             temp1 = new ReadMemIntTask("read temp 1 task", 15);
-            temp1.TaskExecutedEvent+=new PlcRWTask.TaskExecutedEventHandler(tempAll_TaskExecutedEvent);
+            temp1.TaskExecutedEvent += new PlcRWTask.TaskExecutedEventHandler(tempAll_TaskExecutedEvent);
             temp2 = new ReadMemIntTask("read temp 2 task", 16);
             temp2.TaskExecutedEvent += new PlcRWTask.TaskExecutedEventHandler(tempAll_TaskExecutedEvent);
             temp3 = new ReadMemIntTask("read temp 3 task", 17);
