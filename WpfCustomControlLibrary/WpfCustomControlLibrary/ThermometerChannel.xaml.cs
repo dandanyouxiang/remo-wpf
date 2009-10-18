@@ -29,8 +29,26 @@ namespace WpfCustomControlLibrary
             {
                 return comboBox.SelectedIndex == 1;
             }
+            set
+            {
+                if (value)
+                    comboBox.SelectedIndex = 1;
+                else
+                    comboBox.SelectedIndex = 2;
+            }
         }
-        public bool IsChannelOn { get { return (bool)OnOffButton.IsChecked; } }
+
+        public bool IsChannelOn
+        {
+            get
+            {
+                return (bool)OnOffButton.IsChecked;
+            }
+            set
+            {
+                OnOffButton.IsChecked = value;
+            }
+        }
 
         public Thermometer ThermometerControl
         {
